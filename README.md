@@ -41,7 +41,7 @@ VideoContenido/
 │       ├── becario-reels/          # Skill base original (referencia histórica)
 │       └── napkin/                 # Submódulo Git: notas de ejecución del entorno
 ├── .agents/                        # Estructura paralela de descubrimiento de skills
-├── auditoria-skill-nexora/         # Informes técnicos y auditorías (00 al 33)
+├── auditoria-skill-nexora/         # Informes técnicos y auditorías (00 al 35)
 ├── reel-microondas/                # Primer reel completo producido (proyecto de referencia)
 ├── public/                         # Espacio estructural reservado
 ├── src/                            # Espacio estructural reservado
@@ -53,7 +53,7 @@ VideoContenido/
 1. **`nexora-reels` (`.agent/skills/nexora-reels/`):**
    Skill principal de producción audiovisual para Team Nexora. Implementa una arquitectura en 5 capas (*The 5-Layer Composite Stack*), físicas de animación basadas en resortes deterministas (`anim.ts`), tipado estricto en TypeScript, y un motor de renderizado local ultrarrápido con invalidación desacoplada de caché visual y acústica ([`render.mjs`](.agent/skills/nexora-reels/assets/plantilla/render.mjs)).
 2. **`auditoria-skill-nexora/`:**
-   Registro documental cronológico de 34 informes técnicos (del `00` al `33`) que respaldan cada decisión de diseño, validación crítica, resolución de cuellos de botella y mediciones de laboratorio (SSIM, PSNR, determinismo temporal y huellas SHA-256).
+   Registro documental cronológico de 36 informes técnicos (del `00` al `35`) que respaldan cada decisión de diseño, validación crítica, resolución de cuellos de botella y mediciones de laboratorio (SSIM, PSNR, determinismo temporal y huellas SHA-256).
 3. **`becario-reels/`:**
    Skill original utilizada como línea base y punto de partida técnico. Se preserva íntegramente como referencia histórica y base de comparación.
 4. **`reel-microondas/`:**
@@ -82,7 +82,7 @@ npm ci
 ### 3.3. Preparación del Entorno Python
 Los scripts de soporte (`preparar.py`, `alinear.py`, `ritmo.py`, `poses.py`, `sonidos.py`) requieren ciertas librerías auxiliares:
 - **Librerías estándar:** `preparar.py` y `ritmo.py` se ejecutan directamente con el intérprete estándar de Python 3.11.
-- **Alineación:** `alinear.py` utiliza Whisper para transcripción fonética.
+- **Alineación:** `alinear.py` utiliza por defecto el motor determinista de energía y sílabas (`--motor silabas`, sin descargas de modelos ni dependencias externas pesadas). Opcionalmente admite reconocimiento neuronal ASR con Parakeet v3 (`sherpa-onnx`) mediante `--motor asr`.
 - **Morfología y audio sintético:** `poses.py` y `sonidos.py` requieren `numpy`, `pillow` y `scipy`.
 
 > [!NOTE]
@@ -114,22 +114,22 @@ La plantilla maestra define sus comandos en [`package.json`](.agent/skills/nexor
 
 ## 5. Arquitectura de Caché Desacoplada (Audio y Vídeo)
 
-A partir de la Etapa 33 (integración del Bloque 4C), el motor [`render.mjs`](.agent/skills/nexora-reels/assets/plantilla/render.mjs) implementa un sistema de doble huella criptográfica SHA-256 completamente independiente:
+A partir de la Etapa 33 e integrada definitivamente en la Etapa 35, el motor [`render.mjs`](.agent/skills/nexora-reels/assets/plantilla/render.mjs) implementa un sistema de doble huella criptográfica SHA-256 (de 24 caracteres hexadecimales) completamente independiente y gobernada por constantes explícitas de versión (`CACHE_BUNDLE_VERSION = "bundle-v1"`, `CACHE_VIDEO_VERSION = "video-v2"`, `CACHE_AUDIO_VERSION = "audio-v2"`):
 
 ### 5.1. Huella Visual (`huellaVideo()`)
 - **Alcance:** Recorre recursivamente `src/` (componentes TSX, estilos, lógica de escena) y `public/` (texturas, fuentes tipográficas, fotos).
-- **Aislamiento Sonoro:** Al evaluar `src/datos/plan.json`, ignora deliberadamente los campos `.portada`, `.sonidos`, `.audio` y `frases[].sonidos`. Al recorrer `public/`, ignora los archivos de audio (`voz.wav`, `sonidos/*.wav`).
+- **Aislamiento Sonoro:** Al evaluar `src/datos/plan.json`, ignora deliberadamente los campos `.portada`, `.sonidos`, `.audio` y `frases[].sonidos`. Al recorrer `public/`, ignora con expresión regular quirúrgica exclusivamente los recursos de audio (`sonidos/`, `voz.*`, extensiones `.wav`, `.mp3`, etc.), permitiendo que recursos gráficos con la palabra "voz" (p. ej. `altavoz_icono.png`) invaliden correctamente la caché visual.
 - **Almacenamiento de Trozos:** Los chunks de video mudos (`muted: true`) se almacenan en `salida/trozos/${huellaVideo}-${escala}-${crf}/`.
 - **Efecto:** Modificar la voz, un efecto de sonido o su volumen **no invalida los trozos de video ya renderizados** (0 fotogramas re-renderizados).
 
 ### 5.2. Huella Acústica (`huellaAudio()`)
-- **Alcance:** Hashea el contenido de `public/voz.wav`, los archivos WAV de los efectos de sonido realmente utilizados, los FPS, los fotogramas totales y los eventos de sonido con su marca temporal y volumen.
+- **Alcance:** Hashea la versión de caché acústica (`audio-v2`), el contenido de `public/voz.wav`, los archivos WAV de los efectos de sonido realmente utilizados, los FPS, los fotogramas totales y los eventos de sonido con su marca temporal y volumen.
 - **Almacenamiento de Mezcla:** La pista sonora pre-mezclada se guarda en `salida/trozos/audio/${huellaAudio}.wav`.
 - **Efecto:** Modificar colores, fuentes, textos visuales o imágenes **no invalida la mezcla de audio**, reutilizando el WAV generado instantáneamente.
 
 ### 5.3. Recuperación de Caché y Validación
 - **Restauración Histórica:** Si se altera un recurso y luego se revierte a su estado original, el motor recupera de inmediato los trozos y audios anteriores sin procesar nada de nuevo.
-- **Validación con FFprobe:** Cada chunk `.mp4` es verificado con `ffprobe` (`validarTrozo()`). Si un chunk falta o está corrupto, solo ese chunk específico se regenera, conservando el resto intacto.
+- **Validación con FFprobe:** Cada chunk `.mp4` es verificado con `ffprobe` (`validarTrozo()`, con umbral mínimo de 1.000 bytes). Si un chunk falta o está corrupto, solo ese chunk específico se regenera, conservando el resto intacto.
 
 ---
 
@@ -149,11 +149,12 @@ npm ci
 ```
 
 ### Paso 3: Configurar locución y plan
-1. Ubicar la locución grabada en `public/voz.wav`.
-2. Generar la alineación de subtítulos:
+1. Ubicar la locución grabada (por ejemplo `locucion.mp3` o `locucion.wav`).
+2. Alinear la voz con el guion:
    ```bash
-   py ../.agent/skills/nexora-reels/scripts/alinear.py public/voz.wav --salida src/subtitulos.json
+   py ../.agent/skills/nexora-reels/scripts/alinear.py locucion.mp3 --proyecto .
    ```
+   *(Por defecto utiliza `--motor silabas` determinista sin descargas. Opcionalmente admite `--motor asr` con modelo neural Parakeet v3). Esto genera `src/datos/tiempos.json` y copia la voz a `public/voz.wav`.*
 3. Editar `src/datos/plan.json` definiendo las escenas, textos, colores y efectos de sonido.
 
 ### Paso 4: Validar y renderizar
@@ -188,13 +189,14 @@ Para mantener el repositorio ágil, seguro y libre de artefactos efímeros, los 
 ## 8. Estado del Desarrollo y Limitaciones Conocidas
 
 ### Estado Actual:
-- **Bloques 1 al 4C:** **Completados y Aprobados (APTO)**.
+- **Bloques 1 al 4C y Etapa 35 (Cierre Correctivo Integral):** **Completados y Aprobados (APTO)**.
   - Scripts Python verificados y libres de dependencias impuestas al sistema global.
-  - Plantilla maestra actualizada con caché desacoplada (`huellaVideo` / `huellaAudio`).
-  - Pruebas de regresión visual y acústica aprobadas (SSIM = 0.9986, PSNR = 51.83 dB, 0 frames negros o congelados).
+  - Plantilla maestra actualizada con caché desacoplada (`huellaVideo` / `huellaAudio`), claves SHA-256 de 24 caracteres y versiones explícitas.
+  - Registro y reconciliación de escenas personalizadas del usuario (`tipo: "propia"`).
+  - Pruebas de regresión visual y acústica aprobadas (SSIM = 0.9988, PSNR = 52.60 dB, 0 frames negros o congelados).
 - **Bloque 5:** En fase de preparación (consolidación final de la documentación en `SKILL.md` para creadores y directrices de arte).
 
-### Limitaciones Conocidas:
-1. **FFmpeg en PATH:** La multiplexación y remezcla de audio en `render.mjs` dependen de que el binario de FFmpeg esté accesible en la línea de comandos del sistema host.
+### Limitaciones Conocidas y Resoluciones:
+1. **Resolución de FFmpeg:** `render.mjs` detecta binarios de FFmpeg/FFprobe comprobando sucesivamente `entorno.json`, el `PATH` del sistema y el paquete nativo embebido de Remotion (`@remotion/compositor-*`).
 2. **Entorno Python para SciPy:** La ejecución de `poses.py` y `sonidos.py` requiere `scipy`, `numpy` y `pillow` configurados en un entorno virtual (`.venv`) independiente para no contaminar el intérprete global.
 3. **Zonas Seguras:** Las composiciones deben respetar los márgenes seguros verticales (y: 80 a 1040) para evitar superposiciones con los subtítulos y los elementos de interfaz nativos de Instagram Reels / TikTok.

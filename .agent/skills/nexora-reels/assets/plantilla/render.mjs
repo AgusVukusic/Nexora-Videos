@@ -49,15 +49,71 @@ let navegador = process.env.BROWSER_EXECUTABLE || entorno.navegador || undefined
 const modoChrome = entorno.modo || (navegador && /headless[-_]?shell/i.test(navegador) ? "chrome-headless-shell" : "chrome");
 const opcNav = { browserExecutable: navegador, chromeMode: modoChrome };
 
+// Versiones de caché independientes para bundle, vídeo y audio
+const CACHE_BUNDLE_VERSION = "bundle-v1";
+const CACHE_VIDEO_VERSION = "video-v2";
+const CACHE_AUDIO_VERSION = "audio-v2";
+
 // ------------------------------------------------------------ ffmpeg
+let _ffmpegBin = null;
 const ffmpeg = () => {
+  if (_ffmpegBin) return _ffmpegBin;
+  if (entorno.ffmpeg && fs.existsSync(entorno.ffmpeg)) {
+    return (_ffmpegBin = entorno.ffmpeg);
+  }
   for (const n of ["ffmpeg", "ffmpeg.exe"]) {
     try {
       execFileSync(n, ["-version"], { stdio: "ignore" });
-      return n;
+      return (_ffmpegBin = n);
     } catch {}
   }
-  return "ffmpeg";
+  const remotionDir = path.join(RAIZ, "node_modules", "@remotion");
+  if (fs.existsSync(remotionDir)) {
+    try {
+      for (const d of fs.readdirSync(remotionDir)) {
+        if (d.startsWith("compositor-")) {
+          for (const bin of ["ffmpeg.exe", "ffmpeg"]) {
+            const p = path.join(remotionDir, d, bin);
+            if (fs.existsSync(p)) return (_ffmpegBin = p);
+          }
+        }
+      }
+    } catch {}
+  }
+  return (_ffmpegBin = "ffmpeg");
+};
+
+let _ffprobeBin = null;
+const ffprobe = () => {
+  if (_ffprobeBin) return _ffprobeBin;
+  if (entorno.ffprobe && fs.existsSync(entorno.ffprobe)) {
+    return (_ffprobeBin = entorno.ffprobe);
+  }
+  const binFfmpeg = ffmpeg();
+  const candidato = binFfmpeg.replace(/ffmpeg(\.exe)?$/i, "ffprobe$1");
+  if (candidato !== binFfmpeg && fs.existsSync(candidato)) {
+    return (_ffprobeBin = candidato);
+  }
+  for (const n of ["ffprobe", "ffprobe.exe"]) {
+    try {
+      execFileSync(n, ["-version"], { stdio: "ignore" });
+      return (_ffprobeBin = n);
+    } catch {}
+  }
+  const remotionDir = path.join(RAIZ, "node_modules", "@remotion");
+  if (fs.existsSync(remotionDir)) {
+    try {
+      for (const d of fs.readdirSync(remotionDir)) {
+        if (d.startsWith("compositor-")) {
+          for (const bin of ["ffprobe.exe", "ffprobe"]) {
+            const p = path.join(remotionDir, d, bin);
+            if (fs.existsSync(p)) return (_ffprobeBin = p);
+          }
+        }
+      }
+    } catch {}
+  }
+  return (_ffprobeBin = "ffprobe");
 };
 
 const ff = (argumentos) => {
@@ -72,8 +128,8 @@ const ff = (argumentos) => {
 // Comprueba que un trozo .mp4 existe, tiene tamaño razonable y ffprobe lo lee entero
 const validarTrozo = (archivo) => {
   if (!fs.existsSync(archivo)) return false;
-  if (fs.statSync(archivo).size < 10000) return false;
-  const probe = spawnSync(ffmpeg().replace(/ffmpeg(\.exe)?$/i, "ffprobe$1"), ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", archivo], { encoding: "utf8" });
+  if (fs.statSync(archivo).size < 1000) return false;
+  const probe = spawnSync(ffprobe(), ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", archivo], { encoding: "utf8" });
   return probe.status === 0 && Number(probe.stdout.trim()) > 0;
 };
 
@@ -133,6 +189,7 @@ const mezclarAudio = (a, fps, destino) => {
 // Huella general para el empaquetado de Webpack (se invalida si cambia cualquier archivo de código o recurso).
 const huella = () => {
   const h = crypto.createHash("sha256");
+  h.update(CACHE_BUNDLE_VERSION);
   const recorrer = (d) => {
     if (!fs.existsSync(d)) return;
     for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -147,7 +204,7 @@ const huella = () => {
   };
   recorrer(path.join(RAIZ, "src"));
   recorrer(path.join(RAIZ, "public"));
-  return h.digest("hex").slice(0, 12);
+  return h.digest("hex").slice(0, 24);
 };
 
 // Huella de render visual (para trozos de vídeo):
@@ -157,6 +214,8 @@ const huella = () => {
 // y el audio se mezcla externamente mediante FFmpeg.
 const huellaVideo = () => {
   const h = crypto.createHash("sha256");
+  h.update(CACHE_VIDEO_VERSION);
+  h.update("codec:h264:yuv420p:veryfast:jpeg:92");
   const plan = path.join(RAIZ, "src", "datos", "plan.json");
 
   const recorrerSrc = (d) => {
@@ -195,8 +254,12 @@ const huellaVideo = () => {
     for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const p = path.join(d, e.name);
       const rel = path.relative(path.join(RAIZ, "public"), p).replace(/\\/g, "/");
-      // Excluir recursos puramente sonoros (carpeta de efectos, pistas de voz y formatos de audio)
-      if (rel === "sonidos" || rel.startsWith("sonidos/") || /\.(wav|mp3|m4a|ogg|aac|flac)(\..*)?$/i.test(rel) || rel.includes("voz")) {
+      const esAudio =
+        rel === "sonidos" ||
+        rel.startsWith("sonidos/") ||
+        /^voz(\..+)?$/i.test(rel) ||
+        /\.(wav|mp3|m4a|ogg|aac|flac)(\.(tmp|bak))?$/i.test(rel);
+      if (esAudio) {
         continue;
       }
       if (e.isDirectory()) recorrerPublic(p);
@@ -209,7 +272,7 @@ const huellaVideo = () => {
 
   recorrerSrc(path.join(RAIZ, "src"));
   recorrerPublic(path.join(RAIZ, "public"));
-  return h.digest("hex").slice(0, 12);
+  return h.digest("hex").slice(0, 24);
 };
 
 // Huella de mezcla de audio:
@@ -217,6 +280,7 @@ const huellaVideo = () => {
 // los eventos de audio (nombre, tiempo en frames, volumen), duración total y FPS.
 const huellaAudio = (audioConfig, fps) => {
   const h = crypto.createHash("sha256");
+  h.update(CACHE_AUDIO_VERSION);
   const voz = audioConfig.voz ? path.join(RAIZ, "public", audioConfig.voz) : null;
   if (voz && fs.existsSync(voz)) {
     h.update(`voz:${audioConfig.voz}`);
@@ -243,7 +307,7 @@ const huellaAudio = (audioConfig, fps) => {
     h.update(`efecto:${e.s}:${e.en}:${e.vol}`);
   }
   h.update("mix:48000:stereo:pcm_s16le:atrim:adelay:aresample:amix");
-  return h.digest("hex").slice(0, 12);
+  return h.digest("hex").slice(0, 24);
 };
 
 const empaquetar = async () => {

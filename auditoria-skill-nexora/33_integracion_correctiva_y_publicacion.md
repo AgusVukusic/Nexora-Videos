@@ -89,6 +89,14 @@ Todas las pruebas se ejecutaron sobre una instancia aislada en `%TEMP%` configur
 | **P7** | **Chunk inválido** | Eliminación deliberada del trozo `001.mp4` (240..479) | `98b85e89a390-1-20` | `e4b19934a7a8` | FFprobe detectó la ausencia. Trozos 0 y 2 reutilizados; **solo se regeneró el trozo 1** (`trozo 2/3 listo · 32.8 s`). Audio reutilizado. | **APROBADO** |
 | **P8** | **Regresión técnica** | Comparación contra `salida/reel_bloque_4b_ref.mp4` | — | — | **SSIM: 0.998626**, **PSNR: 51.83 dB**, 0 frames negros, 0 frames congelados, 16.02 s / 480 frames @ 30 FPS. | **APROBADO** |
 
+> [!NOTE]
+> **Nota técnica sobre la descomposición de 481 fotogramas en 3 trozos:**
+> La locución alineada en `tiempos.json` registra una duración `T.duracion = 16.02 s`. Al calcular el total de fotogramas de la composición mediante `TOTAL = Math.max(1, Math.ceil(T.duracion * FPS))` a 30 FPS, el resultado es exactamente **481 fotogramas** (índices `0` a `480`). Dado que la constante de partición en `render.mjs` es `TROZO = 240` (8 segundos), el número de chunks es `Math.ceil(481 / 240) = 3`:
+> - `000.mp4`: fotogramas `0…239` (240 frames).
+> - `001.mp4`: fotogramas `240…479` (240 frames).
+> - `002.mp4`: fotogramas `480…480` (1 frame residual).
+> Al realizar la multiplexación final mediante FFmpeg con el flag `-shortest`, la duración de la pista acústica acota el video exportado `salida/reel.mp4` a exactamente 480 fotogramas (16,00 s).
+
 ---
 
 ## 5. Correcciones en la Documentación
@@ -128,7 +136,7 @@ Todas las pruebas se ejecutaron sobre una instancia aislada en `%TEMP%` configur
 
 - **Repositorio:** `https://github.com/AgusVukusic/Nexora-Videos.git`
 - **Rama:** `main`
-- **Commit publicado:** `3c932b1` (o hash resultante)
+- **Commit publicado:** `4769438cc4988387c25e392b839580ecf4f09d88` (`4769438`)
 - **Mensaje de Commit:** `fix: integrate independent audio and video cache`
 - **Archivos Incluidos en el Commit:**
   - `.agent/skills/nexora-reels/assets/plantilla/render.mjs`
