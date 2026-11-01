@@ -41,7 +41,7 @@ VideoContenido/
 │       ├── becario-reels/          # Skill base original (referencia histórica)
 │       └── napkin/                 # Submódulo Git: notas de ejecución del entorno
 ├── .agents/                        # Estructura paralela de descubrimiento de skills
-├── auditoria-skill-nexora/         # Informes técnicos y auditorías (00 al 35)
+├── auditoria-skill-nexora/         # Informes técnicos y auditorías (00 al 36)
 ├── reel-microondas/                # Primer reel completo producido (proyecto de referencia)
 ├── public/                         # Espacio estructural reservado
 ├── src/                            # Espacio estructural reservado
@@ -53,7 +53,7 @@ VideoContenido/
 1. **`nexora-reels` (`.agent/skills/nexora-reels/`):**
    Skill principal de producción audiovisual para Team Nexora. Implementa una arquitectura en 5 capas (*The 5-Layer Composite Stack*), físicas de animación basadas en resortes deterministas (`anim.ts`), tipado estricto en TypeScript, y un motor de renderizado local ultrarrápido con invalidación desacoplada de caché visual y acústica ([`render.mjs`](.agent/skills/nexora-reels/assets/plantilla/render.mjs)).
 2. **`auditoria-skill-nexora/`:**
-   Registro documental cronológico de 36 informes técnicos (del `00` al `35`) que respaldan cada decisión de diseño, validación crítica, resolución de cuellos de botella y mediciones de laboratorio (SSIM, PSNR, determinismo temporal y huellas SHA-256).
+   Registro documental cronológico de 37 informes técnicos (del `00` al `36`) que respaldan cada decisión de diseño, validación crítica, resolución de cuellos de botella y mediciones de laboratorio (SSIM, PSNR, determinismo temporal y huellas SHA-256).
 3. **`becario-reels/`:**
    Skill original utilizada como línea base y punto de partida técnico. Se preserva íntegramente como referencia histórica y base de comparación.
 4. **`reel-microondas/`:**
@@ -194,7 +194,11 @@ Para mantener el repositorio ágil, seguro y libre de artefactos efímeros, los 
   - Plantilla maestra actualizada con caché desacoplada (`huellaVideo` / `huellaAudio`), claves SHA-256 de 24 caracteres y versiones explícitas.
   - Registro y reconciliación de escenas personalizadas del usuario (`tipo: "propia"`).
   - Pruebas de regresión visual y acústica aprobadas (SSIM = 0.9988, PSNR = 52.60 dB, 0 frames negros o congelados).
-- **Bloque 5:** En fase de preparación (consolidación final de la documentación en `SKILL.md` para creadores y directrices de arte).
+- **Bloque 5 / Etapa 36 (Documentación Definitiva y Guía Operativa para Agentes):** **Completado y Aprobado (APTO)**.
+  - Consolidación exhaustiva de [`SKILL.md`](.agent/skills/nexora-reels/SKILL.md) con checklist operativa en 9 pasos, contratos de datos y diagnóstico de errores.
+  - Creación del catálogo técnico completo de las 17 escenas nativas, escenas propias y estilos en [`references/escenas.md`](.agent/skills/nexora-reels/references/escenas.md).
+  - Actualización de patrones de animación e ingeniería en [`references/patrones-motion.md`](.agent/skills/nexora-reels/references/patrones-motion.md) e [`references/ingenieria-remotion.md`](.agent/skills/nexora-reels/references/ingenieria-remotion.md).
+- **Siguiente Fase:** Validación integral de producción de las 17 escenas nativas en laboratorio.
 
 ### Limitaciones Conocidas y Resoluciones:
 1. **Resolución de FFmpeg:** `render.mjs` detecta binarios de FFmpeg/FFprobe comprobando sucesivamente `entorno.json`, el `PATH` del sistema y el paquete nativo embebido de Remotion (`@remotion/compositor-*`).

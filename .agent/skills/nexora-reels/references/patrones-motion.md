@@ -61,14 +61,35 @@ Para dar sensación de tridimensionalidad sin saturar, combinar dos o tres propi
 
 ---
 
-### 5. Estado de los Componentes en Nexora Reels
+### 5. Estado de los Componentes y Patrones en Nexora Reels
 
-* **Patrones Validados en Remotion Nativo (Disponibles):**
-  - Interpolaciones con `spring()` y `Easing` estándar.
-  - Subtítulos sincronizados palabra por palabra (`Subtitulos.tsx`).
-* **Componentes Propuestos para Etapas Siguientes (En Planificación):**
-  - `useMultiSpring()`: Helper para coordinar traslación, escala y rotación en un único resorte.
-  - `TextoRevelado`: Componente reutilizable de máscara tipográfica protegida.
-  - `CapasCine`: Envoltorio de 5 capas lógicas.
-* **Componentes Pendientes de Prototipo Aislado:**
-  - Transiciones continuas `whip` y `zoom-through` (requieren validar el gestor de solape de `<Sequence>` antes de su adopción).
+Todos los patrones avanzados de cinemática y composición de capas se encuentran plenamente implementados y operativos dentro de la plantilla maestra ([`src/motor/anim.ts`](../assets/plantilla/src/motor/anim.ts) y componentes asociados en [`src/`](../assets/plantilla/src/)):
+
+#### A. Primitivas de Animación y Cinemática Multi-propiedad:
+* **`useMultiSpring()` ([`src/motor/anim.ts`](../assets/plantilla/src/motor/anim.ts)):**
+  - Orquesta múltiples canales de resorte en un único hook determinista (`escala`, `y`, `opacidad`, `rotacion`).
+  - Admite presets nombrados (`"snappy"`, `"bouncy"`, `"heavy"`, `"gentle"` procedentes de `THEME.springs`) o configuraciones `SpringConfig` personalizadas.
+  - Implementa clamping automático y duración máxima opcional para fijar valores sin jitter residual.
+* **`useStagger()` y `staggerFrame()` ([`src/motor/anim.ts`](../assets/plantilla/src/motor/anim.ts)):**
+  - Calcula cascadas temporales deterministas para listas y grupos (por defecto 4 fotogramas de desfase por ítem).
+  - `staggerFrame()` permite calcular el fotograma absoluto de inicio de cada elemento para sincronizar efectos de audio o usar con `usePop`.
+* **`useBreathing()` ([`src/motor/anim.ts`](../assets/plantilla/src/motor/anim.ts)):**
+  - Oscilación senoidal suave determinista para badges flotantes o acentos secundarios, parametrizada por `amplitud`, `periodo` (60–90 frames), `fase` y `centro`.
+* **Utilidades Cinemáticas Base (100% Compatibilidad):**
+  - `usePop(desde, config)`: Escala elástica con rebote para elementos focales.
+  - `useSuave(desde, dur)`: Entrada suave `0 → 1` con `Easing.out(Easing.cubic)`.
+  - `lerp(f, a, b, from, to, ease)`: Interpolación acotada con clamping estricto.
+  - `useFlota(fase, amp, vel)`: Flotación continua armónica.
+  - `bump(frame, en, dur)`: Pico senoidal transitorio `0 → 1 → 0`.
+  - `rnd(seed)`: Ruido determinista basado en seno trigonométrico.
+  - `numeroES(n, dec)`: Formateador numérico en español con separador de miles.
+
+#### B. Componentes Arquitectónicos de Capas y Texto:
+* **`TextoRevelado` ([`src/TextoRevelado.tsx`](../assets/plantilla/src/TextoRevelado.tsx)):**
+  - Componente de máscara tipográfica editorial segura con protección estricta contra cortes de caracteres en español (tildes superiores, virgulillas de la Ñ y trazos descendentes).
+* **`CapasCine` ([`src/CapasCine.tsx`](../assets/plantilla/src/CapasCine.tsx)):**
+  - Envoltorio de composición en 5 capas: `BgMesh` (fondo procedural dinámico), `ColorGrade` (etalonaje de temperatura y viñeta) y `PostProcess` (grano y textura analógica).
+* **`Escena` ([`src/Escena.tsx`](../assets/plantilla/src/Escena.tsx)):**
+  - Contenedor de transición de secuencia con soporte para 6 transiciones de entrada (`corte`, `suave`, `semitono`, `deslizar-arriba`, `deslizar-abajo`, `disolver`) y 3 de salida (`corte`, `suave`, `disolver`).
+* **Subtítulos Dinámicos ([`src/piezas/Subtitulos.tsx`](../assets/plantilla/src/piezas/Subtitulos.tsx)):**
+  - Subtitulado fonético palabra por palabra en modalidades `linea` (caja de acento centrada) y `bloque` (párrafo dinámico superior izquierdo).

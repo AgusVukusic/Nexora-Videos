@@ -59,17 +59,40 @@ En el formato 1080×1920 (relación de aspecto 9:16), la distribución debe anti
 
 ---
 
-### 4. Estado Real de las Herramientas de Validación y QA
+### 4. Herramientas de Validación, Renderizado y QA
 
-Es fundamental distinguir con precisión las capacidades que ya funcionan de las que están planificadas para fases posteriores:
+El pipeline de Nexora Reels dispone de un conjunto integral de herramientas de inspección, renderizado determinista y control de calidad totalmente operativas:
 
-#### A. Controles Existentes y Operativos en el Código:
-* **`node render.mjs resumen`:** Comprueba la consistencia de `plan.json`, verifica que los iconos pertenezcan a la librería Lucide, valida la presencia de palabras clave en `tiempos.json` y audita el contraste cromático de los estilos.
-* **`node render.mjs fotos`:** Genera `salida/hoja.png` extrayendo automáticamente el punto medio, los momentos clave y el fotograma final de cada escena para inspección visual humana.
-* **`python scripts/ritmo.py salida/reel.mp4`:** Audita el video renderizado mediante visión artificial en escala de grises para detectar tramos sin cambios visuales superiores a 0,6 s.
-* **`node render.mjs portada`:** Genera `salida/portada_check.png` verificando el recorte 3:4 utilizado por el feed de Instagram.
+#### A. Motor de Renderizado y Caché Desacoplada (`render.mjs`):
+* **Caché Criptográfica Independiente:**
+  - `huellaVideo()`: Prefijada con `video-v2` y la especificación técnica de codec (`codec:h264:yuv420p:veryfast:jpeg:92`). Hashea recursivamente `src/` y `public/` excluyendo selectivamente los recursos sonoros (`sonidos/`, `voz.*`, formatos `.wav`, `.mp3`). Genera un hash SHA-256 de **24 caracteres hexadecimales**. Los trozos de video mudos se almacenan en `salida/trozos/${claveVideo}/`.
+  - `huellaAudio(audio, fps)`: Prefijada con `audio-v2`. Hashea la pista `public/voz.wav`, los archivos WAV de los efectos de sonido requeridos, FPS, fotogramas totales y eventos sonoros `[nombre, fotograma, volumen]`. Genera un hash SHA-256 de **24 caracteres hexadecimales**. La mezcla estéreo PCM a 48 kHz se almacena en `salida/trozos/audio/${claveAudio}.wav`.
+  - **Efecto de Desacoplamiento:** Cambiar la voz o un efecto sonoro renderiza **0 fotogramas de video**; cambiar estilos o recursos gráficos reutiliza instantáneamente la mezcla de audio.
+* **Inspección de Integridad (`validarTrozo`):**
+  - Cada fragmento de video es validado con `ffprobe` para confirmar legibilidad estructural y duración positiva, con un umbral de tamaño mínimo de **1.000 bytes** para admitir trozos residuales breves de 1 fotograma sin re-renderizados innecesarios.
+* **Resolución Automática de Binarios Multimedia:**
+  - El motor busca dinámicamente FFmpeg y FFprobe en tres niveles jerárquicos: configuración en `entorno.json`, variable de entorno `PATH` del sistema, y paquete nativo de Remotion (`node_modules/@remotion/compositor-*`).
+* **Comandos y Flags Operativos:**
+  - `npm run video` (o `node render.mjs video`): Renderiza a 1080×1920 @ 30 FPS, CRF 20 en `salida/reel.mp4`.
+  - `node render.mjs video --borrador`: Render rápido a 540×960, CRF 26 en `salida/borrador.mp4`.
+  - Flags de control: `--crf <num>`, `--hilos <num>`, `--max-segundos <seg>` (interrupción limpia con código 3 PARCIAL y reanudación automática), `--limite-mb <num>` (recompresión automática si supera 28 MB), `--forzar` (ignora avisos bloqueantes en `resumen`).
 
-#### B. Controles Propuestos para Integración Futura (No Existentes Todavía):
-* **Auditoría de Audio (`audio-check`):** `ritmo.py` **no mide audio**. La medición de sonoridad integrada a -14 LUFS y True Peak con FFmpeg `ebur128` se integrará como una herramienta independiente en fases posteriores.
-* **Detección Automática de Colisiones Espaciales:** Comprobación algorítmica de cajas envolventes (*bounding boxes*) en `resumen` para validar que ningún elemento sobrepase $y = 1040$. Actualmente debe verificarse visualmente en `hoja.png`.
-* **Prueba de Determinismo Bit-a-Bit:** Script de cálculo de hash SHA256 sobre fotogramas para validar consistencia entre renders sucesivos.
+#### B. Inspección Visual y Comprobación Estática:
+* **`npm run resumen` (o `node render.mjs resumen`):**
+  - Analiza `plan.json` frente a `tiempos.json`, verifica iconos en la biblioteca Lucide, comprueba contraste cromático ($\ge 3:1$) y valida límites de caracteres.
+  - Distingue entre **PROBLEMAS** (errores fatales que bloquean el render salvo `--forzar`) y **AVISOS** (recomendaciones editoriales y advertencias de ritmo).
+* **`npm run fotos` (o `node render.mjs fotos`):**
+  - Genera la hoja de contacto `salida/hoja.png` extrayendo el punto medio, momentos de entrada y fotograma final de cada escena. Admite intervalo temporal personalizado (`node render.mjs fotos 0.5`).
+* **`node render.mjs foto <segundo>`:**
+  - Extrae un fotograma a resolución nativa completa (1080×1920) en el segundo indicado (ej. `node render.mjs foto 2.5 12.0` $\rightarrow$ `salida/foto_2.50.png`).
+* **`npm run portada` (o `node render.mjs portada`):**
+  - Genera `salida/portada.png` y `salida/portada_check.png` con la cuadrícula de comprobación del recorte 3:4 del feed de Instagram.
+* **`npm run tipos` (`tsc -p .`):**
+  - Comprobación estricta de tipos de TypeScript sin emitir archivos.
+
+#### C. Control de Calidad Dinámico (`ritmo.py` y `alinear.py`):
+* **Auditoría de Retención (`ritmo.py`):**
+  - `py ../.agent/skills/nexora-reels/scripts/ritmo.py salida/reel.mp4 --tiempos src/datos/tiempos.json`
+  - Analiza el flujo óptico y la variación de píxeles en escala de grises. Cuando se proporciona `--tiempos`, coteja los momentos de voz para distinguir pausas de asimilación deliberadas (1.0–1.5 s) de tramos verdaderamente estáticos o escenas desprovistas de momentos `en`.
+* **Normalización Acústica (`alinear.py`):**
+  - Procesa la pista vocal aplicando filtro paso alto a 70 Hz, remuestreo a 48 kHz mono y normalización de sonoridad estricta a **-14 LUFS** según el estándar EBU R128 antes de ubicarla en `public/voz.wav`.
