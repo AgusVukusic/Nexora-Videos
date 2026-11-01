@@ -1,144 +1,147 @@
-// Renderiza el reel con la API de Node de Remotion (sin la CLI) para Nexora Reels.
+// render.mjs — renderizado local ultrarrápido y robusto de Remotion
 //
-//   node render.mjs resumen                 comprueba el plan y enseña escenas, momentos y problemas (no renderiza)
-//   node render.mjs fotos [cada]            hoja de contacto en salida/hoja.png (por escena: la mitad, cada momento y el final;
-//                                           con "cada" en segundos, uno cada tantos segundos)
-//   node render.mjs video [--borrador]      vídeo final en salida/reel.mp4, por trozos (se puede relanzar y sigue donde iba)
-//   node render.mjs foto 12.5 [20 …]        fotogramas sueltos a tamaño completo en salida/foto_12.50.png
-//   node render.mjs portada                 portada en salida/portada.png y su comprobación en salida/portada_check.png
-//
-// Opciones: --max-segundos 270 (para antes de que corte el tiempo de un comando; vuelve a lanzarlo y sigue),
-//           --forzar (renderiza aunque el resumen tenga problemas), --crf 20 (calidad: menos = mejor y más pesado),
-//           --hilos 2 (pestañas del navegador renderizando a la vez; bájalo si se queda sin memoria),
-//           --limite-mb 28 (si el vídeo pesa más, se recomprime para que se pueda descargar).
+// Comandos disponibles:
+//   node render.mjs              -> resumen del plan
+//   node render.mjs resumen      -> duración, escenas, momentos de corte y problemas
+//   node render.mjs fotos        -> hoja de contacto (salida/hoja.png) con un fotograma por escena
+//   node render.mjs fotos 0.5    -> hoja de contacto cada medio segundo
+//   node render.mjs foto 12.5    -> fotograma suelto en salida/foto_12.50.png
+//   node render.mjs video        -> render por trozos en salida/reel.mp4 (1080x1920 a 30 fps)
+//   node render.mjs video --borrador -> rápido a mitad de resolución (540x960, crf 26)
+//   node render.mjs portada      -> salida/portada.png y comprobación del recorte 3:4
+
 import { bundle } from "@remotion/bundler";
-import { openBrowser, renderMedia, renderStill, selectComposition } from "@remotion/renderer";
-import crypto from "node:crypto";
-import { execFileSync, spawnSync } from "node:child_process";
+import { renderMedia, renderStill, selectComposition, openBrowser } from "@remotion/renderer";
+import path from "node:path";
 import fs from "node:fs";
 import os from "node:os";
-import path from "node:path";
+import crypto from "node:crypto";
+import { execFileSync, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-// Remotion avisa de la memoria del contenedor en cada render: es ruido, se quita de la salida.
-const RUIDO = /Memory reported by|inadvertently set the --memory|Using the lower amount of memory|Detected differing memory amounts/;
-for (const s of [process.stdout, process.stderr]) {
-  const escribir = s.write.bind(s);
-  s.write = (trozo, ...resto) => {
-    const texto = typeof trozo === "string" ? trozo : Buffer.from(trozo).toString("utf8");
-    if (!RUIDO.test(texto)) return escribir(trozo, ...resto);
-    const limpio = texto.split("\n").filter((l) => !RUIDO.test(l)).join("\n");
-    return limpio.trim() ? escribir(limpio, ...resto) : true;
-  };
-}
+// En Windows Remotion a veces escupe avisos de memoria en stderr aunque el render vaya perfecto.
+// Los silenciamos para no alarmar al usuario si el proceso termina bien.
+const RUIDO = /Memory reported by|inadvertently set the --max-old-space-size/i;
 
 const RAIZ = path.dirname(fileURLToPath(import.meta.url));
 const SALIDA = path.join(RAIZ, "salida");
 const TROZOS = path.join(SALIDA, "trozos");
+
 const args = process.argv.slice(2);
 const cmd = args[0] ?? "resumen";
 const opt = (n, def) => {
   const i = args.indexOf(`--${n}`);
-  return i >= 0 ? args[i + 1] : def;
+  return i >= 0 && args[i + 1] ? args[i + 1] : def;
 };
 const flag = (n) => args.includes(`--${n}`);
+
 const t0 = Date.now();
 const seg = () => ((Date.now() - t0) / 1000).toFixed(1);
-const MAX_SEG = Number(opt("max-segundos", 270));
-// 30 MB es el límite de descarga de archivos en la app de Claude; dejamos margen.
-const LIMITE_MB = Number(opt("limite-mb", 28));
-fs.mkdirSync(SALIDA, { recursive: true });
 
-// ------------------------------------------------------------ navegador y ffmpeg (los encuentra preparar.py)
+// Límite de tiempo por ejecución: si se supera se para limpiamente y se puede reanudar
+const MAX_SEG = Number(opt("max-segundos", 270));
+// Límite de tamaño del MP4 final (en MB): si lo supera se recomprime para que quepa
+const LIMITE_MB = Number(opt("limite-mb", 28));
+
+// ------------------------------------------------------------ entorno (navegador)
 const entorno = fs.existsSync(path.join(RAIZ, "entorno.json")) ? JSON.parse(fs.readFileSync(path.join(RAIZ, "entorno.json"), "utf8")) : {};
-let navegador = process.env.BROWSER_EXECUTABLE || entorno.navegador || null;
-// el Chromium que viene en npm (@sparticuz/chromium) se descomprime en /tmp: si ya no está, se vuelve a sacar
-if (navegador && !fs.existsSync(navegador) && fs.existsSync(path.join(RAIZ, "node_modules", "@sparticuz", "chromium"))) {
-  const m = await import("@sparticuz/chromium");
-  navegador = await (m.default ?? m).executablePath();
-}
-const modoChrome = entorno.modo || (navegador && /headless[-_]shell/.test(navegador) ? "headless-shell" : navegador ? "chrome-for-testing" : "headless-shell");
+let navegador = process.env.BROWSER_EXECUTABLE || entorno.navegador || undefined;
+const modoChrome = entorno.modo || (navegador && /headless[-_]?shell/i.test(navegador) ? "chrome-headless-shell" : "chrome");
 const opcNav = { browserExecutable: navegador, chromeMode: modoChrome };
 
+// ------------------------------------------------------------ ffmpeg
 const ffmpeg = () => {
-  if (entorno.ffmpeg && fs.existsSync(entorno.ffmpeg)) return { bin: entorno.ffmpeg, env: process.env };
-  const sistema = spawnSync("ffmpeg", ["-version"], { stdio: "ignore" });
-  if (sistema.status === 0) return { bin: "ffmpeg", env: process.env };
-  // el ffmpeg que trae Remotion (con sus librerías al lado)
-  const dir = path.join(RAIZ, "node_modules", "@remotion", `compositor-${process.platform}-${process.arch === "x64" ? "x64" : "arm64"}${process.platform === "linux" ? "-gnu" : ""}`);
-  const bin = path.join(dir, process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg");
-  if (fs.existsSync(bin)) return { bin, env: { ...process.env, LD_LIBRARY_PATH: `${dir}:${process.env.LD_LIBRARY_PATH ?? ""}`, DYLD_LIBRARY_PATH: dir } };
-  throw new Error("No encuentro ffmpeg. Ejecuta python3 scripts/preparar.py otra vez o instala imageio-ffmpeg (pip install imageio-ffmpeg).");
-};
-const ff = (argumentos) => {
-  const { bin, env } = ffmpeg();
-  return execFileSync(bin, ["-hide_banner", "-loglevel", "error", "-y", ...argumentos], { env, stdio: ["ignore", "pipe", "pipe"] });
+  for (const n of ["ffmpeg", "ffmpeg.exe"]) {
+    try {
+      execFileSync(n, ["-version"], { stdio: "ignore" });
+      return n;
+    } catch {}
+  }
+  return "ffmpeg";
 };
 
-// ------------------------------------------------------------ validación de integridad de trozos de video
+const ff = (argumentos) => {
+  const res = spawnSync(ffmpeg(), argumentos, { encoding: "utf8" });
+  if (res.status !== 0) {
+    const err = (res.stderr || res.stdout || "").trim();
+    throw new Error(`ffmpeg falló (${res.status}): ${err.slice(-400)}`);
+  }
+  return res.stdout;
+};
+
+// Comprueba que un trozo .mp4 existe, tiene tamaño razonable y ffprobe lo lee entero
 const validarTrozo = (archivo) => {
   if (!fs.existsSync(archivo)) return false;
-  try {
-    const st = fs.statSync(archivo);
-    if (st.size < 1000) return false;
-    // Comprobación rápida de integridad del contenedor MP4 con ffmpeg
-    const { bin, env } = ffmpeg();
-    const res = spawnSync(bin, ["-v", "error", "-i", archivo, "-f", "null", "-"], { env, stdio: "ignore" });
-    return res.status === 0;
-  } catch {
-    return false;
-  }
+  if (fs.statSync(archivo).size < 10000) return false;
+  const probe = spawnSync(ffmpeg().replace(/ffmpeg(\.exe)?$/i, "ffprobe$1"), ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", archivo], { encoding: "utf8" });
+  return probe.status === 0 && Number(probe.stdout.trim()) > 0;
 };
 
-// ------------------------------------------------------------ audio: voz + efectos mezclados con ffmpeg
-// (igual que en la composición: la voz desde el principio y cada efecto en su fotograma, como mucho 2 s)
+// ------------------------------------------------------------ audio (mezcla ffmpeg)
+// Mezcla la voz y los efectos en un solo archivo WAV estéreo a 48 kHz.
+// Usar ffmpeg fuera de Remotion evita bugs de audio desincronizado al renderizar por trozos.
 const mezclarAudio = (a, fps, destino) => {
-  const dur = (a.fotogramas / fps).toFixed(3);
-  const entradas = [];
-  const filtros = [];
-  const pistas = [];
+  fs.mkdirSync(path.dirname(destino), { recursive: true });
   const voz = a.voz ? path.join(RAIZ, "public", a.voz) : null;
-  if (voz && fs.existsSync(voz)) entradas.push("-i", voz);
-  else {
-    if (voz) console.log(`AVISO: no encuentro public/${a.voz}; el vídeo saldrá sin voz.`);
-    entradas.push("-f", "lavfi", "-t", dur, "-i", "anullsrc=r=48000:cl=stereo");
+  const efectos = a.efectos || [];
+  const totalSeg = (a.fotogramas / fps).toFixed(3);
+
+  // Si no hay voz ni efectos, generamos silencio de la duración exacta
+  if (!voz && !efectos.length) {
+    ff(["-f", "lavfi", "-i", `anullsrc=r=48000:cl=stereo`, "-t", totalSeg, "-y", destino]);
+    return;
   }
-  filtros.push(`[0:a]aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo,apad=whole_dur=${dur}[a0]`);
-  pistas.push("[a0]");
-  a.efectos.forEach((e, k) => {
-    const archivo = path.join(RAIZ, "public", "sonidos", `${e.s}.wav`);
-    if (!fs.existsSync(archivo)) return;
-    entradas.push("-i", archivo);
-    const n = entradas.filter((x) => x === "-i").length - 1;
-    const ms = Math.max(0, Math.round((e.en / fps) * 1000));
-    filtros.push(`[${n}:a]atrim=0:2,aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo,volume=${e.vol},adelay=${ms}|${ms}[e${k}]`);
-    pistas.push(`[e${k}]`);
-  });
-  filtros.push(`${pistas.join("")}amix=inputs=${pistas.length}:normalize=0:duration=first,atrim=0:${dur}[m]`);
-  ff([...entradas, "-filter_complex", filtros.join(";"), "-map", "[m]", "-c:a", "pcm_s16le", "-ar", "48000", destino]);
+
+  const inputs = [];
+  const filtros = [];
+  let idx = 0;
+
+  if (voz && fs.existsSync(voz)) {
+    inputs.push("-i", voz);
+    filtros.push(`[${idx}:a]atrim=0:${totalSeg},asetpts=PTS-STARTPTS,aformat=sample_fmts=s16:sample_rates=48000:channel_layouts=stereo[a_voz]`);
+    idx++;
+  } else {
+    inputs.push("-f", "lavfi", "-i", `anullsrc=r=48000:cl=stereo`);
+    filtros.push(`[${idx}:a]atrim=0:${totalSeg},asetpts=PTS-STARTPTS[a_voz]`);
+    idx++;
+  }
+
+  const etiquetasEfectos = [];
+  for (const [i, e] of efectos.entries()) {
+    const arch = path.join(RAIZ, "public", "sonidos", `${e.s}.wav`);
+    if (!fs.existsSync(arch)) continue;
+    const delayMs = Math.max(0, Math.round((e.en / fps) * 1000));
+    const vol = typeof e.vol === "number" ? e.vol : 1;
+    inputs.push("-i", arch);
+    const tag = `a_fx${i}`;
+    filtros.push(`[${idx}:a]volume=${vol.toFixed(2)},adelay=${delayMs}|${delayMs},aformat=sample_fmts=s16:sample_rates=48000:channel_layouts=stereo[${tag}]`);
+    etiquetasEfectos.push(`[${tag}]`);
+    idx++;
+  }
+
+  if (etiquetasEfectos.length) {
+    const todos = `[a_voz]${etiquetasEfectos.join("")}`;
+    filtros.push(`${todos}amix=inputs=${etiquetasEfectos.length + 1}:duration=first:dropout_transition=0,volume=${etiquetasEfectos.length + 1}[a_final]`);
+  } else {
+    filtros.push(`[a_voz]aresample=48000[a_final]`);
+  }
+
+  ff([...inputs, "-filter_complex", filtros.join(";"), "-map", "[a_final]", "-c:a", "pcm_s16le", "-t", totalSeg, "-y", destino]);
 };
 
-// ------------------------------------------------------------ empaquetado (se reutiliza si no ha cambiado nada)
-// soloVideo: para los trozos del vídeo no cuenta la portada (cambiarla no obliga a renderizar el vídeo otra vez)
-const huella = (soloVideo = false) => {
-  const h = crypto.createHash("sha1");
-  const plan = path.join(RAIZ, "src", "datos", "plan.json");
+// ------------------------------------------------------------ empaquetado y huellas de caché
+// Huella general para el empaquetado de Webpack (se invalida si cambia cualquier archivo de código o recurso).
+const huella = () => {
+  const h = crypto.createHash("sha256");
   const recorrer = (d) => {
     if (!fs.existsSync(d)) return;
     for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const p = path.join(d, e.name);
       if (e.isDirectory()) recorrer(p);
-      else if (soloVideo && p === plan) {
-        try {
-          const j = JSON.parse(fs.readFileSync(p, "utf8"));
-          delete j.portada;
-          h.update(`${p}:${JSON.stringify(j)}`);
-        } catch {
-          h.update(fs.readFileSync(p));
-        }
-      } else {
-        const st = fs.statSync(p);
-        h.update(`${p}:${st.size}:${st.mtimeMs}`);
+      else {
+        const rel = path.relative(RAIZ, p).replace(/\\/g, "/");
+        h.update(rel);
+        h.update(fs.readFileSync(p));
       }
     }
   };
@@ -147,38 +150,127 @@ const huella = (soloVideo = false) => {
   return h.digest("hex").slice(0, 12);
 };
 
-const empaquetar = async () => {
-  const id = huella();
-  const destino = path.join(os.tmpdir(), `nexora-reels-${id}`);
-  if (fs.existsSync(path.join(destino, "index.html"))) return destino;
-  const url = await bundle({
-    entryPoint: path.join(RAIZ, "src", "index.ts"),
-    publicDir: path.join(RAIZ, "public"),
-    outDir: destino,
-    webpackOverride: (currentConfiguration) => {
-      const extraModules = [];
-      if (process.env.NODE_PATH) {
-        extraModules.push(...process.env.NODE_PATH.split(path.delimiter));
+// Huella de render visual (para trozos de vídeo):
+// Recorre src/ (código, escenas, datos) excluyendo el campo .portada de plan.json.
+// Recorre public/ (fuentes, texturas, personaje, fotos) EXCLUYENDO expresamente recursos exclusivamente sonoros
+// (public/sonidos/ y public/voz.*), ya que los trozos de Remotion se renderizan mudos (muted: true)
+// y el audio se mezcla externamente mediante FFmpeg.
+const huellaVideo = () => {
+  const h = crypto.createHash("sha256");
+  const plan = path.join(RAIZ, "src", "datos", "plan.json");
+
+  const recorrerSrc = (d) => {
+    if (!fs.existsSync(d)) return;
+    for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) recorrerSrc(p);
+      else if (p === plan) {
+        try {
+          const j = JSON.parse(fs.readFileSync(p, "utf8"));
+          delete j.portada;
+          delete j.sonidos;
+          delete j.audio;
+          if (Array.isArray(j.frases)) {
+            j.frases = j.frases.map((f) => {
+              if (!f || typeof f !== "object") return f;
+              const fCopy = { ...f };
+              delete fCopy.sonidos;
+              return fCopy;
+            });
+          }
+          h.update(`plan:${JSON.stringify(j)}`);
+        } catch {
+          h.update(fs.readFileSync(p));
+        }
+      } else {
+        const rel = path.relative(path.join(RAIZ, "src"), p).replace(/\\/g, "/");
+        h.update(rel);
+        h.update(fs.readFileSync(p));
       }
-      if (!extraModules.length) return currentConfiguration;
-      return {
-        ...currentConfiguration,
-        resolve: {
-          ...currentConfiguration.resolve,
-          modules: [
-            ...(currentConfiguration.resolve?.modules || ["node_modules"]),
-            ...extraModules,
-          ],
-        },
-      };
-    },
-    onProgress: () => {},
-  });
-  console.log(`empaquetado en ${seg()} s`);
-  return url;
+    }
+  };
+
+  const recorrerPublic = (d) => {
+    if (!fs.existsSync(d)) return;
+    for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      const p = path.join(d, e.name);
+      const rel = path.relative(path.join(RAIZ, "public"), p).replace(/\\/g, "/");
+      // Excluir recursos puramente sonoros (carpeta de efectos, pistas de voz y formatos de audio)
+      if (rel === "sonidos" || rel.startsWith("sonidos/") || /\.(wav|mp3|m4a|ogg|aac|flac)(\..*)?$/i.test(rel) || rel.includes("voz")) {
+        continue;
+      }
+      if (e.isDirectory()) recorrerPublic(p);
+      else {
+        h.update(rel);
+        h.update(fs.readFileSync(p));
+      }
+    }
+  };
+
+  recorrerSrc(path.join(RAIZ, "src"));
+  recorrerPublic(path.join(RAIZ, "public"));
+  return h.digest("hex").slice(0, 12);
 };
 
-const abrirNavegador = () => openBrowser("chrome", { browserExecutable: navegador, chromeMode: modoChrome, logLevel: "error" });
+// Huella de mezcla de audio:
+// Incluye voz.wav, los archivos WAV de efectos utilizados en la composición,
+// los eventos de audio (nombre, tiempo en frames, volumen), duración total y FPS.
+const huellaAudio = (audioConfig, fps) => {
+  const h = crypto.createHash("sha256");
+  const voz = audioConfig.voz ? path.join(RAIZ, "public", audioConfig.voz) : null;
+  if (voz && fs.existsSync(voz)) {
+    h.update(`voz:${audioConfig.voz}`);
+    h.update(fs.readFileSync(voz));
+  } else {
+    h.update("voz:null");
+  }
+
+  const efectos = audioConfig.efectos || [];
+  const sonidosUsados = Array.from(new Set(efectos.map((e) => e.s))).sort();
+  for (const s of sonidosUsados) {
+    const arch = path.join(RAIZ, "public", "sonidos", `${s}.wav`);
+    if (fs.existsSync(arch)) {
+      h.update(`sfx:${s}`);
+      h.update(fs.readFileSync(arch));
+    } else {
+      h.update(`sfx:${s}:missing`);
+    }
+  }
+
+  h.update(`fps:${fps}`);
+  h.update(`fotogramas:${audioConfig.fotogramas}`);
+  for (const e of efectos) {
+    h.update(`efecto:${e.s}:${e.en}:${e.vol}`);
+  }
+  h.update("mix:48000:stereo:pcm_s16le:atrim:adelay:aresample:amix");
+  return h.digest("hex").slice(0, 12);
+};
+
+const empaquetar = async () => {
+  const c = path.join(SALIDA, ".bundle");
+  const m = path.join(c, "manifest.json");
+  const h = huella();
+  if (fs.existsSync(m)) {
+    try {
+      const { huella: hVieja } = JSON.parse(fs.readFileSync(m, "utf8"));
+      if (hVieja === h && fs.existsSync(path.join(c, "index.html"))) return c;
+    } catch {}
+  }
+  fs.mkdirSync(c, { recursive: true });
+  await bundle({
+    entryPoint: path.join(RAIZ, "src", "index.ts"),
+    outDir: c,
+    publicDir: path.join(RAIZ, "public"),
+    onProgress: (p) => {
+      if (p === 100) console.log(`código empaquetado · ${seg()} s`);
+    },
+  });
+  fs.writeFileSync(m, JSON.stringify({ huella: h }), "utf8");
+  return c;
+};
+
+// ------------------------------------------------------------ navegador e inspección
+const abrirNavegador = () => openBrowser("chrome", { browserExecutable: navegador, chromeMode: modoChrome });
 
 const elegir = async (serveUrl, id, browser, inputProps = {}) => selectComposition({ serveUrl, id, inputProps, puppeteerInstance: browser, ...opcNav, logLevel: "error" });
 
@@ -277,9 +369,11 @@ const main = async () => {
       const crf = Number(opt("crf", borrador ? 26 : 20));
       const TROZO = 240; // 8 s por trozo: cada trozo tarda poco y se puede seguir si se corta
       const total = comp.durationInFrames;
-      const clave = `${huella(true)}-${escala}-${crf}`;
-      const dirT = path.join(TROZOS, clave);
+      const claveVideo = `${huellaVideo()}-${escala}-${crf}`;
+      const dirT = path.join(TROZOS, claveVideo);
       fs.mkdirSync(dirT, { recursive: true });
+      const claveAudio = huellaAudio(r.audio, comp.fps);
+      console.log(`huella video: ${claveVideo} · huella audio: ${claveAudio}`);
       const n = Math.ceil(total / TROZO);
       const conc = Math.max(1, Number(opt("hilos", Math.min(os.cpus().length, 4))));
       for (let k = 0; k < n; k++) {
@@ -296,7 +390,9 @@ const main = async () => {
         fs.renameSync(archivo + ".tmp.mp4", archivo);
         console.log(`trozo ${k + 1}/${n} (fotogramas ${a}…${b}) listo · ${seg()} s`);
       }
-      const audio = path.join(dirT, "audio.wav");
+      const dirAudio = path.join(TROZOS, "audio");
+      fs.mkdirSync(dirAudio, { recursive: true });
+      const audio = path.join(dirAudio, `${claveAudio}.wav`);
       if (!fs.existsSync(audio)) mezclarAudio(r.audio, comp.fps, audio);
       const lista = path.join(dirT, "lista.txt");
       fs.writeFileSync(lista, Array.from({ length: n }, (_, k) => {
