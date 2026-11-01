@@ -464,12 +464,12 @@ const main = async () => {
         return `file '${chunkPath}'`;
       }).join("\n"), "utf8");
       const final = path.join(SALIDA, borrador ? "borrador.mp4" : "reel.mp4");
-      ff(["-f", "concat", "-safe", "0", "-i", lista, "-i", audio, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", final]);
+      ff(["-y", "-f", "concat", "-safe", "0", "-i", lista, "-i", audio, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", final]);
       let mb = fs.statSync(final).size / 1e6;
       if (mb > LIMITE_MB) {
         // la app de Claude no deja descargar archivos de más de 30 MB: se recomprime a la tasa justa
         const kbps = Math.floor(((LIMITE_MB * 8e6) / (total / comp.fps) - 200e3) / 1000);
-        ff(["-i", final, "-c:v", "libx264", "-preset", "veryfast", "-b:v", `${kbps}k`, "-maxrate", `${Math.round(kbps * 1.3)}k`, "-bufsize", `${kbps * 2}k`, "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", final + ".tmp.mp4"]);
+        ff(["-y", "-i", final, "-c:v", "libx264", "-preset", "veryfast", "-b:v", `${kbps}k`, "-maxrate", `${Math.round(kbps * 1.3)}k`, "-bufsize", `${kbps * 2}k`, "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", final + ".tmp.mp4"]);
         fs.renameSync(final + ".tmp.mp4", final);
         mb = fs.statSync(final).size / 1e6;
       }
