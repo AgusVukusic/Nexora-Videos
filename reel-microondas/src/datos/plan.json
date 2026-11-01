@@ -1,0 +1,107 @@
+{
+  "titulo": "La mentira del microondas",
+  "estilo": "noche",
+  "subtitulos": "linea",
+  "personaje": false,
+  "frases": [
+    {
+      "texto": "El microondas *no calienta* la comida de dentro hacia afuera.",
+      "emocion": "[skeptical]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "MicroondasGancho",
+        "en": ["calienta"]
+      }
+    },
+    {
+      "texto": "De hecho, ni siquiera calienta *la comida entera*.",
+      "emocion": "[curious]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "CorteComida",
+        "en": ["siquiera", "entera"]
+      }
+    },
+    {
+      "texto": "Dentro tiene una pieza llamada *magnetrón* que dispara ondas invisibles.",
+      "emocion": "[confident]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "Magnetron",
+        "en": ["pieza", "magnetron", "ondas"]
+      }
+    },
+    {
+      "texto": "Esas ondas vibran a *2.400 millones* de veces por segundo.",
+      "emocion": "[excited]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "MoleculaAgua",
+        "en": ["vibran", "millones"]
+      }
+    },
+    {
+      "texto": "Y están calibradas para mover solo una cosa: *moléculas de agua*.",
+      "emocion": "[confident]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "MaterialesVsAgua",
+        "en": ["calibradas", "solo", "agua"]
+      }
+    },
+    {
+      "texto": "Al chocar entre ellas a esa velocidad, producen *fricción y calor*.",
+      "emocion": "[curious]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "FriccionTermica",
+        "en": ["chocar", "velocidad", "friccion"]
+      }
+    },
+    {
+      "texto": "Por eso, si metes un recipiente totalmente seco, sale *completamente frío*.",
+      "emocion": "[confident]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "PlatoSeco",
+        "en": ["metes", "seco", "frio"]
+      }
+    },
+    {
+      "texto": "¿Por qué a veces el plato quema? Porque la comida caliente le *transfiere su calor*.",
+      "emocion": "[playfully]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "ConduccionCalor",
+        "en": ["plato", "transfiere"]
+      }
+    },
+    {
+      "texto": "O peor: porque la cerámica tiene *humedad atrapada* en sus poros.",
+      "emocion": "[skeptical]",
+      "escena": {
+        "tipo": "propia",
+        "nombre": "CeramicaPoros",
+        "en": ["ceramica", "poros"]
+      }
+    },
+    {
+      "texto": "*Guarda este vídeo* para cuando alguien te repita el mito.",
+      "emocion": "[excited]",
+      "sinSubtitulos": true,
+      "escena": {
+        "tipo": "cta",
+        "verbo": "Guarda",
+        "palabra": "ESTE REEL",
+        "texto": "¿A ti también / te pasaba? 👇",
+        "iconos": ["bookmark", "message-circle", "share-2", "heart"],
+        "en": ["Guarda", "cuando", "repita"]
+      }
+    }
+  ],
+  "portada": {
+    "etiqueta": "CIENCIA",
+    "lineas": ["EL MITO", "DEL", "*MICROONDAS*"],
+    "icono": "microwave"
+  }
+}

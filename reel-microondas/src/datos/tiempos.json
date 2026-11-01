@@ -1,0 +1,720 @@
+{
+ "voz": "audio.mp3",
+ "motor": "silabas",
+ "velocidad": 1.05,
+ "duracion": 39.5,
+ "frases": [
+  {
+   "texto": "El microondas no calienta la comida de dentro hacia afuera.",
+   "inicio": 0.02,
+   "fin": 3.24,
+   "palabras": [
+    {
+     "w": "El",
+     "t": 0.02,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "microondas",
+     "t": 0.19,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "no",
+     "t": 0.66,
+     "clave": true,
+     "g": 0
+    },
+    {
+     "w": "calienta",
+     "t": 0.82,
+     "clave": true,
+     "g": 0
+    },
+    {
+     "w": "la",
+     "t": 1.32,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "comida",
+     "t": 1.48,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "de",
+     "t": 1.95,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "dentro",
+     "t": 2.11,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "hacia",
+     "t": 2.43,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "afuera.",
+     "t": 2.74,
+     "clave": false,
+     "g": -1
+    }
+   ]
+  },
+  {
+   "texto": "De hecho, ni siquiera calienta la comida entera.",
+   "inicio": 3.4,
+   "fin": 6.12,
+   "palabras": [
+    {
+     "w": "De",
+     "t": 3.4,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "hecho,",
+     "t": 3.63,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "ni",
+     "t": 3.93,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "siquiera",
+     "t": 4.09,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "calienta",
+     "t": 4.55,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "la",
+     "t": 5.01,
+     "clave": true,
+     "g": 1
+    },
+    {
+     "w": "comida",
+     "t": 5.17,
+     "clave": true,
+     "g": 1
+    },
+    {
+     "w": "entera.",
+     "t": 5.63,
+     "clave": true,
+     "g": 1
+    }
+   ]
+  },
+  {
+   "texto": "Dentro tiene una pieza llamada magnetrón que dispara ondas invisibles.",
+   "inicio": 6.28,
+   "fin": 10.39,
+   "palabras": [
+    {
+     "w": "Dentro",
+     "t": 6.28,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "tiene",
+     "t": 6.67,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "una",
+     "t": 7.0,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "pieza",
+     "t": 7.33,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "llamada",
+     "t": 7.65,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "magnetrón",
+     "t": 8.13,
+     "clave": true,
+     "g": 2
+    },
+    {
+     "w": "que",
+     "t": 8.68,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "dispara",
+     "t": 8.84,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "ondas",
+     "t": 9.41,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "invisibles.",
+     "t": 9.73,
+     "clave": false,
+     "g": -1
+    }
+   ]
+  },
+  {
+   "texto": "Esas ondas vibran a 2.400 millones de veces por segundo.",
+   "inicio": 10.55,
+   "fin": 14.54,
+   "palabras": [
+    {
+     "w": "Esas",
+     "t": 10.55,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "ondas",
+     "t": 10.96,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "vibran",
+     "t": 11.29,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "a",
+     "t": 11.63,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "2.400",
+     "t": 11.79,
+     "clave": true,
+     "g": 3
+    },
+    {
+     "w": "millones",
+     "t": 12.83,
+     "clave": true,
+     "g": 3
+    },
+    {
+     "w": "de",
+     "t": 13.33,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "veces",
+     "t": 13.5,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "por",
+     "t": 13.85,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "segundo.",
+     "t": 14.02,
+     "clave": false,
+     "g": -1
+    }
+   ]
+  },
+  {
+   "texto": "Y están calibradas para mover solo una cosa: moléculas de agua.",
+   "inicio": 14.7,
+   "fin": 18.54,
+   "palabras": [
+    {
+     "w": "Y",
+     "t": 14.7,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "están",
+     "t": 14.94,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "calibradas",
+     "t": 15.22,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "para",
+     "t": 15.81,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "mover",
+     "t": 16.09,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "solo",
+     "t": 16.37,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "una",
+     "t": 16.65,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "cosa:",
+     "t": 16.94,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "moléculas",
+     "t": 17.48,
+     "clave": true,
+     "g": 4
+    },
+    {
+     "w": "de",
+     "t": 18.08,
+     "clave": true,
+     "g": 4
+    },
+    {
+     "w": "agua.",
+     "t": 18.22,
+     "clave": true,
+     "g": 4
+    }
+   ]
+  },
+  {
+   "texto": "Al chocar entre ellas a esa velocidad, producen fricción y calor.",
+   "inicio": 18.7,
+   "fin": 22.47,
+   "palabras": [
+    {
+     "w": "Al",
+     "t": 18.7,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "chocar",
+     "t": 18.93,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "entre",
+     "t": 19.24,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "ellas",
+     "t": 19.55,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "a",
+     "t": 19.86,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "esa",
+     "t": 20.02,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "velocidad,",
+     "t": 20.33,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "producen",
+     "t": 21.12,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "fricción",
+     "t": 21.6,
+     "clave": true,
+     "g": 5
+    },
+    {
+     "w": "y",
+     "t": 21.98,
+     "clave": true,
+     "g": 5
+    },
+    {
+     "w": "calor.",
+     "t": 22.13,
+     "clave": true,
+     "g": 5
+    }
+   ]
+  },
+  {
+   "texto": "Por eso, si metes un recipiente totalmente seco, sale completamente frío.",
+   "inicio": 22.63,
+   "fin": 27.18,
+   "palabras": [
+    {
+     "w": "Por",
+     "t": 22.63,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "eso,",
+     "t": 22.87,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "si",
+     "t": 23.25,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "metes",
+     "t": 23.41,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "un",
+     "t": 23.74,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "recipiente",
+     "t": 23.9,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "totalmente",
+     "t": 24.63,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "seco,",
+     "t": 25.3,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "sale",
+     "t": 25.76,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "completamente",
+     "t": 26.17,
+     "clave": true,
+     "g": 6
+    },
+    {
+     "w": "frío.",
+     "t": 26.99,
+     "clave": true,
+     "g": 6
+    }
+   ]
+  },
+  {
+   "texto": "¿Por qué a veces el plato quema? Porque la comida caliente le transfiere su calor.",
+   "inicio": 27.34,
+   "fin": 31.37,
+   "palabras": [
+    {
+     "w": "¿Por",
+     "t": 27.34,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "qué",
+     "t": 27.54,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "a",
+     "t": 27.68,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "veces",
+     "t": 27.82,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "el",
+     "t": 28.1,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "plato",
+     "t": 28.26,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "quema?",
+     "t": 28.55,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "Porque",
+     "t": 29.08,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "la",
+     "t": 29.37,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "comida",
+     "t": 29.52,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "caliente",
+     "t": 29.94,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "le",
+     "t": 30.36,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "transfiere",
+     "t": 30.5,
+     "clave": true,
+     "g": 7
+    },
+    {
+     "w": "su",
+     "t": 30.92,
+     "clave": true,
+     "g": 7
+    },
+    {
+     "w": "calor.",
+     "t": 31.06,
+     "clave": true,
+     "g": 7
+    }
+   ]
+  },
+  {
+   "texto": "O peor: porque la cerámica tiene humedad atrapada en sus poros.",
+   "inicio": 31.53,
+   "fin": 35.12,
+   "palabras": [
+    {
+     "w": "O",
+     "t": 31.53,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "peor:",
+     "t": 31.75,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "porque",
+     "t": 31.89,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "la",
+     "t": 32.42,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "cerámica",
+     "t": 32.56,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "tiene",
+     "t": 33.13,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "humedad",
+     "t": 33.44,
+     "clave": true,
+     "g": 8
+    },
+    {
+     "w": "atrapada",
+     "t": 33.86,
+     "clave": true,
+     "g": 8
+    },
+    {
+     "w": "en",
+     "t": 34.46,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "sus",
+     "t": 34.66,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "poros.",
+     "t": 34.8,
+     "clave": false,
+     "g": -1
+    }
+   ]
+  },
+  {
+   "texto": "Guarda este vídeo para cuando alguien te repita el mito.",
+   "inicio": 35.28,
+   "fin": 38.02,
+   "palabras": [
+    {
+     "w": "Guarda",
+     "t": 35.28,
+     "clave": true,
+     "g": 9
+    },
+    {
+     "w": "este",
+     "t": 35.61,
+     "clave": true,
+     "g": 9
+    },
+    {
+     "w": "vídeo",
+     "t": 35.91,
+     "clave": true,
+     "g": 9
+    },
+    {
+     "w": "para",
+     "t": 36.2,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "cuando",
+     "t": 36.47,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "alguien",
+     "t": 36.74,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "te",
+     "t": 37.01,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "repita",
+     "t": 37.15,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "el",
+     "t": 37.56,
+     "clave": false,
+     "g": -1
+    },
+    {
+     "w": "mito.",
+     "t": 37.69,
+     "clave": false,
+     "g": -1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+# ==========================================
+# VideoContenido - .gitignore
+# ==========================================
+
+# Dependencias instaladas
+node_modules/
+.venv/
+venv/
+env/
+
+# Cachés de compilación y ejecución
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Entorno local de renderizado Remotion
+.remotion/
+
+# Resultados generados, renders y trozos de video
+salida/
+**/salida/
+test-render/
+**/test-render/
+test-render-5-4/
+**/test-render-5-4/
+*.mp4
+
+# Archivos de sistema y temporales
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.log
+*.tmp
+
+# Entorno de agentes e instrucciones internas locales
+.claude/
+
+# Secretos y credenciales locales
+.env
+.env.*
+*.pem
+*.key
+
+# Proyectos independientes externos
+VideoFactory/
