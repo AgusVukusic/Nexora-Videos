@@ -154,7 +154,7 @@ Se contrastaron los hashes criptográficos SHA-256 de los 262 archivos protegido
   - `.agent/skills/nexora-reels/assets/plantilla/render.mjs` (Inclusión de flag `-y` en comandos FFmpeg)
   - `README.md` (Actualización de índice a 38 informes y estado de validación en producción)
   - `auditoria-skill-nexora/37_validacion_integral_produccion_17_escenas.md` (Presente informe técnico)
-- **Commit inicial:** *(se registrará tras el push)*
+- **Commit inicial:** `9e683538921b000faa03ff670dd217fa54f14da0` (`9e68353`)
 
 ---
 
