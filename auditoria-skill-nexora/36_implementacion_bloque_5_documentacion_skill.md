@@ -99,7 +99,7 @@ Se contrastaron los hashes SHA-256 de los 262 archivos protegidos del repositori
   - `.agent/skills/nexora-reels/references/ingenieria-remotion.md`
   - `README.md`
   - `auditoria-skill-nexora/36_implementacion_bloque_5_documentacion_skill.md`
-- **Commit inicial:** *(se registrará tras el push)*
+- **Commit inicial:** `e537fd8190c0a4492ca175ad81dd7a31febce30c` (`e537fd8`)
 
 ---
 
