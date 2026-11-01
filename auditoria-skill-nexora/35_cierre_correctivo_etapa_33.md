@@ -79,7 +79,8 @@ Las pruebas se ejecutaron en la instancia temporal aislada `%TEMP%\nexora-reels-
 
 - **Repositorio:** `https://github.com/AgusVukusic/Nexora-Videos.git`
 - **Rama:** `main`
-- **Mensaje de Commit Previsto:** `fix(nexora-reels): close stage 33 cache audit observations and register custom scenes`
+- **Commit publicado:** `07789c2f23cffbfafef36928bc43d55990f7e04c` (`07789c2`)
+- **Mensaje de Commit:** `fix(nexora-reels): close stage 33 cache audit observations and register custom scenes`
 - **Archivos Incluidos:**
   - `.agent/skills/nexora-reels/assets/plantilla/render.mjs`
   - `.agent/skills/nexora-reels/assets/plantilla/src/escenas/index.ts`
