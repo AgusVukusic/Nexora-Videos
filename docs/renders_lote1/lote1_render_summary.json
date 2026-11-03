@@ -1,0 +1,86 @@
+[
+  {
+    "id": "DemoTitular",
+    "frame": 12,
+    "out": "01_titular_f12_revelado.png",
+    "size": 63500,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\01_titular_f12_revelado.png"
+  },
+  {
+    "id": "DemoTitular",
+    "frame": 30,
+    "out": "01_titular_f30_completo.png",
+    "size": 78687,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\01_titular_f30_completo.png"
+  },
+  {
+    "id": "DemoContador",
+    "frame": 15,
+    "out": "02_contador_f15_conteo.png",
+    "size": 69608,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\02_contador_f15_conteo.png"
+  },
+  {
+    "id": "DemoContador",
+    "frame": 35,
+    "out": "02_contador_f35_climax.png",
+    "size": 88200,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\02_contador_f35_climax.png"
+  },
+  {
+    "id": "DemoTachado",
+    "frame": 15,
+    "out": "03_tachado_f15_corte.png",
+    "size": 76821,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\03_tachado_f15_corte.png"
+  },
+  {
+    "id": "DemoTachado",
+    "frame": 42,
+    "out": "03_tachado_f42_revelado.png",
+    "size": 132067,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\03_tachado_f42_revelado.png"
+  },
+  {
+    "id": "DemoObjecion",
+    "frame": 18,
+    "out": "04_objecion_f18_cita.png",
+    "size": 78479,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\04_objecion_f18_cita.png"
+  },
+  {
+    "id": "DemoObjecion",
+    "frame": 38,
+    "out": "04_objecion_f38_replica.png",
+    "size": 103703,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\04_objecion_f38_replica.png"
+  },
+  {
+    "id": "DemoCta",
+    "frame": 18,
+    "out": "05_cta_f18_palabra.png",
+    "size": 99632,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\05_cta_f18_palabra.png"
+  },
+  {
+    "id": "DemoCta",
+    "frame": 45,
+    "out": "05_cta_f45_completo.png",
+    "size": 157456,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\05_cta_f45_completo.png"
+  },
+  {
+    "id": "DemoTitularFotos",
+    "frame": 35,
+    "out": "06_titular_fotos_f35.png",
+    "size": 85954,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\06_titular_fotos_f35.png"
+  },
+  {
+    "id": "DemoCifrasRegression",
+    "frame": 25,
+    "out": "07_cifras_regresion_f25.png",
+    "size": 97606,
+    "dest": "C:\\Users\\Agustín\\AppData\\Local\\Temp\\nexora-reels-validation\\salida\\lote1\\07_cifras_regresion_f25.png"
+  }
+]
