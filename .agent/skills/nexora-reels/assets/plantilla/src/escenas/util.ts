@@ -1,5 +1,7 @@
 // Ayudas para leer y comprobar las propiedades de las escenas que vienen del plan (JSON).
 import { existeIcono } from "../piezas/basicas";
+export { validarContratoArte, type ResultadoValidacionArte } from "../motor/actual";
+export { normalizarCamara, calcularTransformacionCamara, resolverCamaraParaFrase } from "../motor/camara";
 
 export const txt = (p: Record<string, unknown>, k: string, def = ""): string =>
   typeof p[k] === "string" ? (p[k] as string) : typeof p[k] === "number" ? String(p[k]) : def;

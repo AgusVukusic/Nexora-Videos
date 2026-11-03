@@ -1,28 +1,31 @@
-// Escena "titular": el gancho para Nexora Motion Reels.
-// Un título grande que se escribe palabra a palabra al ritmo de la voz,
-// con las palabras de énfasis (*así*) en letra a mano y color de acento, una etiqueta opcional
-// ("¿SABÍAS QUE…?") y, debajo, un abanico de imágenes o un icono grande.
+// Escena "titular": el gancho editorial para Nexora Motion Reels.
+// Renovación visual Lote 1 (Etapa 41B):
+// - Composición tipográfica asimétrica de estilo suizo cinético (Kinetic Swiss).
+// - Contraste tipográfico bold de alto impacto sin cursiva manuscrita obligatoria.
+// - Kicker editorial estructurado (Etiqueta) con micro-indicador técnico.
+// - Deck multimedia fotográfico moderno con composición limpia y sin rotación desordenada de abanico plano.
+// - Safe area estricta: y in [220, 1020] px, x in [70, 1010] px.
 import React, { useMemo } from "react";
 import { AbsoluteFill, Easing, Img, spring, staticFile, useCurrentFrame } from "remotion";
 import { measureText } from "@remotion/layout-utils";
 import { C, ESTILO, SOMBRA } from "../motor/actual";
 import { FPS } from "../motor/constantes";
-import { F } from "../motor/estilos";
+import { F, alfa } from "../motor/estilos";
 import { useFuentes } from "../motor/fuentes";
 import { lerp, usePop } from "../motor/anim";
-import { Baldosa, Destello } from "../piezas/basicas";
+import { Baldosa, Icono } from "../piezas/basicas";
 import type { DefEscena, PropsEscena } from "../tipos";
 import { arr, bool, iconos, norm, reglas, txt } from "./util";
 
 type Tok = { w: string; enfasis: boolean; f: number };
 
-/** Tamaño máximo del título (los cortos salen grandes, como un cartel) y ancho disponible. */
-const TAM_MAX = 124;
+/** Tamaño máximo del título y ancho disponible en safe area. */
+const TAM_MAX = 118;
 const ANCHO_MAX = 920;
-/** Alto que ocupa la etiqueta encima del título. */
-const ALTO_ETIQUETA = 76;
+/** Alto que ocupa la etiqueta kicker encima del título. */
+const ALTO_ETIQUETA = 64;
 
-/** Reparte el título en líneas y le pone a cada palabra el fotograma en que se dice. */
+/** Reparte el título en líneas y asigna a cada palabra el fotograma exacto sincronizado con la voz. */
 const preparar = (texto: string, palabras: PropsEscena["palabras"], dur: number): Tok[][] => {
   let dentro = false;
   const lineas = texto
@@ -64,32 +67,48 @@ const preparar = (texto: string, palabras: PropsEscena["palabras"], dur: number)
   return lineas;
 };
 
+/** Renderizado cinético de cada palabra con contraste tipográfico suizo. */
 const PalabraTitulo: React.FC<{ t: Tok; tam: number; ultima: boolean }> = ({ t, tam, ultima }) => {
   const f = useCurrentFrame();
   if (f < t.f) return null;
-  const fuente = t.enfasis
-    ? { fontFamily: F.mano, fontWeight: 700, fontSize: tam * 1.28, letterSpacing: 0, color: C.acento, lineHeight: 1 }
-    : { fontFamily: F.titulo, fontWeight: ESTILO.fuentes.titulo.peso, fontSize: tam, letterSpacing: -tam * 0.02, color: C.texto, lineHeight: 1 };
+
+  // Enfoque suizo cinético: tipografía contundente, contraste bold + acento sin mano alzada obligatoria
+  const peso = t.enfasis ? "900" : String(ESTILO.fuentes.titulo.peso ?? "800");
+  const color = t.enfasis ? C.acento : C.texto;
+  const letterSpacing = t.enfasis ? -tam * 0.025 : -tam * 0.03;
+
   const ancho = measureText({
     text: t.w,
-    fontFamily: fuente.fontFamily,
-    fontWeight: String(fuente.fontWeight),
-    fontSize: fuente.fontSize,
-    letterSpacing: `${fuente.letterSpacing}px`,
+    fontFamily: F.titulo,
+    fontWeight: peso,
+    fontSize: tam,
+    letterSpacing: `${letterSpacing}px`,
     validateFontIsLoaded: false,
   }).width;
-  const hueco = ancho + (ultima ? 0 : 0.26 * tam);
-  const k = lerp(f, t.f, t.f + 6, 0, 1);
-  const g = lerp(f, t.f, t.f + 5, 0, 1, Easing.out(Easing.cubic));
+
+  const hueco = ancho + (ultima ? 0 : 0.24 * tam);
+
+  // Animación cinética suave con desenfoque de desempañado y rebote de resorte para énfasis
+  const progreso = lerp(f, t.f, t.f + 5, 0, 1, Easing.out(Easing.cubic));
+  const escalaPop = t.enfasis
+    ? spring({ frame: f - t.f, fps: FPS, config: { damping: 11, stiffness: 240, mass: 0.5 } })
+    : 1;
+
   return (
-    <span style={{ display: "inline-block", width: hueco * g, whiteSpace: "nowrap", textAlign: "left" }}>
+    <span style={{ display: "inline-block", width: hueco * Math.min(1, progreso * 1.08), whiteSpace: "nowrap", textAlign: "left" }}>
       <span
         style={{
           display: "inline-block",
-          ...fuente,
-          opacity: k,
-          transform: `translateY(${(1 - k) * 22}px)`,
-          filter: k < 1 ? `blur(${(1 - k) * 6}px)` : undefined,
+          fontFamily: F.titulo,
+          fontWeight: peso,
+          fontSize: tam,
+          letterSpacing,
+          color,
+          lineHeight: 1.06,
+          opacity: Math.min(1, progreso * 1.5),
+          transform: `translateY(${(1 - progreso) * 18}px) scale(${0.96 + 0.04 * escalaPop})`,
+          filter: progreso < 1 ? `blur(${(1 - progreso) * 4}px)` : undefined,
+          transformOrigin: "bottom left",
         }}
       >
         {t.w}
@@ -98,88 +117,173 @@ const PalabraTitulo: React.FC<{ t: Tok; tam: number; ultima: boolean }> = ({ t, 
   );
 };
 
-const Etiqueta: React.FC<{ texto: string; primera: number; grande: boolean; top: number }> = ({ texto, primera, grande, top }) => {
+/** Kicker / Etiqueta editorial con indicador técnico */
+const EtiquetaEditorial: React.FC<{ texto: string; primera: number; grande: boolean; top: number }> = ({
+  texto,
+  primera,
+  grande,
+  top,
+}) => {
   const f = useCurrentFrame();
-  const sube = grande && primera > 14;
-  const y = sube ? lerp(f, primera - 8, primera + 4, 300, 0, Easing.inOut(Easing.cubic)) : 0;
-  const s = sube ? lerp(f, primera - 8, primera + 4, 2.4, 1, Easing.inOut(Easing.cubic)) : 1;
+  const opacidad = lerp(f, Math.max(0, primera - 6), primera + 4, 0, 1, Easing.out(Easing.quad));
+  const slideY = lerp(f, Math.max(0, primera - 6), primera + 5, 12, 0, Easing.out(Easing.cubic));
+
   return (
     <div
       style={{
         position: "absolute",
         top,
-        left: 0,
-        right: 0,
+        left: 80,
+        right: 80,
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
         gap: 12,
-        transform: `translateY(${y}px) scale(${s})`,
+        opacity: opacidad,
+        transform: `translateY(${slideY}px)`,
       }}
     >
-      <Destello size={34} giro={f * 3} />
-      <span style={{ fontFamily: F.texto, fontWeight: 800, fontSize: 34, letterSpacing: 7, color: C.acento, whiteSpace: "nowrap" }}>
-        {texto.split("").map((l, k) => (
-          <span
-            key={k}
-            style={{
-              display: "inline-block",
-              opacity: lerp(f, k * 1.2, k * 1.2 + 4, 0, 1),
-              transform: `translateY(${lerp(f, k * 1.2, k * 1.2 + 5, 18, 0)}px)`,
-            }}
-          >
-            {l === " " ? " " : l}
-          </span>
-        ))}
+      <div
+        style={{
+          width: grande ? 9 : 8,
+          height: grande ? 9 : 8,
+          borderRadius: 2,
+          background: C.acento,
+          boxShadow: `0 0 10px ${C.acento}`,
+        }}
+      />
+      <span
+        style={{
+          fontFamily: F.texto,
+          fontWeight: 800,
+          fontSize: grande ? 26 : 22,
+          letterSpacing: "4px",
+          textTransform: "uppercase",
+          color: C.acento,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {texto}
       </span>
+      <div style={{ flex: 1, height: 1, background: alfa(C.linea, 0.6), marginLeft: 8 }} />
     </div>
   );
 };
 
-const anchoAbanico = (n: number) => (n <= 2 ? 330 : n === 3 ? 290 : 236);
-
-/** Alto que ocupa el abanico (con su hueco de arriba). */
-const altoAbanico = (n: number) => 70 + (anchoAbanico(n) * 2) / 3 + 60;
-
-const Abanico: React.FC<{ imagenes: string[]; desde: number; arriba: number }> = ({ imagenes, desde, arriba }) => {
+/** Galería multimedia fotográfica moderna y equilibrada (sin deformación de abanico de cartas). */
+const DeckFotografico: React.FC<{ imagenes: string[]; desde: number; arriba: number }> = ({
+  imagenes,
+  desde,
+  arriba,
+}) => {
   const f = useCurrentFrame();
   const n = imagenes.length;
-  const w = anchoAbanico(n);
-  const cy = arriba + 70 + w / 3;
+
+  if (n === 1) {
+    const w = 720;
+    const h = 340;
+    const p = spring({ frame: f - desde, fps: FPS, config: { damping: 14, stiffness: 140, mass: 0.8 } });
+    if (f < desde) return null;
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: 540 - w / 2,
+          top: arriba + 36,
+          width: w,
+          height: h,
+          borderRadius: 20,
+          overflow: "hidden",
+          border: `1px solid ${C.linea}`,
+          boxShadow: SOMBRA,
+          transform: `scale(${0.92 + 0.08 * p}) translateY(${(1 - p) * 24}px)`,
+          opacity: Math.min(1, p * 2),
+        }}
+      >
+        <Img src={staticFile(imagenes[0])} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
+    );
+  }
+
+  if (n === 2) {
+    const w = 440;
+    const h = 280;
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: 80,
+          right: 80,
+          top: arriba + 36,
+          display: "flex",
+          justifyContent: "center",
+          gap: 28,
+        }}
+      >
+        {imagenes.map((src, k) => {
+          const d = desde + k * 4;
+          const p = spring({ frame: f - d, fps: FPS, config: { damping: 14, stiffness: 140, mass: 0.8 } });
+          if (f < d) return null;
+          return (
+            <div
+              key={k}
+              style={{
+                width: w,
+                height: h,
+                borderRadius: 18,
+                overflow: "hidden",
+                border: `1px solid ${C.linea}`,
+                boxShadow: SOMBRA,
+                transform: `scale(${0.92 + 0.08 * p}) translateY(${(1 - p) * 20}px)`,
+                opacity: Math.min(1, p * 2),
+              }}
+            >
+              <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // 3 o 4 imágenes: composición en deck moderno escalonado
+  const w = n === 3 ? 360 : 320;
+  const h = 250;
   return (
-    <AbsoluteFill style={{ zIndex: 0 }}>
+    <div
+      style={{
+        position: "absolute",
+        left: 60,
+        right: 60,
+        top: arriba + 32,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: n === 3 ? 24 : 16,
+      }}
+    >
       {imagenes.map((src, k) => {
         const d = desde + k * 3;
-        const p = spring({ frame: f - d, fps: FPS, config: { damping: 13, stiffness: 140, mass: 0.7 } });
+        const p = spring({ frame: f - d, fps: FPS, config: { damping: 13, stiffness: 150, mass: 0.7 } });
         if (f < d) return null;
-        const pos = (k - (n - 1) / 2) / Math.max(1, (n - 1) / 2); // -1..1
-        const ang = pos * 17;
-        const dx = pos * (n <= 2 ? 190 : 330);
-        const dy = Math.abs(pos) * 40;
-        const flo = Math.sin(f / 15 + k * 1.7) * 6;
         return (
           <div
             key={k}
             style={{
-              position: "absolute",
-              left: 540 + dx * p - w / 2,
-              top: cy - 120 + (120 + dy) * p - w / 3 + flo,
               width: w,
-              height: (w * 2) / 3,
-              borderRadius: w * 0.08,
+              height: h,
+              borderRadius: 16,
               overflow: "hidden",
-              border: `5px solid ${C.tarjeta}`,
+              border: `1px solid ${C.linea}`,
               boxShadow: SOMBRA,
-              transform: `rotate(${ang * p}deg) scale(${0.25 + 0.75 * p})`,
-              opacity: Math.min(1, p * 3),
-              zIndex: Math.round(10 - Math.abs(pos) * 5),
+              transform: `scale(${0.9 + 0.1 * p}) translateY(${(1 - p) * 18}px)`,
+              opacity: Math.min(1, p * 2),
             }}
           >
             <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
         );
       })}
-    </AbsoluteFill>
+    </div>
   );
 };
 
@@ -191,52 +295,78 @@ const Titular: React.FC<PropsEscena> = ({ p, b, dur, palabras }) => {
   const icono = txt(p, "icono");
   const lineas = useMemo(() => preparar(texto, palabras, dur), [texto, palabras, dur]);
   const ic = usePop(b[0] ?? 0);
+
   if (!ok) return null;
-  // tamaño: lo más grande que quepa a lo ancho (como mucho TAM_MAX) y que no se coma la pantalla a lo alto
+
+  // Medición matemática de texto para cálculo determinista de safe areas
   const anchoLinea = (l: Tok[], s: number) =>
     l.reduce(
       (a, t, k) =>
         a +
         measureText({
           text: t.w,
-          fontFamily: t.enfasis ? F.mano : F.titulo,
-          fontWeight: String(t.enfasis ? 700 : ESTILO.fuentes.titulo.peso),
-          fontSize: t.enfasis ? s * 1.28 : s,
-          letterSpacing: t.enfasis ? "0px" : `${-s * 0.02}px`,
+          fontFamily: F.titulo,
+          fontWeight: t.enfasis ? "900" : String(ESTILO.fuentes.titulo.peso ?? "800"),
+          fontSize: s,
+          letterSpacing: t.enfasis ? `${-s * 0.025}px` : `${-s * 0.03}px`,
           validateFontIsLoaded: false,
         }).width +
-        (k < l.length - 1 ? 0.26 * s : 0),
+        (k < l.length - 1 ? 0.24 * s : 0),
       0
     );
+
   const ancho100 = Math.max(1, ...lineas.map((l) => anchoLinea(l, 100)));
   const conMedia = imagenes.length > 0 || !!icono;
-  const altoMaxTitulo = conMedia ? 470 : 640;
-  // las líneas con letra a mano necesitan algo más de alto
-  const factores = lineas.map((l) => (l.some((t) => t.enfasis) ? 1.42 : 1.16));
+  const altoMaxTitulo = conMedia ? 420 : 620;
+
+  const factores = lineas.map(() => 1.18);
   const sumaFactores = factores.reduce((a, x) => a + x, 0) || 1;
   const tam = Math.max(46, Math.min(TAM_MAX * ESTILO.escalaTitulo, (100 * ANCHO_MAX) / ancho100, altoMaxTitulo / sumaFactores));
   const altos = factores.map((x) => x * tam);
   const altoTitulo = altos.reduce((a, x) => a + x, 0);
-  // todo el bloque (etiqueta + título + imágenes o icono) centrado en el lienzo
-  const altoMedia = imagenes.length > 0 ? altoAbanico(imagenes.length) : icono ? 70 + 220 : 0;
-  const altoBloque = (etiqueta ? ALTO_ETIQUETA : 0) + altoTitulo + altoMedia;
-  const y0 = Math.max(225, 640 - altoBloque / 2);
-  const top = y0 + (etiqueta ? ALTO_ETIQUETA : 0);
-  const fin = top + altoTitulo;
+
+  // Espacio multimedia estructurado
+  const altoMedia = imagenes.length === 1 ? 380 : imagenes.length >= 2 ? 310 : icono ? 220 : 0;
+  const altoBloque = (etiqueta ? ALTO_ETIQUETA : 0) + altoTitulo + (conMedia ? altoMedia + 24 : 0);
+
+  // Centrado vertical dentro de la safe area [220, 1020] px
+  const yMin = 230;
+  const yCentro = 610 - altoBloque / 2;
+  const y0 = Math.max(yMin, Math.min(1020 - altoBloque, yCentro));
+  const topTitulo = y0 + (etiqueta ? ALTO_ETIQUETA : 0);
+  const finTitulo = topTitulo + altoTitulo;
   const primera = lineas[0]?.[0]?.f ?? 0;
+
   return (
     <AbsoluteFill>
-      {etiqueta && <Etiqueta texto={etiqueta} primera={primera} grande={bool(p, "etiquetaGrande", true)} top={y0} />}
-      <div style={{ position: "absolute", top, left: 20, right: 20, textAlign: "center" }}>
+      {etiqueta && (
+        <EtiquetaEditorial
+          texto={etiqueta}
+          primera={primera}
+          grande={bool(p, "etiquetaGrande", true)}
+          top={y0}
+        />
+      )}
+
+      {/* Composición tipográfica asimétrica editorial con margen izquierdo firme */}
+      <div
+        style={{
+          position: "absolute",
+          top: topTitulo,
+          left: 80,
+          right: 80,
+          textAlign: "left",
+        }}
+      >
         {lineas.map((l, k) => (
           <div
             key={k}
             style={{
               height: altos[k],
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "baseline",
-              paddingTop: tam * 0.03,
+              paddingTop: tam * 0.02,
               boxSizing: "border-box",
             }}
           >
@@ -246,10 +376,30 @@ const Titular: React.FC<PropsEscena> = ({ p, b, dur, palabras }) => {
           </div>
         ))}
       </div>
-      {imagenes.length > 0 && <Abanico imagenes={imagenes} desde={b[0] ?? 0} arriba={fin} />}
+
+      {/* Media fotográfica o icono editorial */}
+      {imagenes.length > 0 && <DeckFotografico imagenes={imagenes} desde={b[0] ?? 0} arriba={finTitulo} />}
+
       {imagenes.length === 0 && icono && ic > 0 && (
-        <div style={{ position: "absolute", left: 540 - 110, top: fin + 70, transform: `scale(${ic})` }}>
-          <Baldosa size={220} icono={icono} brillo={0.4} />
+        <div
+          style={{
+            position: "absolute",
+            left: 540 - 80,
+            top: finTitulo + 40,
+            width: 160,
+            height: 160,
+            borderRadius: 28,
+            background: C.tarjeta,
+            border: `1.5px solid ${C.linea}`,
+            boxShadow: SOMBRA,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transform: `scale(${ic})`,
+            opacity: Math.min(1, ic * 2),
+          }}
+        >
+          <Icono nombre={icono} tam={84} color={C.acento} />
         </div>
       )}
     </AbsoluteFill>

@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, staticFile, useCurrentFrame } from "remotion";
-import { C, ESTILO, SUAVE } from "./actual";
+import { C, ESTILO, SUAVE, modoArteActivo } from "./actual";
 import { alfa, type Estilo } from "./estilos";
 
 /** Fondo del estilo: degradado con manchas de luz que se mueven despacio (suave) o liso con grano (marcado). */
@@ -24,9 +24,9 @@ export const Fondo: React.FC<{ estilo?: Estilo }> = ({ estilo: estiloProp }) => 
       ]
     : [m(540, 900, 1100, m2, 0.35)];
   return (
-    <AbsoluteFill style={{ background: `linear-gradient(170deg, ${c.fondo} 0%, ${c.fondo2} 100%)` }}>
+    <AbsoluteFill style={{ zIndex: 0, background: `linear-gradient(170deg, ${c.fondo} 0%, ${c.fondo2} 100%)` }}>
       <AbsoluteFill style={{ backgroundImage: capas.join(",") }} />
-      {est.grano > 0 && (
+      {!modoArteActivo && est.grano > 0 && (
         <AbsoluteFill
           style={{
             backgroundImage: `url(${staticFile("texturas/grano.png")})`,

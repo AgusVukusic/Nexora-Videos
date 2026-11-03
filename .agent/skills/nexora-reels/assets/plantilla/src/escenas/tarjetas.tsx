@@ -8,6 +8,7 @@ import { F, alfa } from "../motor/estilos";
 import { pesoTexto, useFuentes } from "../motor/fuentes";
 import { bump, lerp, numeroES, rnd, useFlota, usePop } from "../motor/anim";
 import { Destello, Icono, Llama, Marca, Onda, Pildora, Tachon, useGolpe } from "../piezas/basicas";
+import { generarEsquinasReticula } from "../motor/trazos";
 import type { DefEscena, PropsEscena } from "../tipos";
 import { arr, bool, iconos, item, num, obj, reglas, txt } from "./util";
 
@@ -75,24 +76,128 @@ const Contador: React.FC<PropsEscena> = ({ p, b }) => {
   const icono = txt(p, "icono");
   const destacar = bool(p, "destacar", true) && f >= b1;
   const entra = usePop(b0, { damping: 14, stiffness: 150, mass: 0.7, overshootClamping: false });
+
+  // Geometría del contenedor monumental
+  const x = 100;
+  const y = 370;
+  const w = 880;
+  const h = 440;
+  const esquinas = generarEsquinasReticula(x, y, w, h, 28);
+  const progresoBarra = lerp(f, b0, b1, desde === valor ? 0 : 8, desde === valor ? 0 : 100);
+
   return (
     <AbsoluteFill>
       {entra > 0 && (
-        <div style={{ position: "absolute", left: 140, width: 800, top: 390 + (1 - entra) * 160, borderRadius: 40, background: C.tarjeta, color: C.tarjetaTexto, boxShadow: SOMBRA, border: BORDE, opacity: Math.min(1, entra * 1.6), padding: "38px 46px 36px", display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ ...T(800), fontSize: 42, color: alfa(C.tarjetaTexto, 0.8), lineHeight: 1.15 }}>{txt(p, "etiqueta")}</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <Numero desde={b0 + 4} hasta={b1} v0={desde} v1={valor} tam={150} color={destacar ? C.acento : C.tarjetaTexto} golpe={b1} prefijo={txt(p, "prefijo")} sufijo={txt(p, "sufijo")} />
-            <div style={{ marginLeft: "auto" }}>
-              {llama && <Llama size={70} enciende={b0 + 6} apaga={b1} />}
-              {!llama && icono && <Icono nombre={icono} tam={86} />}
+        <div
+          style={{
+            position: "absolute",
+            left: x,
+            top: y + (1 - entra) * 80,
+            width: w,
+            height: h,
+            opacity: Math.min(1, entra * 1.6),
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "44px 50px 38px",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* Retícula de esquinas técnicas vectoriales */}
+          <svg
+            viewBox={`${x} ${y} ${w} ${h}`}
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+              pointerEvents: "none",
+            }}
+          >
+            <path d={esquinas.topIzq} stroke={alfa(C.acento, 0.45)} strokeWidth={2} fill="none" />
+            <path d={esquinas.topDer} stroke={alfa(C.acento, 0.45)} strokeWidth={2} fill="none" />
+            <path d={esquinas.botIzq} stroke={alfa(C.acento, 0.45)} strokeWidth={2} fill="none" />
+            <path d={esquinas.botDer} stroke={alfa(C.acento, 0.45)} strokeWidth={2} fill="none" />
+          </svg>
+
+          {/* Cabecera técnica: Etiqueta e indicadores */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <div style={{ width: 8, height: 8, borderRadius: 2, background: C.acento }} />
+              <span
+                style={{
+                  fontFamily: F.texto,
+                  fontSize: 32,
+                  fontWeight: 800,
+                  letterSpacing: "3px",
+                  textTransform: "uppercase",
+                  color: alfa(C.tarjetaTexto, 0.85),
+                  lineHeight: 1.15,
+                }}
+              >
+                {txt(p, "etiqueta")}
+              </span>
+            </div>
+            <div>
+              {llama && <Llama size={64} enciende={b0 + 4} apaga={b1} />}
+              {!llama && icono && <Icono nombre={icono} tam={68} color={C.acento} />}
             </div>
           </div>
-          <div style={{ height: 14, borderRadius: 7, background: C.linea }}>
-            <div style={{ width: `${lerp(f, b0, b1, desde === valor ? 0 : 8, desde === valor ? 0 : 100)}%`, height: "100%", borderRadius: 7, background: C.acento }} />
+
+          {/* Cifra tipográfica monumental */}
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "flex-start", marginTop: 8 }}>
+            <Numero
+              desde={b0 + 4}
+              hasta={b1}
+              v0={desde}
+              v1={valor}
+              tam={200}
+              color={destacar ? C.acento : C.tarjetaTexto}
+              golpe={b1}
+              prefijo={txt(p, "prefijo")}
+              sufijo={txt(p, "sufijo")}
+            />
+          </div>
+
+          {/* Calibrador técnico milimétrico con progreso */}
+          <div style={{ marginTop: 20 }}>
+            <div style={{ height: 6, borderRadius: 3, background: alfa(C.linea, 0.5), position: "relative" }}>
+              <div
+                style={{
+                  width: `${progresoBarra}%`,
+                  height: "100%",
+                  borderRadius: 3,
+                  background: C.acento,
+                  boxShadow: `0 0 12px ${alfa(C.acento, 0.6)}`,
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: 8,
+                fontFamily: F.mono,
+                fontSize: 16,
+                color: alfa(C.tarjetaTexto, 0.45),
+                letterSpacing: "1px",
+              }}
+            >
+              <span>0%</span>
+              <span>CALIBRACIÓN</span>
+              <span>100%</span>
+            </div>
           </div>
         </div>
       )}
-      {f >= b1 && <Onda desde={b1} x={380} y={590} r0={60} r1={240} />}
+      {f >= b1 && <Onda desde={b1} x={540} y={590} r0={60} r1={260} />}
     </AbsoluteFill>
   );
 };
@@ -323,40 +428,187 @@ export const comparacion: DefEscena = {
 const Objecion: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
   const [b0, b1] = b;
-  const burbuja = spring({ frame: f - b0, fps: FPS, config: { damping: 12, stiffness: 170, mass: 0.7 } });
-  const resp = usePop(b1, { damping: 11, stiffness: 200, mass: 0.6, overshootClamping: false });
-  const fl = useFlota(1, 6, 15);
+  const burbuja = spring({ frame: f - b0, fps: FPS, config: { damping: 14, stiffness: 160, mass: 0.7 } });
+  const resp = usePop(b1, { damping: 11, stiffness: 220, mass: 0.6, overshootClamping: false });
   const numero = txt(p, "numero");
+  const conectorP = lerp(f, b1 - 6, b1, 0, 1, Easing.out(Easing.cubic));
+
+  const x0 = 100;
+  const w = 880;
+  const topCita = 320;
+
   return (
     <AbsoluteFill>
-      {numero && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: 250, textAlign: "center", opacity: lerp(f, 0, 6, 0, 1) }}>
-          <Pildora fondo={C.acento} color={C.acentoTexto} tam={34}>
-            {numero}
-          </Pildora>
-        </div>
-      )}
+      {/* Comillas gigantes en marca de agua de fondo editorial */}
       {f >= b0 && (
-        <div style={{ position: "absolute", left: 110, top: 360 + fl, width: 860, transform: `scale(${0.6 + 0.4 * burbuja}) rotate(${-2 * burbuja}deg)`, opacity: Math.min(1, burbuja * 2), transformOrigin: "20% 100%" }}>
-          <div style={{ position: "relative", background: C.tarjeta, color: C.tarjetaTexto, borderRadius: 44, padding: "48px 54px 54px", boxShadow: SOMBRA, border: BORDE }}>
-            <div style={{ fontFamily: F.mano, fontWeight: 700, fontSize: 52, color: C.acento, marginBottom: 6 }}>¿Pensarás que…</div>
-            <div style={{ fontFamily: F.titulo, fontSize: 60, lineHeight: 1.08 }}>{txt(p, "texto")}?</div>
-            <svg viewBox="0 0 60 50" width={90} height={75} style={{ position: "absolute", left: 90, bottom: -62 }}>
-              <path d="M4 0 L56 0 L10 46 Z" fill={C.tarjeta} />
-            </svg>
-          </div>
-          {[0, 1, 2].map((k) => (
-            <div key={k} style={{ position: "absolute", right: 30 + k * 70, top: -60 - k * 18, fontFamily: F.titulo, fontSize: 70 + k * 12, color: C.acento, transform: `rotate(${(k - 1) * 14}deg) translateY(${Math.sin(f / 7 + k) * 8}px)`, opacity: lerp(f, b0 + 6 + k * 3, b0 + 10 + k * 3, 0, 1) }}>
-              ?
-            </div>
-          ))}
+        <div
+          style={{
+            position: "absolute",
+            left: x0 + 10,
+            top: topCita - 70,
+            fontFamily: F.titulo,
+            fontWeight: 900,
+            fontSize: 220,
+            lineHeight: 1,
+            color: alfa(C.acento, 0.12),
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        >
+          «
         </div>
       )}
+
+      {/* Cita editorial de la objeción */}
+      {f >= b0 && (
+        <div
+          style={{
+            position: "absolute",
+            left: x0,
+            top: topCita,
+            width: w,
+            transform: `translateY(${(1 - burbuja) * 36}px) scale(${0.96 + 0.04 * burbuja})`,
+            opacity: Math.min(1, burbuja * 1.8),
+          }}
+        >
+          {/* Header editorial con micro-kicker o número */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              marginBottom: 20,
+            }}
+          >
+            <div
+              style={{
+                padding: "5px 14px",
+                borderRadius: 4,
+                background: C.acento,
+                color: C.acentoTexto,
+                fontFamily: F.texto,
+                fontWeight: 800,
+                fontSize: 18,
+                letterSpacing: "3px",
+                textTransform: "uppercase",
+              }}
+            >
+              {numero ? `OBJECIÓN ${numero}` : "PREGUNTA FRECUENTE"}
+            </div>
+            <div style={{ flex: 1, height: 1, background: alfa(C.linea, 0.6) }} />
+          </div>
+
+          {/* Bloque de texto de la objeción con alta dignidad editorial */}
+          <div
+            style={{
+              padding: "24px 34px",
+              background: C.tarjeta,
+              color: C.tarjetaTexto,
+              borderRadius: 24,
+              border: `1.5px solid ${C.linea}`,
+              boxShadow: SOMBRA,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: F.texto,
+                fontWeight: 700,
+                fontSize: 24,
+                color: C.acento,
+                marginBottom: 8,
+                letterSpacing: "1px",
+              }}
+            >
+              ¿PENSARÁS QUE...
+            </div>
+            <div
+              style={{
+                fontFamily: F.titulo,
+                fontWeight: 800,
+                fontSize: 54,
+                lineHeight: 1.12,
+                letterSpacing: "-1px",
+              }}
+            >
+              {txt(p, "texto")}?
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Conector ortogonal vectorial hacia la respuesta */}
+      {f >= b1 - 6 && (
+        <svg
+          viewBox="0 0 1080 1920"
+          style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+        >
+          <line
+            x1={540}
+            y1={topCita + 280}
+            x2={540}
+            y2={topCita + 280 + 110 * conectorP}
+            stroke={C.acento}
+            strokeWidth={2}
+            strokeDasharray="4 4"
+          />
+        </svg>
+      )}
+
+      {/* Tarjeta de réplica / respuesta categórica */}
       {resp > 0 && txt(p, "respuesta") && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: 860, display: "flex", justifyContent: "center", transform: `scale(${resp}) rotate(${-3 + 3 * resp}deg)` }}>
-          <Pildora fondo={C.oscuro} color={C.oscuroTexto} tam={44}>
-            {txt(p, "respuesta")}
-          </Pildora>
+        <div
+          style={{
+            position: "absolute",
+            left: 100,
+            right: 100,
+            top: topCita + 410,
+            display: "flex",
+            justifyContent: "center",
+            transform: `scale(${resp}) translateY(${(1 - resp) * 20}px)`,
+            opacity: Math.min(1, resp * 2),
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              background: C.oscuro,
+              color: C.oscuroTexto,
+              padding: "20px 42px",
+              borderRadius: 24,
+              border: `1.5px solid ${C.acento}`,
+              boxShadow: `0 16px 36px ${alfa(C.acento, 0.28)}`,
+            }}
+          >
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 16,
+                background: C.acento,
+                color: C.acentoTexto,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 900,
+                fontSize: 18,
+              }}
+            >
+              ✓
+            </div>
+            <span
+              style={{
+                fontFamily: F.titulo,
+                fontWeight: 800,
+                fontSize: 38,
+                letterSpacing: "-0.5px",
+                lineHeight: 1.15,
+              }}
+            >
+              {txt(p, "respuesta")}
+            </span>
+          </div>
         </div>
       )}
     </AbsoluteFill>
@@ -526,7 +778,7 @@ export const barras: DefEscena = {
 };
 
 // ================================================================== tachado ("No es X: es Y")
-const CARTA = { x: 110, y: 300, w: 860, h: 600 };
+const CARTA = { x: 100, y: 310, w: 880, h: 560 };
 
 /** Tamaño de letra para que el texto quepa en `ancho` (como mucho `max`). */
 const tamQueCabe = (texto: string, fuente: string, peso: string, max: number, ancho: number) => {
@@ -544,45 +796,199 @@ const Tachado: React.FC<PropsEscena> = ({ p, b }) => {
   const antes = txt(p, "antes");
   const despues = txt(p, "despues");
   const entra = spring({ frame: f, fps: FPS, config: { damping: 15, stiffness: 130, mass: 0.8 } });
-  const temblor = f >= b0 && f < b0 + 10 ? Math.sin(f * 2.4) * 6 : 0;
+
+  // Sacudida cinemática de impacto en el fotograma b0 (damped mechanical micro-jitter)
+  const deltaB0 = f - b0;
+  const temblor = f >= b0 && deltaB0 < 9 ? Math.sin(deltaB0 * 2.8) * Math.exp(-deltaB0 * 0.45) * 8 : 0;
+
   const sube = lerp(f, b1 - 2, b1 + 10, 0, 1, Easing.inOut(Easing.cubic));
-  const nueva = usePop(b1, { damping: 11, stiffness: 180, mass: 0.6, overshootClamping: false });
+  const nueva = usePop(b1, { damping: 11, stiffness: 190, mass: 0.6, overshootClamping: false });
+
   if (!ok) return null;
   const peso = String(ESTILO.fuentes.titulo.peso);
-  const tamA = tamQueCabe(antes, F.titulo, peso, 92 * ESTILO.escalaTitulo, CARTA.w - 160);
+  const tamA = tamQueCabe(antes, F.titulo, peso, 84 * ESTILO.escalaTitulo, CARTA.w - 180);
   const anchoA = measureText({ text: antes, fontFamily: F.titulo, fontWeight: peso, fontSize: tamA, validateFontIsLoaded: false }).width;
   const textoN = codigo ? `</> ${despues}` : despues;
-  const tamN = codigo ? tamQueCabe(textoN, F.mono, "700", 64, CARTA.w - 200) : tamQueCabe(despues, F.titulo, peso, 108 * ESTILO.escalaTitulo, CARTA.w - 140);
+  const tamN = codigo ? tamQueCabe(textoN, F.mono, "700", 60, CARTA.w - 200) : tamQueCabe(despues, F.titulo, "900", 98 * ESTILO.escalaTitulo, CARTA.w - 160);
   const conVisual = !!(imagen || icono);
-  const yAntes = CARTA.y + (conVisual ? 340 : 250);
-  const yNueva = CARTA.y + (conVisual ? 470 : 400);
-  const bajada = (1 - entra) * 120;
+  const yAntes = CARTA.y + (conVisual ? 310 : 210);
+  const yNueva = CARTA.y + (conVisual ? 440 : 380);
+  const bajada = (1 - entra) * 80;
   const visible = Math.min(1, entra * 1.6);
+
+  const esquinas = generarEsquinasReticula(CARTA.x, CARTA.y + bajada, CARTA.w, CARTA.h, 24);
+  const progresoTachon = lerp(f, b0, b0 + 5, 0, 1, Easing.out(Easing.cubic));
+
   return (
     <AbsoluteFill>
-      <div style={{ position: "absolute", left: CARTA.x, top: CARTA.y + bajada, width: CARTA.w, height: CARTA.h, borderRadius: 34, overflow: "hidden", boxShadow: SOMBRA, border: BORDE, background: C.tarjeta, opacity: visible }}>
-        {imagen && <Img src={staticFile(imagen)} style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 250, objectFit: "cover", transform: `scale(${1 + 0.05 * Math.min(1, f / 150)})` }} />}
+      {/* Contenedor editorial estilizado con esquinas técnicas */}
+      <div
+        style={{
+          position: "absolute",
+          left: CARTA.x,
+          top: CARTA.y + bajada,
+          width: CARTA.w,
+          height: CARTA.h,
+          borderRadius: 28,
+          overflow: "hidden",
+          boxShadow: SOMBRA,
+          border: `1.5px solid ${C.linea}`,
+          background: C.tarjeta,
+          opacity: visible,
+          transform: `translateX(${temblor.toFixed(2)}px)`,
+        }}
+      >
+        {/* Esquinas técnicas */}
+        <svg
+          viewBox={`${CARTA.x} ${CARTA.y + bajada} ${CARTA.w} ${CARTA.h}`}
+          style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+        >
+          <path d={esquinas.topIzq} stroke={alfa(C.acento, 0.5)} strokeWidth={2} fill="none" />
+          <path d={esquinas.topDer} stroke={alfa(C.acento, 0.5)} strokeWidth={2} fill="none" />
+          <path d={esquinas.botIzq} stroke={alfa(C.acento, 0.5)} strokeWidth={2} fill="none" />
+          <path d={esquinas.botDer} stroke={alfa(C.acento, 0.5)} strokeWidth={2} fill="none" />
+        </svg>
+
+        {imagen && (
+          <Img
+            src={staticFile(imagen)}
+            style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 210, objectFit: "cover" }}
+          />
+        )}
         {!imagen && icono && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: 46, display: "flex", justifyContent: "center" }}>
-            <Icono nombre={icono} tam={150} color={alfa(C.tarjetaTexto, 0.8)} grosor={1.8} />
+          <div style={{ position: "absolute", left: 0, right: 0, top: 36, display: "flex", justifyContent: "center" }}>
+            <Icono nombre={icono} tam={120} color={alfa(C.acento, 0.7)} grosor={1.6} />
           </div>
         )}
       </div>
-      {/* lo de antes: se tacha y luego sube apagado */}
-      <div style={{ position: "absolute", left: CARTA.x, width: CARTA.w, top: yAntes - tamA * 0.58 - sube * tamA * 0.95 + bajada, display: "flex", justifyContent: "center", opacity: visible * (1 - 0.6 * sube), transform: `translateX(${temblor}px) scale(${1 - 0.38 * sube})` }}>
-        <div style={{ position: "relative", fontFamily: F.titulo, fontWeight: ESTILO.fuentes.titulo.peso, fontSize: tamA, lineHeight: 1.15, color: C.tarjetaTexto, whiteSpace: "nowrap" }}>
+
+      {/* Lo de antes: Descarte geométrico con línea de corte neta y retroceso en profundidad */}
+      <div
+        style={{
+          position: "absolute",
+          left: CARTA.x,
+          width: CARTA.w,
+          top: yAntes - tamA * 0.5 - sube * tamA * 0.85 + bajada,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          opacity: visible * (1 - 0.65 * sube),
+          transform: `translateX(${temblor.toFixed(2)}px) scale(${1 - 0.28 * sube})`,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: F.texto,
+            fontSize: 20,
+            fontWeight: 800,
+            letterSpacing: "3px",
+            textTransform: "uppercase",
+            color: alfa(C.tarjetaTexto, 0.45),
+            marginBottom: 6,
+          }}
+        >
+          CONCEPCIÓN ANTERIOR
+        </span>
+        <div
+          style={{
+            position: "relative",
+            fontFamily: F.titulo,
+            fontWeight: ESTILO.fuentes.titulo.peso,
+            fontSize: tamA,
+            lineHeight: 1.12,
+            color: C.tarjetaTexto,
+            whiteSpace: "nowrap",
+          }}
+        >
           {antes}
-          <Tachon desde={b0} w={anchoA} grosor={Math.max(7, tamA * 0.1)} />
+          {/* Corte geométrico cinemático */}
+          {f >= b0 && (
+            <svg
+              style={{
+                position: "absolute",
+                left: -16,
+                top: "50%",
+                width: anchoA + 32,
+                height: 18,
+                transform: "translateY(-50%) rotate(-3deg)",
+                overflow: "visible",
+                pointerEvents: "none",
+              }}
+            >
+              <line
+                x1={0}
+                y1={9}
+                x2={(anchoA + 32) * progresoTachon}
+                y2={9}
+                stroke="#EF4444"
+                strokeWidth={Math.max(6, tamA * 0.09)}
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
         </div>
       </div>
-      {f < b1 && <Marca desde={b0 + 3} x={CARTA.x + CARTA.w / 2 + Math.min(anchoA / 2 + 44, CARTA.w / 2 - 36)} y={yAntes - tamA * 0.62} tipo="x" size={64} />}
-      {/* lo nuevo, grande y en color de acento */}
+
+      {/* Lo nuevo: Revelado en tipografía ultra-bold con acento vibrante */}
       {nueva > 0 && (
-        <div style={{ position: "absolute", left: CARTA.x, width: CARTA.w, top: yNueva - tamN * 0.5, display: "flex", justifyContent: "center", transform: `scale(${0.6 + 0.4 * nueva}) rotate(${-2 + 2 * nueva}deg)`, opacity: Math.min(1, nueva * 2) }}>
+        <div
+          style={{
+            position: "absolute",
+            left: CARTA.x,
+            width: CARTA.w,
+            top: yNueva - tamN * 0.5,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            transform: `scale(${0.9 + 0.1 * nueva}) translateY(${(1 - nueva) * 20}px)`,
+            opacity: Math.min(1, nueva * 2),
+          }}
+        >
+          <span
+            style={{
+              fontFamily: F.texto,
+              fontSize: 20,
+              fontWeight: 800,
+              letterSpacing: "3px",
+              textTransform: "uppercase",
+              color: C.acento,
+              marginBottom: 8,
+            }}
+          >
+            NUEVO ESTÁNDAR
+          </span>
           {codigo ? (
-            <div style={{ fontFamily: F.mono, fontWeight: 700, fontSize: tamN, lineHeight: 1.2, background: C.oscuro, color: C.acento, padding: "12px 30px", borderRadius: 22, whiteSpace: "nowrap" }}>{textoN}</div>
+            <div
+              style={{
+                fontFamily: F.mono,
+                fontWeight: 700,
+                fontSize: tamN,
+                lineHeight: 1.2,
+                background: C.oscuro,
+                color: C.acento,
+                padding: "14px 34px",
+                borderRadius: 20,
+                border: `1.5px solid ${alfa(C.acento, 0.4)}`,
+                whiteSpace: "nowrap",
+                boxShadow: `0 12px 28px ${alfa(C.acento, 0.2)}`,
+              }}
+            >
+              {textoN}
+            </div>
           ) : (
-            <div style={{ fontFamily: F.titulo, fontWeight: ESTILO.fuentes.titulo.peso, fontSize: tamN, lineHeight: 1.15, color: C.acento, whiteSpace: "nowrap" }}>{despues}</div>
+            <div
+              style={{
+                fontFamily: F.titulo,
+                fontWeight: 900,
+                fontSize: tamN,
+                lineHeight: 1.1,
+                color: C.acento,
+                whiteSpace: "nowrap",
+                textShadow: `0 4px 20px ${alfa(C.acento, 0.35)}`,
+              }}
+            >
+              {despues}
+            </div>
           )}
         </div>
       )}

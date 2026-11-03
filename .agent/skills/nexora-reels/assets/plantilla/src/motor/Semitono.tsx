@@ -25,7 +25,7 @@ export const Semitono: React.FC<{ centro: number; color?: string }> = ({ centro,
     }
   }
   return (
-    <AbsoluteFill style={{ zIndex: 50, pointerEvents: "none" }}>
+    <AbsoluteFill style={{ zIndex: 45, pointerEvents: "none" }}>
       <svg width={1080} height={1920}>{dots}</svg>
     </AbsoluteFill>
   );

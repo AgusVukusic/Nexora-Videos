@@ -4,7 +4,7 @@
 // y el resumen completo para render.mjs y calculateMetadata.
 import tiempos0 from "../datos/tiempos.json";
 import type { DefEscena, Entrada, Momento, PalabraEscena, Tiempos } from "../tipos";
-import { C, CON_PERSONAJE, ESTILO, PLAN, POSE_BASE, POSES, THEME } from "./actual";
+import { ARTE_RESOLUCION, C, CON_PERSONAJE, ESTILO, PLAN, POSE_BASE, POSES, THEME } from "./actual";
 import { ADELANTO, FPS, SEMI, SOLAPE, s2f } from "./constantes";
 
 export { ADELANTO, CON_PERSONAJE, ESTILO, FPS, PLAN, POSES, SEMI, SOLAPE, THEME, s2f };
@@ -37,6 +37,14 @@ const problema = (s: string) => PROBLEMAS.push(s);
 /** Avisos de mejora que no impiden renderizar. */
 export const AVISOS: string[] = [];
 const aviso = (s: string) => AVISOS.push(s);
+
+// Integración de problemas y avisos de dirección de arte
+for (const p of ARTE_RESOLUCION.problemas) {
+  problema(p);
+}
+for (const a of ARTE_RESOLUCION.avisos) {
+  aviso(a);
+}
 
 const N = Math.min(PLAN.frases.length, T.frases.length);
 if (PLAN.frases.length !== T.frases.length) {
@@ -138,7 +146,15 @@ export const entrada = (i: number): Entrada => {
 
 /** Determina si una transición requiere solape temporal entre secuencias contiguas. */
 export const esTransicionSolapada = (e: Entrada): boolean =>
-  e === "suave" || e === "disolver";
+  e === "suave" ||
+  e === "disolver" ||
+  e === "whip-pan-izq" ||
+  e === "whip-pan-der" ||
+  e === "whip-pan-arriba" ||
+  e === "whip-pan-abajo" ||
+  e === "zoom-through" ||
+  e === "iris-apertura" ||
+  e === "iris-cierre";
 
 /** Primer fotograma en el que la secuencia de la escena i debe comenzar a renderizarse. */
 export const ini = (i: number): number => {
@@ -472,6 +488,8 @@ EFECTOS.sort((x, y) => x.en - y.en);
 export const resumen = () => ({
   duracion: +(TOTAL / FPS).toFixed(2),
   estilo: ESTILO.nombre,
+  modoArteActivo: ARTE_RESOLUCION.modoArteActivo,
+  mundoVisualActivo: ARTE_RESOLUCION.mundoVisualActivo,
   escenas: ESCENAS.map((e) => ({
     frase: e.i + 1,
     tipo: PLAN.frases[e.i]?.escena?.tipo === "propia" ? `propia:${PLAN.frases[e.i]?.escena.nombre}` : PLAN.frases[e.i]?.escena?.tipo,

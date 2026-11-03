@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { CapasCine, type BgMeshConfig, type ColorGradeConfig, type PostProcessConfig } from "./CapasCine";
+import type { CamaraConfig } from "./tipos";
 
 /**
  * Tipos de transición de entrada disponibles para la escena.
@@ -10,7 +11,14 @@ export type TipoTransicionEntrada =
   | "suave"
   | "deslizar-arriba"
   | "deslizar-abajo"
-  | "disolver";
+  | "disolver"
+  | "whip-pan-izq"
+  | "whip-pan-der"
+  | "whip-pan-arriba"
+  | "whip-pan-abajo"
+  | "zoom-through"
+  | "iris-apertura"
+  | "iris-cierre";
 
 /**
  * Tipos de transición de salida disponibles para la escena.
@@ -18,7 +26,14 @@ export type TipoTransicionEntrada =
 export type TipoTransicionSalida =
   | "corte"
   | "suave"
-  | "disolver";
+  | "disolver"
+  | "whip-pan-izq"
+  | "whip-pan-der"
+  | "whip-pan-arriba"
+  | "whip-pan-abajo"
+  | "zoom-through"
+  | "iris-apertura"
+  | "iris-cierre";
 
 /**
  * Configuración detallada para una transición de escena.
@@ -38,6 +53,8 @@ export interface TransicionConfig<T = TipoTransicionEntrada> {
  * con soporte para transiciones de cámara y modulación de entrada/salida.
  */
 export interface EscenaProps {
+  /** Configuración opcional de cámara 2.5D y movimiento espacial (Etapa 39B). */
+  camara?: CamaraConfig;
   /** Duración total de la escena en fotogramas. Si se omite, se deduce del contexto de Remotion. */
   dur?: number;
   /** Transición de entrada (nombre del modo o configuración completa). Por defecto 'corte'. */
@@ -92,6 +109,7 @@ function normalizarTransicion<T extends string>(
  * Orquesta la composición de capas y las transiciones deterministas sin imponer animaciones obligatorias.
  */
 export const Escena: React.FC<EscenaProps> = ({
+  camara,
   dur,
   entrada = "corte",
   salida = "corte",
@@ -128,8 +146,16 @@ export const Escena: React.FC<EscenaProps> = ({
   // Parámetros de composición
   let opacidad = 1;
   let escala = 1 + empuje * progresoEscena;
+  let translateX = 0;
   let translateY = 0;
   let blur = 0;
+  let clipPath: string | undefined = undefined;
+
+  const centroIrisX = camara?.iris?.centro ? camara.iris.centro[0] : 50;
+  const centroIrisY = camara?.iris?.centro ? camara.iris.centro[1] : 50;
+  const desenfoqueWhip = camara?.whipPan?.desenfoque ?? true;
+  const maxBlurWhip = camara?.whipPan?.intensidadDesenfoque ?? 10;
+  const zoomThroughMax = camara?.zoomThrough?.escalaMax ?? 3.5;
 
   // 1. Cálculo de Transición de Entrada
   if (cfgEntrada.tipo !== "corte" && frame < cfgEntrada.duracion) {
@@ -152,6 +178,33 @@ export const Escena: React.FC<EscenaProps> = ({
         opacidad *= t;
         translateY -= (1 - t) * 60;
         break;
+      case "whip-pan-izq":
+        translateX += (1 - t) * -1080;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-der":
+        translateX += (1 - t) * 1080;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-arriba":
+        translateY += (1 - t) * -1920;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-abajo":
+        translateY += (1 - t) * 1920;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "zoom-through":
+        escala *= 0.45 + 0.55 * t;
+        opacidad *= t;
+        blur += (1 - t) * 6;
+        break;
+      case "iris-apertura":
+        clipPath = `circle(${(t * 150).toFixed(2)}% at ${centroIrisX}% ${centroIrisY}%)`;
+        break;
+      case "iris-cierre":
+        clipPath = `circle(${((1 - t) * 150).toFixed(2)}% at ${centroIrisX}% ${centroIrisY}%)`;
+        break;
     }
   }
 
@@ -170,29 +223,62 @@ export const Escena: React.FC<EscenaProps> = ({
       case "disolver":
         opacidad *= 1 - t;
         break;
+      case "whip-pan-izq":
+        translateX += t * 1080;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-der":
+        translateX -= t * 1080;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-arriba":
+        translateY += t * 1920;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "whip-pan-abajo":
+        translateY -= t * 1920;
+        if (desenfoqueWhip) blur += Math.sin(t * Math.PI) * maxBlurWhip;
+        break;
+      case "zoom-through":
+        escala *= 1.0 + (zoomThroughMax - 1.0) * t;
+        opacidad *= Math.max(0, 1 - t * t);
+        blur += t * 8;
+        break;
+      case "iris-cierre":
+        clipPath = `circle(${((1 - t) * 150).toFixed(2)}% at ${centroIrisX}% ${centroIrisY}%)`;
+        break;
+      case "iris-apertura":
+        clipPath = `circle(${(t * 150).toFixed(2)}% at ${centroIrisX}% ${centroIrisY}%)`;
+        break;
     }
   }
 
   // Generación de estilos de contenedor
   const transformParts: string[] = [];
   if (Math.abs(escala - 1) > 1e-4) {
-    transformParts.push(`scale(${escala})`);
+    transformParts.push(`scale(${escala.toFixed(4)})`);
   }
-  if (Math.abs(translateY) > 1e-2) {
-    transformParts.push(`translateY(${translateY}px)`);
+  if (Math.abs(translateX) > 1e-2 || Math.abs(translateY) > 1e-2) {
+    transformParts.push(`translate(${translateX.toFixed(2)}px, ${translateY.toFixed(2)}px)`);
   }
 
   const contenedorEstilo: React.CSSProperties = {
+    zIndex: 10,
     opacity: opacidad,
+    clipPath,
     filter: blur > 0.3 ? `blur(${blur.toFixed(1)}px)` : undefined,
     transform: transformParts.length > 0 ? transformParts.join(" ") : undefined,
-    transformOrigin: "50% 40%",
+    transformOrigin: camara?.zoomThrough?.puntoFocal
+      ? `${camara.zoomThrough.puntoFocal[0]}% ${camara.zoomThrough.puntoFocal[1]}%`
+      : "50% 40%",
     ...style,
   };
 
   return (
     <AbsoluteFill style={contenedorEstilo}>
       <CapasCine
+        camara={camara}
+        dur={durTotal}
         bgMesh={fondo}
         bgMeshConfig={bgMeshConfig}
         assets={assets}

@@ -1,6 +1,9 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { THEME } from "./motor/theme";
+import { C, ESTILO, MATERIALIDAD, modoArteActivo } from "./motor/actual";
+import type { CamaraConfig } from "./tipos";
+import { normalizarCamara, calcularTransformacionCamara } from "./motor/camara";
 
 /**
  * Configuración de la Capa 1: Fondo y malla visual (BgMesh).
@@ -71,6 +74,10 @@ export interface PostProcessConfig {
  * 5. PostProcess (Viñeta y grano óptico)
  */
 export interface CapasCineProps {
+  /** Configuración de cámara 2.5D y movimiento espacial (Etapa 39B). */
+  camara?: CamaraConfig;
+  /** Duración de la escena en fotogramas para interpolación temporal. */
+  dur?: number;
   /** Capa 1 personalizada: componente de fondo libre. Si no se provee, se utiliza el BgMesh por defecto. */
   bgMesh?: React.ReactNode;
   /** Parámetros de personalización para el BgMesh por defecto. */
@@ -91,31 +98,81 @@ export interface CapasCineProps {
 
 /**
  * Fondo con malla de gradientes radiales difusos (BgMesh).
- * Renderizado determinista y ligero mediante CSS puro sin dependencias externas.
+ * En modo clásico preserva al 100% el comportamiento original (fondo opaco y manchas de THEME).
+ * En modo artístico respeta materialidad.fondo_modo ("transparente", "malla_armonizada" o "clasico").
  */
 export const BgMesh: React.FC<{ config?: BgMeshConfig }> = ({ config }) => {
   const frame = useCurrentFrame();
   const animado = config?.animado ?? false;
-  const base = config?.colorBase ?? THEME.colores.fondo;
-  const c1 = config?.mancha1 ?? THEME.colores.fondoMalla1;
-  const c2 = config?.mancha2 ?? THEME.colores.fondoMalla2;
-  const opacidad = config?.opacidad ?? 0.8;
 
-  // Si está animado, genera un desplazamiento senoidal suave y determinista a 30 FPS
+  // Modo clásico estricto
+  if (!modoArteActivo || MATERIALIDAD.fondo_modo === "clasico") {
+    const base = config?.colorBase ?? THEME.colores.fondo;
+    const c1 = config?.mancha1 ?? THEME.colores.fondoMalla1;
+    const c2 = config?.mancha2 ?? THEME.colores.fondoMalla2;
+    const opacidad = config?.opacidad ?? 0.8;
+
+    const dx1 = animado ? 40 * Math.sin(frame / 90) : 0;
+    const dy1 = animado ? 50 * Math.cos(frame / 110) : 0;
+    const dx2 = animado ? 50 * Math.cos(frame / 100) : 0;
+    const dy2 = animado ? 40 * Math.sin(frame / 80) : 0;
+
+    const gradienteManchas = [
+      `radial-gradient(circle 850px at ${800 + dx1}px ${1450 + dy1}px, ${c1} 0%, transparent 70%)`,
+      `radial-gradient(circle 750px at ${280 + dx2}px ${480 + dy2}px, ${c2} 0%, transparent 70%)`,
+    ].join(", ");
+
+    return (
+      <AbsoluteFill
+        style={{
+          backgroundColor: base,
+          zIndex: 0,
+          overflow: "hidden",
+        }}
+      >
+        <AbsoluteFill
+          style={{
+            backgroundImage: gradienteManchas,
+            opacity: opacidad,
+          }}
+        />
+      </AbsoluteFill>
+    );
+  }
+
+  // Modo artístico: "transparente"
+  if (MATERIALIDAD.fondo_modo === "transparente") {
+    return (
+      <AbsoluteFill
+        style={{
+          backgroundColor: "transparent",
+          zIndex: 0,
+          overflow: "hidden",
+        }}
+      />
+    );
+  }
+
+  // Modo artístico: "malla_armonizada"
+  // No tapa el gradiente ni el fondo definido por Fondo; armoniza manchas con C.manchas
+  const m1 = C.manchas[0] ?? config?.mancha1 ?? THEME.colores.fondoMalla1;
+  const m2 = C.manchas[1] ?? config?.mancha2 ?? THEME.colores.fondoMalla2;
+  const opacidadArmonizada = Math.min(config?.opacidad ?? 0.45, 0.5);
+
   const dx1 = animado ? 40 * Math.sin(frame / 90) : 0;
   const dy1 = animado ? 50 * Math.cos(frame / 110) : 0;
   const dx2 = animado ? 50 * Math.cos(frame / 100) : 0;
   const dy2 = animado ? 40 * Math.sin(frame / 80) : 0;
 
   const gradienteManchas = [
-    `radial-gradient(circle 850px at ${800 + dx1}px ${1450 + dy1}px, ${c1} 0%, transparent 70%)`,
-    `radial-gradient(circle 750px at ${280 + dx2}px ${480 + dy2}px, ${c2} 0%, transparent 70%)`,
+    `radial-gradient(circle 900px at ${800 + dx1}px ${1450 + dy1}px, ${m1} 0%, transparent 75%)`,
+    `radial-gradient(circle 800px at ${280 + dx2}px ${480 + dy2}px, ${m2} 0%, transparent 75%)`,
   ].join(", ");
 
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: base,
+        backgroundColor: "transparent",
         zIndex: 0,
         overflow: "hidden",
       }}
@@ -123,7 +180,7 @@ export const BgMesh: React.FC<{ config?: BgMeshConfig }> = ({ config }) => {
       <AbsoluteFill
         style={{
           backgroundImage: gradienteManchas,
-          opacity: opacidad,
+          opacity: opacidadArmonizada,
         }}
       />
     </AbsoluteFill>
@@ -223,9 +280,12 @@ export const FilmGrain: React.FC<{
 
 /**
  * Componente principal CapasCine.
- * Orquesta la composición multicapa de Remotion con control de apilamiento y no-intrusión.
+ * Orquesta la composición multicapa de Remotion con control de apilamiento,
+ * profundidad parallax entre planos y transformaciones de cámara 2.5D.
  */
 export const CapasCine: React.FC<CapasCineProps> = ({
+  camara,
+  dur,
   bgMesh,
   bgMeshConfig,
   assets,
@@ -235,6 +295,20 @@ export const CapasCine: React.FC<CapasCineProps> = ({
   postProcess,
   style,
 }) => {
+  const frame = useCurrentFrame();
+  const camNorm = normalizarCamara(camara, dur ?? 90);
+
+  // Transformaciones espaciales calculadas por plano de profundidad (Parallax)
+  const tBg = camNorm.activa
+    ? calcularTransformacionCamara(frame, camNorm, camNorm.parallax.profundidadFondo)
+    : null;
+  const tAssets = camNorm.activa
+    ? calcularTransformacionCamara(frame, camNorm, camNorm.parallax.profundidadAssets)
+    : null;
+  const tUi = camNorm.activa
+    ? calcularTransformacionCamara(frame, camNorm, camNorm.parallax.profundidadUI)
+    : null;
+
   return (
     <AbsoluteFill
       style={{
@@ -243,11 +317,15 @@ export const CapasCine: React.FC<CapasCineProps> = ({
       }}
     >
       {/* CAPA 1: Fondo visual y malla de iluminación difusa */}
-      {bgMesh ? (
-        <AbsoluteFill style={{ zIndex: 0 }}>{bgMesh}</AbsoluteFill>
-      ) : (
-        <BgMesh config={bgMeshConfig} />
-      )}
+      <AbsoluteFill
+        style={{
+          zIndex: 0,
+          transform: tBg?.transform,
+          transformOrigin: tBg?.transformOrigin,
+        }}
+      >
+        {bgMesh ? bgMesh : <BgMesh config={bgMeshConfig} />}
+      </AbsoluteFill>
 
       {/* CAPA 2: Recursos visuales, ilustraciones, mockups y elementos de apoyo */}
       {assets && (
@@ -255,6 +333,8 @@ export const CapasCine: React.FC<CapasCineProps> = ({
           style={{
             zIndex: 10,
             pointerEvents: "none",
+            transform: tAssets?.transform,
+            transformOrigin: tAssets?.transformOrigin,
           }}
         >
           {assets}
@@ -266,6 +346,8 @@ export const CapasCine: React.FC<CapasCineProps> = ({
         <AbsoluteFill
           style={{
             zIndex: 20,
+            transform: tUi?.transform,
+            transformOrigin: tUi?.transformOrigin,
           }}
         >
           {ui}
@@ -292,11 +374,14 @@ export const CapasCine: React.FC<CapasCineProps> = ({
         opacidad={postProcess?.vignette?.opacidad}
         radioInicio={postProcess?.vignette?.radioInicio}
       />
-      <FilmGrain
-        activo={postProcess?.grano?.activo}
-        opacidad={postProcess?.grano?.opacidad}
-        metodo={postProcess?.grano?.metodo}
-      />
+      {/* En modo artístico global, FilmGrain se orquesta centralmente en Reel.tsx para evitar duplicación */}
+      {!modoArteActivo && (
+        <FilmGrain
+          activo={postProcess?.grano?.activo}
+          opacidad={postProcess?.grano?.opacidad}
+          metodo={postProcess?.grano?.metodo}
+        />
+      )}
     </AbsoluteFill>
   );
 };

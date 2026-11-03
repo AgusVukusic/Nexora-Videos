@@ -52,7 +52,7 @@ const opcNav = { browserExecutable: navegador, chromeMode: modoChrome };
 // Versiones de caché independientes para bundle, vídeo y audio
 const CACHE_BUNDLE_VERSION = "bundle-v1";
 const CACHE_VIDEO_VERSION = "video-v2";
-const CACHE_AUDIO_VERSION = "audio-v2";
+const CACHE_AUDIO_VERSION = "audio-v3";
 
 // ------------------------------------------------------------ ffmpeg
 let _ffmpegBin = null;
@@ -140,7 +140,8 @@ const mezclarAudio = (a, fps, destino) => {
   fs.mkdirSync(path.dirname(destino), { recursive: true });
   const voz = a.voz ? path.join(RAIZ, "public", a.voz) : null;
   const efectos = a.efectos || [];
-  const totalSeg = (a.fotogramas / fps).toFixed(3);
+  // Duración de audio calibrada para cubrir exactamente la totalidad de fotogramas sin truncar el stream final
+  const totalSeg = ((a.fotogramas + 0.05) / fps).toFixed(4);
 
   // Si no hay voz ni efectos, generamos silencio de la duración exacta
   if (!voz && !efectos.length) {
@@ -177,9 +178,9 @@ const mezclarAudio = (a, fps, destino) => {
 
   if (etiquetasEfectos.length) {
     const todos = `[a_voz]${etiquetasEfectos.join("")}`;
-    filtros.push(`${todos}amix=inputs=${etiquetasEfectos.length + 1}:duration=first:dropout_transition=0,volume=${etiquetasEfectos.length + 1}[a_final]`);
+    filtros.push(`${todos}amix=inputs=${etiquetasEfectos.length + 1}:duration=first:dropout_transition=0,volume=${etiquetasEfectos.length + 1},apad[a_final]`);
   } else {
-    filtros.push(`[a_voz]aresample=48000[a_final]`);
+    filtros.push(`[a_voz]aresample=48000,apad[a_final]`);
   }
 
   ff([...inputs, "-filter_complex", filtros.join(";"), "-map", "[a_final]", "-c:a", "pcm_s16le", "-t", totalSeg, "-y", destino]);
@@ -340,7 +341,8 @@ const elegir = async (serveUrl, id, browser, inputProps = {}) => selectCompositi
 
 // ------------------------------------------------------------ resumen
 const enseñarResumen = (r) => {
-  console.log(`\nDuración ${r.duracion} s · estilo ${r.estilo} · ${r.escenas.length} escenas · ${r.efectos} efectos de sonido · ${r.poses} cambios de pose\n`);
+  const tagArte = r.modoArteActivo ? ` · arte: ${r.mundoVisualActivo || "activo"}` : "";
+  console.log(`\nDuración ${r.duracion} s · estilo ${r.estilo}${tagArte} · ${r.escenas.length} escenas · ${r.efectos} efectos de sonido · ${r.poses} cambios de pose\n`);
   for (const e of r.escenas) {
     console.log(`  ${String(e.frase).padStart(2)}. ${String(e.tipo).padEnd(12)} ${e.desde.toFixed(2)}–${e.hasta.toFixed(2)} s  (${e.entrada})  momentos: ${e.momentos.join(", ")}`);
   }
@@ -356,8 +358,140 @@ const enseñarResumen = (r) => {
   }
 };
 
+// ------------------------------------------------------------ validación temprana de arte
+const MUNDOS_VALIDOS = new Set([
+  "cinematic-dark",
+  "editorial-print",
+  "technical-blueprint",
+  "kinetic-swiss",
+  "neobrutalist-pop",
+  "organic-botanical",
+  "data-cyber",
+  "mixed-collage",
+]);
+const FONDOS_MODO_VALIDOS = new Set(["clasico", "malla_armonizada", "transparente"]);
+
+const validarPreRenderArte = () => {
+  const problemas = [];
+  const avisos = [];
+
+  // 1. Revisión de arte.json
+  const rutasArte = [
+    path.join(RAIZ, "src", "datos", "arte.json"),
+    path.join(RAIZ, "arte.json"),
+  ];
+  let arteObj = null;
+  for (const r of rutasArte) {
+    if (fs.existsSync(r)) {
+      const txt = fs.readFileSync(r, "utf8");
+      if (txt.trim() === "") {
+        problemas.push("El archivo arte.json existe pero está vacío.");
+      } else {
+        try {
+          arteObj = JSON.parse(txt);
+        } catch (e) {
+          problemas.push(`El archivo arte.json contiene JSON corrupto: ${e.message}`);
+        }
+      }
+      break;
+    }
+  }
+
+  // 2. Revisión de plan.json
+  const rutaPlan = path.join(RAIZ, "src", "datos", "plan.json");
+  let planObj = null;
+  if (fs.existsSync(rutaPlan)) {
+    try {
+      planObj = JSON.parse(fs.readFileSync(rutaPlan, "utf8"));
+    } catch (e) {
+      problemas.push(`El archivo plan.json contiene JSON corrupto: ${e.message}`);
+    }
+  }
+
+  const validarContrato = (obj, origen) => {
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return;
+    if ("mundo_visual" in obj && obj.mundo_visual !== undefined && obj.mundo_visual !== null) {
+      if (typeof obj.mundo_visual !== "string" || obj.mundo_visual.trim() === "") {
+        problemas.push(`${origen}: «mundo_visual» debe ser un ID de texto válido o null.`);
+      } else if (!MUNDOS_VALIDOS.has(obj.mundo_visual)) {
+        problemas.push(`${origen}: Mundo visual desconocido «${obj.mundo_visual}».`);
+      }
+    }
+    if ("materialidad" in obj && obj.materialidad !== undefined && obj.materialidad !== null) {
+      if (typeof obj.materialidad !== "object" || Array.isArray(obj.materialidad)) {
+        problemas.push(`${origen}: «materialidad» debe ser un objeto {…}`);
+      } else {
+        const fm = obj.materialidad.fondo_modo;
+        if (fm !== undefined && fm !== null) {
+          if (typeof fm !== "string" || !FONDOS_MODO_VALIDOS.has(fm)) {
+            problemas.push(`${origen}: «materialidad.fondo_modo» inválido («${fm}»).`);
+          }
+        }
+      }
+    }
+    if ("grano_intensidad" in obj && obj.grano_intensidad !== undefined && obj.grano_intensidad !== null) {
+      if (typeof obj.grano_intensidad !== "number" || isNaN(obj.grano_intensidad)) {
+        problemas.push(`${origen}: «grano_intensidad» debe ser un número.`);
+      }
+    }
+    if ("vineta_intensidad" in obj && obj.vineta_intensidad !== undefined && obj.vineta_intensidad !== null) {
+      if (typeof obj.vineta_intensidad !== "number" || isNaN(obj.vineta_intensidad)) {
+        problemas.push(`${origen}: «vineta_intensidad» debe ser un número.`);
+      }
+    }
+    if ("colores" in obj && obj.colores !== undefined && obj.colores !== null) {
+      if (typeof obj.colores !== "object" || Array.isArray(obj.colores)) {
+        problemas.push(`${origen}: «colores» debe ser un objeto {…}`);
+      }
+    }
+  };
+
+  if (arteObj) validarContrato(arteObj, "arte.json");
+  if (planObj) {
+    if ("mundo_visual" in planObj && planObj.mundo_visual !== undefined && planObj.mundo_visual !== null) {
+      if (typeof planObj.mundo_visual !== "string" || planObj.mundo_visual.trim() === "") {
+        problemas.push("plan.mundo_visual: debe ser un ID de texto válido o null.");
+      } else if (!MUNDOS_VALIDOS.has(planObj.mundo_visual)) {
+        problemas.push(`plan.mundo_visual: Mundo visual desconocido «${planObj.mundo_visual}».`);
+      }
+    }
+    if (planObj.arte) validarContrato(planObj.arte, "plan.arte");
+    if (Array.isArray(planObj.frases)) {
+      planObj.frases.forEach((f, idx) => {
+        if (!f || typeof f !== "object") return;
+        if ("mundo_visual" in f && f.mundo_visual !== undefined) {
+          avisos.push(`Frase ${idx + 1}: "mundo_visual" es global y no es configurable por frase.`);
+        }
+        if ("grano_intensidad" in f && f.grano_intensidad !== undefined && f.grano_intensidad !== null) {
+          if (typeof f.grano_intensidad !== "number" || isNaN(f.grano_intensidad)) {
+            problemas.push(`Frase ${idx + 1}: «grano_intensidad» debe ser un número.`);
+          }
+        }
+        if ("vineta_intensidad" in f && f.vineta_intensidad !== undefined && f.vineta_intensidad !== null) {
+          if (typeof f.vineta_intensidad !== "number" || isNaN(f.vineta_intensidad)) {
+            problemas.push(`Frase ${idx + 1}: «vineta_intensidad» debe ser un número.`);
+          }
+        }
+      });
+    }
+  }
+
+  return { problemas, avisos };
+};
+
 // ------------------------------------------------------------ comandos
 const main = async () => {
+  if (cmd === "video") {
+    const v = validarPreRenderArte();
+    if (v.problemas.length && !flag("forzar")) {
+      for (const p of v.problemas) {
+        process.stderr.write(`ERROR (contrato de arte): ${p}\n`);
+      }
+      process.exitCode = 1;
+      return;
+    }
+  }
+
   const serveUrl = await empaquetar();
   const browser = await abrirNavegador();
   try {

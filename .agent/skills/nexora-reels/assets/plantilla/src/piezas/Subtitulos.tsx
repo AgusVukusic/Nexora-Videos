@@ -131,6 +131,7 @@ export const SubtitulosLinea: React.FC<{ frases: FraseT[]; sin: number[] }> = ({
     <div
       style={{
         position: "absolute",
+        zIndex: 50,
         left: 20,
         right: 20,
         top: SUB_Y - L.tam * 0.75,
@@ -214,6 +215,7 @@ export const SubtitulosBloque: React.FC<{ frases: FraseT[]; sin: number[] }> = (
     <div
       style={{
         position: "absolute",
+        zIndex: 50,
         top: B.y,
         left: B.x,
         width: B.ancho + 40,

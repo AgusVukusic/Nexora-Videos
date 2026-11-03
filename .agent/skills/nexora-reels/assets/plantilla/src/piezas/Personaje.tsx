@@ -38,6 +38,7 @@ export const Personaje: React.FC<{
     <div
       style={{
         position: "absolute",
+        zIndex: 44,
         left,
         top,
         width: w,
