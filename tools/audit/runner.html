@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Runner</title>
+</head>
+<body>
+<div id="results-json" style="display:none;"></div>
+<script>
+  const scenarios = [{"id":"CFG1_TC1_estatica","cfgNombre":"Línea con Personaje","movNombre":"Estática (f=0)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"none","analitico":{"supIzq":[60,210],"infDer":[1020,1040],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC2_travel_in_f90","cfgNombre":"Línea con Personaje","movNombre":"Travel-In (f=90: max escala 1.12, tx=0, ty=0)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.1200)","analitico":{"supIzq":[2.4,143.04],"infDer":[1077.6,1072.64],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC3_zoom_in_f90","cfgNombre":"Línea con Personaje","movNombre":"Zoom-In (f=90: max zoom 1.15, ty=-20)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,103.3],"infDer":[1092,1057.8],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC4_orbital_f0","cfgNombre":"Línea con Personaje","movNombre":"Orbital (f=0: rot=-1.2°, inclina sector izq)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.0200) rotate(-1.200deg)","analitico":{"supIzq":[60.71,208.57],"infDer":[1025.26,1055.61],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC5_paneo_f0","cfgNombre":"Línea con Personaje","movNombre":"Paneo (f=0: max desp horizontal tx=-30)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"translate(-30.00px, 0.00px)","analitico":{"supIzq":[30,210],"infDer":[990,1040],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG2_TC1_estatica","cfgNombre":"Línea sin Personaje","movNombre":"Estática (f=0, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"none","analitico":{"supIzq":[60,300],"infDer":[1020,1130],"subTop":1283.5,"personajeTop":null}},{"id":"CFG2_TC2_travel_in_f90","cfgNombre":"Línea sin Personaje","movNombre":"Travel-In (f=90: max escala 1.12, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"scale(1.1200)","analitico":{"supIzq":[2.4,243.84],"infDer":[1077.6,1173.44],"subTop":1283.5,"personajeTop":null}},{"id":"CFG2_TC3_zoom_in_f90","cfgNombre":"Línea sin Personaje","movNombre":"Zoom-In (f=90: escala 1.15, ty=-20, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,206.8],"infDer":[1092,1161.3],"subTop":1283.5,"personajeTop":null}},{"id":"CFG3_TC1_estatica","cfgNombre":"Bloque con Personaje","movNombre":"Estática (f=0: s=0.8605, dy=+230px)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"none","analitico":{"supIzq":[126.98,534.42],"infDer":[953.02,1214.19],"contentLeftBottom":1145.35,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC2_zoom_in_f90","cfgNombre":"Bloque con Personaje","movNombre":"Zoom-In (f=90: peor separación superior y=250 vs subtítulos)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[65.02,476.38],"infDer":[1014.98,1258.11],"contentLeftBottom":1178.95,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC3_travel_in_f90","cfgNombre":"Bloque con Personaje","movNombre":"Travel-In (f=90: escala 1.12, tx=0, ty=0)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.1200)","analitico":{"supIzq":[77.41,506.35],"infDer":[1002.59,1267.69],"contentLeftBottom":1190.59,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC4_orbital_f0","cfgNombre":"Bloque con Personaje","movNombre":"Orbital (f=0: rot=-1.2°, inclina sector izq)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.0200) rotate(-1.200deg)","analitico":{"supIzq":[113.82,538.62],"infDer":[969.25,1231.81],"contentLeftBottom":1161.64,"subBottom":465,"personajeTop":1262}},{"id":"CFG4_TC1_estatica","cfgNombre":"Bloque sin Personaje","movNombre":"Estática (f=0, dy=+360px)","subModo":"bloque","conPersonaje":false,"subTop":210,"subBottom":465,"personajeTop":null,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 360px) scale(1)","camTransform":"none","analitico":{"supIzq":[60,610],"infDer":[1020,1400],"subBottom":465,"personajeTop":null}},{"id":"CFG4_TC2_zoom_in_f90","cfgNombre":"Bloque sin Personaje","movNombre":"Zoom-In (f=90: escala 1.15, ty=-20, dy=+360px)","subModo":"bloque","conPersonaje":false,"subTop":210,"subBottom":465,"personajeTop":null,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 360px) scale(1)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,563.3],"infDer":[1092,1471.8],"subBottom":465,"personajeTop":null}}];
+  const results = [];
+
+  // Cargamos el iframe o ejecutamos directamente
+  window.onload = function() {
+    const frame = document.createElement("iframe");
+    frame.style.width = "1080px";
+    frame.style.height = "1920px";
+    frame.src = "harness_41a4.html";
+    document.body.appendChild(frame);
+
+    frame.onload = function() {
+      scenarios.forEach(sc => {
+        const domData = frame.contentWindow.runScenario(sc);
+        results.push({
+          id: sc.id,
+          cfgNombre: sc.cfgNombre,
+          movNombre: sc.movNombre,
+          domData: domData,
+          analitico: sc.analitico
+        });
+      });
+      document.getElementById("results-json").textContent = JSON.stringify(results);
+      document.getElementById("results-json").style.display = "block";
+    };
+  };
+</script>
+</body>
+</html>

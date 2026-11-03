@@ -1,0 +1,310 @@
+[
+  {
+    "path": "fuentes/anton-latin-400-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\anton-latin-400-normal.woff2",
+    "size": 18612,
+    "hash": "d0fa07ff63dd60cbc0e2f58e29c802dca2a5ae0276c999f59c6111ab7bbaec3b",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/archivo-black-latin-400-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\archivo-black-latin-400-normal.woff2",
+    "size": 18604,
+    "hash": "25f33e61cf995abd6be62931cf03bf427286259177b43618cc410ee0157cfd30",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/archivo-latin-600-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\archivo-latin-600-normal.woff2",
+    "size": 13820,
+    "hash": "d9e8c29fdd348edde2a4f9aae438e569dd165bbbdebda78495824a2d9aaa67e8",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/archivo-latin-800-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\archivo-latin-800-normal.woff2",
+    "size": 14416,
+    "hash": "c26cda2400b374eb1adb6e0973c86f455e2df17ca57c6755eb37d7bde47663fb",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/bricolage-grotesque-latin-800-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\bricolage-grotesque-latin-800-normal.woff2",
+    "size": 21844,
+    "hash": "3e1b5f0a56ee995b7c1445bc54e6ec98c5dffb585ef5c4baf86731cf68e27c61",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/caveat-latin-700-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\caveat-latin-700-normal.woff2",
+    "size": 51020,
+    "hash": "15f9638095ad5ec9816f93d66805ca1a87e71dc5a76b596bfce1c78d4704c405",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/dm-sans-latin-600-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\dm-sans-latin-600-normal.woff2",
+    "size": 14144,
+    "hash": "6bb2b2645ba5eeaecf56322c543fa3a75b87b927977b9c03b1dabc4205089120",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/dm-sans-latin-800-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\dm-sans-latin-800-normal.woff2",
+    "size": 14404,
+    "hash": "094c859b70f10e1e010d293381f5cd032ef9929380e2dca97d12a574c2ef5c0a",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/inter-latin-600-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\inter-latin-600-normal.woff2",
+    "size": 24452,
+    "hash": "f9a06e79cd3a2a20951c0f0e28f66dd0e6d3fda73911d640a2125c8fcb78f21a",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/inter-latin-800-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\inter-latin-800-normal.woff2",
+    "size": 24400,
+    "hash": "a7d0a50f15d389cad679238466bdb5fc9787aa0715719064ce25abaff042820d",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/jetbrains-mono-latin-400-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\jetbrains-mono-latin-400-normal.woff2",
+    "size": 21168,
+    "hash": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/jetbrains-mono-latin-700-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\jetbrains-mono-latin-700-normal.woff2",
+    "size": 21908,
+    "hash": "d0d4e818808f2a0ba39b2b09d1989366f63494e295f003c7ef436697378507e8",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/anton-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\anton-OFL.txt",
+    "size": 4390,
+    "hash": "9267baca92b7a7ce9db6dd9e6cc32c9fe3ddf1ac96e421d5f87c5746b9089d6a",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/archivo-black-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\archivo-black-OFL.txt",
+    "size": 4398,
+    "hash": "4cafdbbd100af37a23805af09b7068e4daafb4516dc3d6d52436f4a9d7b4c0d3",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/archivo-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\archivo-OFL.txt",
+    "size": 4503,
+    "hash": "c3c8402eec0e31dc9a76851235b1c02a0bb821488b2db8e35bcc2ab60ca8fc2b",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/bricolage-grotesque-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\bricolage-grotesque-OFL.txt",
+    "size": 4401,
+    "hash": "923f4ddf0fd39f9b7794ab0df7332f3d95dc43e8ad7ec2289d6d9e8491177f51",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/caveat-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\caveat-OFL.txt",
+    "size": 4384,
+    "hash": "163a2b400e16916ad3196296c946c526d0efce6baf22a2164269ffc62fb9f671",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/dm-sans-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\dm-sans-OFL.txt",
+    "size": 4502,
+    "hash": "6fbd040a29c2037a765dfb9f2561e9965b5c95c6dcb5dce516089d63d5f17af7",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/inter-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\inter-OFL.txt",
+    "size": 4477,
+    "hash": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/jetbrains-mono-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\jetbrains-mono-OFL.txt",
+    "size": 4524,
+    "hash": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/manrope-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\manrope-OFL.txt",
+    "size": 4383,
+    "hash": "d826ab6583b12c26807d8716a545bdbbb672df04f48608a364ba9efdbe501c30",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/licencias/space-grotesk-OFL.txt",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\licencias\\space-grotesk-OFL.txt",
+    "size": 4401,
+    "hash": "18a4de52385f6b988782639d5d0cc1326e5a8c2de9a7f01d7b20d9aedcc60943",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/manrope-latin-600-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\manrope-latin-600-normal.woff2",
+    "size": 14172,
+    "hash": "f7ac6258da20ab7541939b59851155753d1d24f1b30cbcb949077a3faa3d1593",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/manrope-latin-800-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\manrope-latin-800-normal.woff2",
+    "size": 13648,
+    "hash": "74c161dbcbce7c3590803cc72dc1f63313c360e13367aba5075a7b7b3818ea49",
+    "tipo": "fuente"
+  },
+  {
+    "path": "fuentes/space-grotesk-latin-700-normal.woff2",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\fuentes\\space-grotesk-latin-700-normal.woff2",
+    "size": 12840,
+    "hash": "35f8aec56cfd5cbfdb03cc68733a54a0b05bb3617ffcd5fd332badc0b045ca55",
+    "tipo": "fuente"
+  },
+  {
+    "path": "sonidos/burbuja.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\burbuja.wav",
+    "size": 30764,
+    "hash": "627912d01ec68d8ba8c7b6f156ea0df97e2b412f0a3787292fcb435b771fbc6b",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/campana.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\campana.wav",
+    "size": 172844,
+    "hash": "769e70a89062a212abc08caf114f8fc25bf71229760ab4ea613723945d97763e",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/clic.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\clic.wav",
+    "size": 1196,
+    "hash": "fa236194ac0bbb592bcf4fe556462166df8063a2da0f4d4ef7dcf5b9777d9616",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/cristal.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\cristal.wav",
+    "size": 86444,
+    "hash": "8f2304c4607078c62e83c18894d111249b67f1a0b7a7dd9c82668753546d7d64",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/ding.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\ding.wav",
+    "size": 124844,
+    "hash": "cfd56210077433b39056045fb5694978e4ccb41ad1ef67e3db52d4a097623ed2",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/exito.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\exito.wav",
+    "size": 120044,
+    "hash": "098c0e0bc9d326ebe1f63e5d167c5f3f1dd0f6945ada877e632a0167e435e640",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/golpe.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\golpe.wav",
+    "size": 30764,
+    "hash": "89cc2ca506ca94e5d5b07c067cee2da558049e5f2c1ac6c1ccb29ea923bb88e2",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/negacion.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\negacion.wav",
+    "size": 30764,
+    "hash": "d4d1ab8f30ca80360d44e839a82d359425fcb3c89886b803a8919e146cd613fc",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/papel.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\papel.wav",
+    "size": 8684,
+    "hash": "e41f99ec9f184395e4ce3b8eeaa2e80cdd768c74a9ca9f7d6a30f01c4cfba4e7",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/pop.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\pop.wav",
+    "size": 13484,
+    "hash": "d449cc682f2d8e07b22e259958c3d7b078f3f0cebe3636afc0e60525a4a27c94",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/proyector.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\proyector.wav",
+    "size": 96044,
+    "hash": "b7f5cd751430149a195698237b1c71c3a805d9f19c03ac322813cc3c1daf73b9",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/puff.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\puff.wav",
+    "size": 33644,
+    "hash": "1a5612b34e99d761240c62eab9ed39686e91583398ad7b628f45217ea6b8fcbe",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/subida.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\subida.wav",
+    "size": 86444,
+    "hash": "c800a93e21438f8086b7f203ac7950fcfbbd0268235fababe6850d5883ae5d19",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/swoosh.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\swoosh.wav",
+    "size": 26924,
+    "hash": "ec74919a972c0e2b56fc0dfdc251043b7304ce9f72021976cef754cb76be0ac5",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/tecla.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\tecla.wav",
+    "size": 5804,
+    "hash": "e9e78f0b6ef595e2cfa4315e3ae796f75126eda79576ed4bd7ded734d5f7336b",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/tic.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\tic.wav",
+    "size": 2924,
+    "hash": "a6023504e062add934d8361be1e4581e22857a896d72dd5f7bf2388da085854e",
+    "tipo": "sonido"
+  },
+  {
+    "path": "sonidos/whoosh.wav",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\sonidos\\whoosh.wav",
+    "size": 48044,
+    "hash": "df636c31527c721eeacdfc353031580e7f1e5506df3cbb6111386b542957046d",
+    "tipo": "sonido"
+  },
+  {
+    "path": "texturas/causticas.png",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\texturas\\causticas.png",
+    "size": 73137,
+    "hash": "a0c5b5a001c652f32184145b546500007d89867e82a344001140e25eb7c791d0",
+    "tipo": "textura"
+  },
+  {
+    "path": "texturas/grano.png",
+    "fullPath": "reel-olla-presion\\salida\\.bundle\\public\\texturas\\grano.png",
+    "size": 161315,
+    "hash": "b9b1905b5a95b9b4bcad9028611b9639c221ee1f1dee8d583b28ccaf1c8bde69",
+    "tipo": "textura"
+  }
+]

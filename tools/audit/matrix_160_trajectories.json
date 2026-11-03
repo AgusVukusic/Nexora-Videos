@@ -1,0 +1,2242 @@
+[
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "estatica",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 230,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "empuje",
+    "minMargin": 227.39999999999998,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 203.10000000000002,
+      "yMax": 896.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "paneo",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 230,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "orbital",
+    "minMargin": 221.26110833911912,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 59.41054097841152,
+      "xMax": 1011.7031714166825,
+      "yMin": 209.5341687270727,
+      "yMax": 902.2388916608809
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 230,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 233.5,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 230,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 213.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 40,
+      "xMax": 960,
+      "yMin": 250,
+      "yMax": 910
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 218.86,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 165.43999999999994,
+      "yMax": 904.64
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 303.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 320,
+      "yMax": 980
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 292.9,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 297.59999999999997,
+      "yMax": 990.6
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 303.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 320,
+      "yMax": 980
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 289.48124159612826,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 61.33305512370367,
+      "xMax": 1013.6256855619747,
+      "yMin": 301.3140354700636,
+      "yMax": 994.0187584038717
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 294.70000000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 229.80000000000007,
+      "yMax": 988.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 294.70000000000005,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 229.80000000000007,
+      "yMax": 988.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 278.05999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 266.23999999999995,
+      "yMax": 1005.44
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "linea_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 278.05999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 266.23999999999995,
+      "yMax": 1005.44
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "estatica",
+    "minMargin": 52.20930232558135,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 144.18604651162792,
+      "xMax": 935.8139534883721,
+      "yMin": 517.2093023255813,
+      "yMax": 1085.1162790697674
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "empuje",
+    "minMargin": 39.669767441860415,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 124.39534883720933,
+      "xMax": 955.6046511627908,
+      "yMin": 504.6697674418604,
+      "yMax": 1100.9720930232559
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "paneo",
+    "minMargin": 52.20930232558135,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 114.18604651162792,
+      "xMax": 905.8139534883721,
+      "yMin": 517.2093023255813,
+      "yMax": 1085.1162790697674
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "orbital",
+    "minMargin": 38.7945029174972,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 131.0011047781565,
+      "xMax": 950.4156937599246,
+      "yMin": 503.7945029174972,
+      "yMax": 1099.8427528837972
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": -8.40930232558145,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 84.81395348837214,
+      "xMax": 995.1860465116279,
+      "yMin": 456.59069767441855,
+      "yMax": 1109.6837209302325
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": -8.40930232558145,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 84.81395348837214,
+      "xMax": 995.1860465116279,
+      "yMin": 456.59069767441855,
+      "yMax": 1109.6837209302325
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 22.114418604651064,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 96.68837209302325,
+      "xMax": 983.3116279069768,
+      "yMin": 487.11441860465106,
+      "yMax": 1123.1702325581396
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 22.114418604651064,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 96.68837209302325,
+      "xMax": 983.3116279069768,
+      "yMin": 487.11441860465106,
+      "yMax": 1123.1702325581396
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 125,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 590,
+      "yMax": 1250
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 116.10000000000002,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 581.1,
+      "yMax": 1274.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 125,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 590,
+      "yMax": 1250
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 111.65363569903593,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 67.1005975595802,
+      "xMax": 1019.3932279978511,
+      "yMin": 576.6536356990359,
+      "yMax": 1269.358358632844
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 75.29999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 540.3,
+      "yMax": 1299.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 75.29999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 540.3,
+      "yMax": 1299.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 103.63999999999999,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 568.64,
+      "yMax": 1307.8400000000001
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "titular",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 103.5274074074074,
+    "worstFrame": 30,
+    "worstBBox": {
+      "xMin": 46.78518518518513,
+      "xMax": 1052.651851851852,
+      "yMin": 568.5274074074074,
+      "yMax": 1290.1274074074074
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "estatica",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 370,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "empuje",
+    "minMargin": 227.39999999999998,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 350.09999999999997,
+      "yMax": 896.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "paneo",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 370,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "orbital",
+    "minMargin": 221.68833370473965,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 82.79664448064176,
+      "xMax": 991.3076454737957,
+      "yMin": 352.7300756929011,
+      "yMax": 901.8116662952604
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 233.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 370,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 233.5,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 370,
+      "yMax": 890
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 213.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 60,
+      "xMax": 940,
+      "yMin": 390,
+      "yMax": 910
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 218.86,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 322.23999999999995,
+      "yMax": 904.64
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 303.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 460,
+      "yMax": 980
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 292.9,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 444.59999999999997,
+      "yMax": 990.6
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 303.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 460,
+      "yMax": 980
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 289.9084669617488,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 84.71915862593391,
+      "xMax": 993.2301596190878,
+      "yMin": 444.5099424358919,
+      "yMax": 993.5915330382512
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 294.70000000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 390.8,
+      "yMax": 988.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 294.70000000000005,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 390.8,
+      "yMax": 988.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 278.05999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 423.03999999999996,
+      "yMax": 1005.44
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "linea_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 278.05999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 423.03999999999996,
+      "yMax": 1005.44
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "estatica",
+    "minMargin": 172.67441860465124,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 161.39534883720933,
+      "xMax": 918.6046511627907,
+      "yMin": 637.6744186046512,
+      "yMax": 1085.1162790697674
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "empuje",
+    "minMargin": 158.02790697674413,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 142.46511627906978,
+      "xMax": 937.5348837209302,
+      "yMin": 631.1581395348837,
+      "yMax": 1100.9720930232559
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "paneo",
+    "minMargin": 172.67441860465124,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 131.39534883720933,
+      "xMax": 888.6046511627907,
+      "yMin": 637.6744186046512,
+      "yMax": 1085.1162790697674
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "orbital",
+    "minMargin": 159.52485964010884,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 151.1240310475174,
+      "xMax": 932.8660551579055,
+      "yMin": 627.0095856555357,
+      "yMax": 1099.4751403598912
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 130.12558139534895,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 595.125581395349,
+      "yMax": 1109.6837209302325
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 130.12558139534895,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 595.125581395349,
+      "yMax": 1109.6837209302325
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 135.82976744186044,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 622.0353488372093,
+      "yMax": 1123.1702325581396
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 135.82976744186044,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 622.0353488372093,
+      "yMax": 1123.1702325581396
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 265,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 730,
+      "yMax": 1250
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 263.1,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 728.1,
+      "yMax": 1274.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 265,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 730,
+      "yMax": 1250
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 254.84954266486443,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 90.48670106181038,
+      "xMax": 998.9977020549643,
+      "yMin": 719.8495426648644,
+      "yMax": 1268.9311332672237
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 236.29999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 701.3,
+      "yMax": 1299.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 236.29999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 701.3,
+      "yMax": 1299.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 260.44000000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 725.44,
+      "yMax": 1307.8400000000001
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "contador",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 245,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 140,
+      "xMax": 1020,
+      "yMin": 710,
+      "yMax": 1230
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "estatica",
+    "minMargin": 173.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 310,
+      "yMax": 950
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "empuje",
+    "minMargin": 164.39999999999998,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 287.09999999999997,
+      "yMax": 959.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "paneo",
+    "minMargin": 173.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 310,
+      "yMax": 950
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "orbital",
+    "minMargin": 160.50175587607907,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 81.51496838378029,
+      "xMax": 992.5893215706571,
+      "yMin": 291.5434978642406,
+      "yMax": 962.9982441239209
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 169.20000000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 218.30000000000007,
+      "yMax": 954.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 169.20000000000005,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 218.30000000000007,
+      "yMax": 954.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 151.62735268404208,
+    "worstFrame": 68,
+    "worstBBox": {
+      "xMin": 48.22460166438037,
+      "xMax": 1021.2047498125287,
+      "yMin": 264.2507213900319,
+      "yMax": 971.8726473159579
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 151.65999999999997,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 255.03999999999996,
+      "yMax": 971.84
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 243.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 400,
+      "yMax": 1040
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 229.9000000000001,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 381.59999999999997,
+      "yMax": 1053.6
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 243.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 400,
+      "yMax": 1040
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 228.7218891330881,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 83.43748252907244,
+      "xMax": 994.5118357159492,
+      "yMin": 383.3233646072314,
+      "yMax": 1054.778110866912
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 225.70000000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 321.8,
+      "yMax": 1057.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 225.70000000000005,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 321.8,
+      "yMax": 1057.8
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 210.8599999999999,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 355.84,
+      "yMax": 1072.64
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "linea_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 210.8599999999999,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 355.84,
+      "yMax": 1072.64
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "estatica",
+    "minMargin": 121.04651162790697,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 161.39534883720933,
+      "xMax": 918.6046511627907,
+      "yMin": 586.046511627907,
+      "yMax": 1136.7441860465117
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "empuje",
+    "minMargin": 103.81860465116279,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 142.46511627906978,
+      "xMax": 937.5348837209302,
+      "yMin": 576.9488372093023,
+      "yMax": 1155.1813953488372
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "paneo",
+    "minMargin": 121.04651162790697,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 131.39534883720933,
+      "xMax": 888.6046511627907,
+      "yMin": 586.046511627907,
+      "yMax": 1136.7441860465117
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "orbital",
+    "minMargin": 106.8759438340519,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 150.0211934757994,
+      "xMax": 933.9688927296236,
+      "yMin": 574.3606698494789,
+      "yMax": 1152.124056165948
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 70.75348837209299,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 535.753488372093,
+      "yMax": 1169.0558139534883
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 70.75348837209299,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 535.753488372093,
+      "yMax": 1169.0558139534883
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 78.006511627907,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 564.2120930232558,
+      "yMax": 1180.993488372093
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 78.006511627907,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 564.2120930232558,
+      "yMax": 1180.993488372093
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 205,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 670,
+      "yMax": 1310
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 200.10000000000002,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 665.1,
+      "yMax": 1337.1
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 205,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 670,
+      "yMax": 1310
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 193.66296483620386,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 89.2050249649489,
+      "xMax": 1000.2793781518258,
+      "yMin": 658.6629648362039,
+      "yMax": 1330.1177110958843
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 167.29999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 632.3,
+      "yMax": 1368.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 167.29999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 632.3,
+      "yMax": 1368.3
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 193.24,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 658.24,
+      "yMax": 1375.04
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "tachado",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 185,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 140,
+      "xMax": 1020,
+      "yMin": 650,
+      "yMax": 1290
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "estatica",
+    "minMargin": 288.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 250,
+      "yMax": 835
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "empuje",
+    "minMargin": 285.15,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 224.10000000000002,
+      "yMax": 838.35
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "paneo",
+    "minMargin": 288.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 250,
+      "yMax": 835
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "orbital",
+    "minMargin": 277.77603004767843,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80.23329228691887,
+      "xMax": 990.1327757183393,
+      "yMin": 230.35692003558006,
+      "yMax": 845.7239699523216
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 288.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 250,
+      "yMax": 835
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 288.5,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 250,
+      "yMax": 835
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 268.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 60,
+      "xMax": 940,
+      "yMin": 270,
+      "yMax": 855
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 280.46000000000004,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 187.83999999999992,
+      "yMax": 843.04
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 358.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 340,
+      "yMax": 925
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 350.65,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 318.59999999999997,
+      "yMax": 932.85
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 358.5,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 340,
+      "yMax": 925
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 345.9961633046877,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 82.15580643221102,
+      "xMax": 992.0552898636315,
+      "yMin": 322.1367867785708,
+      "yMax": 937.5038366953123
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 357.44984549622063,
+    "worstFrame": 23,
+    "worstBBox": {
+      "xMin": 61.22957201646091,
+      "xMax": 1018.7704279835391,
+      "yMin": 289.5031082074831,
+      "yMax": 926.0501545037794
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 357.44980154732514,
+    "worstFrame": 42,
+    "worstBBox": {
+      "xMin": 60.83022222222229,
+      "xMax": 1019.1697777777777,
+      "yMin": 288.97219845267495,
+      "yMax": 926.0501984526749
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 338.33990577046177,
+    "worstFrame": 32,
+    "worstBBox": {
+      "xMin": 55.856878207590285,
+      "xMax": 962.5567300594421,
+      "yMin": 342.41076089620486,
+      "yMax": 945.1600942295382
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "linea_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 339.65999999999997,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 288.63999999999993,
+      "yMax": 943.84
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "estatica",
+    "minMargin": 69.41860465116281,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 161.39534883720933,
+      "xMax": 918.6046511627907,
+      "yMin": 534.4186046511628,
+      "yMax": 1037.7906976744187
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "empuje",
+    "minMargin": 57.73953488372092,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 142.46511627906978,
+      "xMax": 937.5348837209302,
+      "yMin": 522.7395348837209,
+      "yMax": 1051.2802325581397
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "paneo",
+    "minMargin": 69.41860465116281,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 131.39534883720933,
+      "xMax": 888.6046511627907,
+      "yMin": 534.4186046511628,
+      "yMax": 1037.7906976744187
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "orbital",
+    "minMargin": 56.71175404342216,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 148.9183559040814,
+      "xMax": 931.855120717164,
+      "yMin": 521.7117540434222,
+      "yMax": 1051.2136342043393
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 11.381395348837259,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 476.38139534883726,
+      "yMax": 1055.2593023255813
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 11.381395348837259,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 104.60465116279073,
+      "xMax": 975.3953488372092,
+      "yMin": 476.38139534883726,
+      "yMax": 1055.2593023255813
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 41.388837209302324,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 506.3888372093023,
+      "yMax": 1070.165581395349
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 41.388837209302324,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 115.9627906976744,
+      "xMax": 964.0372093023257,
+      "yMin": 506.3888372093023,
+      "yMax": 1070.165581395349
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 145,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 100,
+      "xMax": 980,
+      "yMin": 610,
+      "yMax": 1195
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 137.10000000000002,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 78,
+      "xMax": 1002,
+      "yMin": 602.1,
+      "yMax": 1216.35
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 145,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 70,
+      "xMax": 950,
+      "yMin": 610,
+      "yMax": 1195
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 132.47638700754328,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 87.92334886808749,
+      "xMax": 997.822832299508,
+      "yMin": 597.4763870075433,
+      "yMax": 1212.8434369242848
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 98.29999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 563.3,
+      "yMax": 1236.05
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 98.29999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 34.00000000000006,
+      "xMax": 1046,
+      "yMin": 563.3,
+      "yMax": 1236.05
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 126.03999999999996,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 47.19999999999993,
+      "xMax": 1032.8000000000002,
+      "yMin": 591.04,
+      "yMax": 1246.24
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "objecion",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 124.80734390489249,
+    "worstFrame": 56,
+    "worstBBox": {
+      "xMin": 114.49091219021489,
+      "xMax": 1024.6325418198446,
+      "yMin": 589.8073439048925,
+      "yMax": 1194.8446772382258
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "estatica",
+    "minMargin": 152,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 290,
+      "yMax": 971.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "empuje",
+    "minMargin": 141.82500000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 266.09999999999997,
+      "yMax": 981.675
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "paneo",
+    "minMargin": 152,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 290,
+      "yMax": 971.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "orbital",
+    "minMargin": 138.14934012185518,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 60.692217075272936,
+      "xMax": 1013.4441147815859,
+      "yMin": 270.7207465557332,
+      "yMax": 985.3506598781448
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 144.47500000000002,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 195.30000000000007,
+      "yMax": 979.025
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 144.47500000000002,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 195.30000000000007,
+      "yMax": 979.025
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 127.57999999999993,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 232.64,
+      "yMax": 995.9200000000001
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 127.57999999999993,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 232.64,
+      "yMax": 995.9200000000001
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 222,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 380,
+      "yMax": 1061.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 207.32500000000005,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 360.59999999999997,
+      "yMax": 1076.175
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 222,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 380,
+      "yMax": 1061.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 206.3694733788643,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 62.61473122056515,
+      "xMax": 1015.3666289268781,
+      "yMin": 362.5006132987241,
+      "yMax": 1077.1305266211357
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 200.9749999999999,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 298.8,
+      "yMax": 1082.525
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 200.9749999999999,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 298.8,
+      "yMax": 1082.525
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 186.77999999999997,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 333.43999999999994,
+      "yMax": 1096.72
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "linea_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 186.77999999999997,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 333.43999999999994,
+      "yMax": 1096.72
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "estatica",
+    "minMargin": 103.75581395348831,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 144.18604651162792,
+      "xMax": 935.8139534883721,
+      "yMin": 568.8372093023256,
+      "yMax": 1155.2441860465117
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "empuje",
+    "minMargin": 84.3936046511626,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 124.39534883720933,
+      "xMax": 955.6046511627908,
+      "yMin": 558.8790697674419,
+      "yMax": 1174.6063953488374
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "paneo",
+    "minMargin": 103.75581395348831,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 114.18604651162792,
+      "xMax": 905.8139534883721,
+      "yMin": 568.8372093023256,
+      "yMax": 1155.2441860465117
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "orbital",
+    "minMargin": 87.6424698129756,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 132.1039423498745,
+      "xMax": 951.9137147948414,
+      "yMin": 556.443418723554,
+      "yMax": 1171.3575301870244
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-in",
+    "minMargin": 50.96279069767445,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 84.81395348837214,
+      "xMax": 995.1860465116279,
+      "yMin": 515.9627906976744,
+      "yMax": 1190.3308139534884
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "zoom-out",
+    "minMargin": 50.96279069767445,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 84.81395348837214,
+      "xMax": 995.1860465116279,
+      "yMin": 515.9627906976744,
+      "yMax": 1190.3308139534884
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "travel-in",
+    "minMargin": 57.28651162790675,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 96.68837209302325,
+      "xMax": 983.3116279069768,
+      "yMin": 544.9376744186047,
+      "yMax": 1201.7134883720933
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_con_personaje",
+    "mov": "travel-out",
+    "minMargin": 57.28651162790675,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 96.68837209302325,
+      "xMax": 983.3116279069768,
+      "yMin": 544.9376744186047,
+      "yMax": 1201.7134883720933
+    },
+    "limitante": "Personaje"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "estatica",
+    "minMargin": 185,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 80,
+      "xMax": 1000,
+      "yMin": 650,
+      "yMax": 1331.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "empuje",
+    "minMargin": 179.10000000000002,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 57,
+      "xMax": 1023,
+      "yMin": 644.1,
+      "yMax": 1359.6750000000002
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "paneo",
+    "minMargin": 185,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 50,
+      "xMax": 970,
+      "yMin": 650,
+      "yMax": 1331.5
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "orbital",
+    "minMargin": 172.8402135276965,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 68.38227365644161,
+      "xMax": 1021.1341713627546,
+      "yMin": 637.8402135276965,
+      "yMax": 1352.470126850108
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-in",
+    "minMargin": 144.29999999999995,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 609.3,
+      "yMax": 1393.025
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "zoom-out",
+    "minMargin": 144.29999999999995,
+    "worstFrame": 0,
+    "worstBBox": {
+      "xMin": 11,
+      "xMax": 1069,
+      "yMin": 609.3,
+      "yMax": 1393.025
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-in",
+    "minMargin": 170.83999999999992,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 24.799999999999955,
+      "xMax": 1055.2,
+      "yMin": 635.8399999999999,
+      "yMax": 1399.12
+    },
+    "limitante": "Subtítulos"
+  },
+  {
+    "escena": "cta",
+    "config": "bloque_sin_personaje",
+    "mov": "travel-out",
+    "minMargin": 165,
+    "worstFrame": 90,
+    "worstBBox": {
+      "xMin": 120,
+      "xMax": 1040,
+      "yMin": 630,
+      "yMax": 1311.5
+    },
+    "limitante": "Subtítulos"
+  }
+]

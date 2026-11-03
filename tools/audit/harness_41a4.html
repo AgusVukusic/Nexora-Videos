@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Nexora Reels 41A.4 Chromium Layer Test Harness</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+    font-family: sans-serif;
+  }
+  #root-container {
+    width: 1080px;
+    height: 1920px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #0d1117;
+    overflow: hidden;
+  }
+  .absolute-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  /* Capa 1: Fondo */
+  #capa-fondo { z-index: 0; }
+  /* Capa 2: Assets */
+  #capa-assets { z-index: 10; pointer-events: none; }
+  /* Capa 3: UI y Composición */
+  #capa-ui { z-index: 20; }
+  /* Capa 44: Personaje */
+  #personaje {
+    position: absolute;
+    z-index: 44;
+    background: rgba(235, 87, 87, 0.35);
+    border: 3px solid #eb5757;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 24px;
+  }
+  /* Capa 50: Subtítulos */
+  #subtitulos {
+    position: absolute;
+    z-index: 50;
+    background: rgba(45, 156, 219, 0.35);
+    border: 3px solid #2d9cdb;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 26px;
+    text-align: center;
+  }
+  /* Elementos de escena dentro de Lienzo */
+  #scene-content-full {
+    position: absolute;
+    background: rgba(46, 204, 113, 0.25);
+    border: 2px dashed #2ecc71;
+  }
+  #scene-content-left {
+    position: absolute;
+    background: rgba(241, 196, 15, 0.25);
+    border: 2px solid #f1c40f;
+  }
+  #scene-content-right {
+    position: absolute;
+    background: rgba(155, 89, 182, 0.25);
+    border: 2px solid #9b59b6;
+  }
+  .marker {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff0055;
+    transform: translate(-50%, -50%);
+  }
+</style>
+</head>
+<body>
+<div id="root-container">
+  <!-- Capa 1: Fondo -->
+  <div id="capa-fondo" class="absolute-fill"></div>
+
+  <!-- Capa 2: Assets -->
+  <div id="capa-assets" class="absolute-fill"></div>
+
+  <!-- Capa 3: UI (Contiene Lienzo y Escena) -->
+  <div id="capa-ui" class="absolute-fill">
+    <div id="lienzo" class="absolute-fill">
+      <!-- Elemento de prueba global o sectorizado -->
+      <div id="scene-content-full"></div>
+      <div id="scene-content-left"></div>
+      <div id="scene-content-right"></div>
+      <!-- Marcadores de esquinas -->
+      <div id="m-sup-izq" class="marker"></div>
+      <div id="m-sup-der" class="marker"></div>
+      <div id="m-inf-izq" class="marker"></div>
+      <div id="m-inf-der" class="marker"></div>
+    </div>
+  </div>
+
+  <!-- Capa 44: Personaje -->
+  <div id="personaje"></div>
+
+  <!-- Capa 50: Subtítulos -->
+  <div id="subtitulos"></div>
+</div>
+
+<script>
+  // Parámetros inyectados o por defecto
+  window.runScenario = function(params) {
+    const capaUi = document.getElementById("capa-ui");
+    const lienzo = document.getElementById("lienzo");
+    const sub = document.getElementById("subtitulos");
+    const pers = document.getElementById("personaje");
+
+    const contentFull = document.getElementById("scene-content-full");
+    const contentLeft = document.getElementById("scene-content-left");
+    const contentRight = document.getElementById("scene-content-right");
+
+    const mSupIzq = document.getElementById("m-sup-izq");
+    const mSupDer = document.getElementById("m-sup-der");
+    const mInfIzq = document.getElementById("m-inf-izq");
+    const mInfDer = document.getElementById("m-inf-der");
+
+    // 1. Transformación de Capa 3 UI (Cámara 2.5D)
+    capaUi.style.transformOrigin = "540px 768px";
+    capaUi.style.transform = params.camTransform || "none";
+
+    // 2. Transformación de Lienzo
+    lienzo.style.transformOrigin = "540px 640px";
+    lienzo.style.transform = params.lienzoTransform || "none";
+
+    // 3. Posicionamiento del contenido de la escena dentro de Lienzo
+    const localTop = params.localTop;
+    const localBottom = params.localBottom;
+
+    contentFull.style.left = "60px";
+    contentFull.style.top = localTop + "px";
+    contentFull.style.width = "960px";
+    contentFull.style.height = (localBottom - localTop) + "px";
+
+    // Sector izquierdo y derecho (para modo bloque)
+    if (params.subModo === "bloque") {
+      contentLeft.style.display = "block";
+      contentLeft.style.left = "60px";
+      contentLeft.style.top = localTop + "px";
+      contentLeft.style.width = "460px";
+      contentLeft.style.height = (960 - localTop) + "px"; // Sector izquierdo a y=960
+
+      contentRight.style.display = "block";
+      contentRight.style.left = "520px";
+      contentRight.style.top = localTop + "px";
+      contentRight.style.width = "500px";
+      contentRight.style.height = (1040 - localTop) + "px"; // Sector derecho a y=1040
+    } else {
+      contentLeft.style.display = "none";
+      contentRight.style.display = "none";
+    }
+
+    // Marcadores
+    mSupIzq.style.left = "60px";
+    mSupIzq.style.top = localTop + "px";
+
+    mSupDer.style.left = "1020px";
+    mSupDer.style.top = localTop + "px";
+
+    mInfIzq.style.left = "60px";
+    mInfIzq.style.top = localBottom + "px";
+
+    mInfDer.style.left = "1020px";
+    mInfDer.style.top = localBottom + "px";
+
+    // 4. Subtítulos
+    if (params.subModo === "linea") {
+      sub.style.display = "flex";
+      sub.style.left = "20px";
+      sub.style.right = "20px";
+      sub.style.width = "1040px";
+      sub.style.top = (params.subTop) + "px";
+      sub.style.height = "85px";
+      sub.textContent = "SUBTÍTULOS LÍNEA (TOP: " + params.subTop + "px)";
+    } else {
+      sub.style.display = "flex";
+      sub.style.left = "130px";
+      sub.style.top = "210px";
+      sub.style.width = "870px";
+      sub.style.height = "255px";
+      sub.textContent = "SUBTÍTULOS BLOQUE (210-465px)";
+    }
+
+    // 5. Personaje
+    if (params.conPersonaje) {
+      pers.style.display = "flex";
+      pers.style.left = "80px";
+      pers.style.width = "440px";
+      pers.style.top = (params.personajeTop || 1262) + "px";
+      pers.style.height = (1920 - (params.personajeTop || 1262)) + "px";
+      pers.textContent = "PERSONAJE (TOP: " + (params.personajeTop || 1262) + "px)";
+    } else {
+      pers.style.display = "none";
+    }
+
+    // Retornamos las mediciones del DOM
+    const rRoot = document.getElementById("root-container").getBoundingClientRect();
+    const rContent = contentFull.getBoundingClientRect();
+    const rContentLeft = contentLeft.getBoundingClientRect();
+    const rSub = sub.getBoundingClientRect();
+    const rPers = params.conPersonaje ? pers.getBoundingClientRect() : null;
+
+    const rSupIzq = mSupIzq.getBoundingClientRect();
+    const rSupDer = mSupDer.getBoundingClientRect();
+    const rInfIzq = mInfIzq.getBoundingClientRect();
+    const rInfDer = mInfDer.getBoundingClientRect();
+
+    return {
+      content: {
+        x: rContent.left - rRoot.left,
+        y: rContent.top - rRoot.top,
+        width: rContent.width,
+        height: rContent.height,
+        right: rContent.right - rRoot.left,
+        bottom: rContent.bottom - rRoot.top
+      },
+      contentLeft: params.subModo === "bloque" ? {
+        x: rContentLeft.left - rRoot.left,
+        y: rContentLeft.top - rRoot.top,
+        width: rContentLeft.width,
+        height: rContentLeft.height,
+        right: rContentLeft.right - rRoot.left,
+        bottom: rContentLeft.bottom - rRoot.top
+      } : null,
+      subtitulos: {
+        x: rSub.left - rRoot.left,
+        y: rSub.top - rRoot.top,
+        width: rSub.width,
+        height: rSub.height,
+        bottom: rSub.bottom - rRoot.top
+      },
+      personaje: rPers ? {
+        x: rPers.left - rRoot.left,
+        y: rPers.top - rRoot.top,
+        width: rPers.width,
+        height: rPers.height
+      } : null,
+      markers: {
+        supIzq: [rSupIzq.left - rRoot.left + 4, rSupIzq.top - rRoot.top + 4],
+        supDer: [rSupDer.left - rRoot.left + 4, rSupDer.top - rRoot.top + 4],
+        infIzq: [rInfIzq.left - rRoot.left + 4, rInfIzq.top - rRoot.top + 4],
+        infDer: [rInfDer.left - rRoot.left + 4, rInfDer.top - rRoot.top + 4]
+      }
+    };
+  };
+</script>
+</body>
+</html>

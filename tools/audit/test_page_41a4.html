@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1080px; height: 1920px; background: #000; overflow: hidden; position: relative; }
+  #root-container { width: 1080px; height: 1920px; position: absolute; top: 0; left: 0; background: #0d1117; overflow: hidden; }
+  .absolute-fill { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  #capa-fondo { z-index: 0; }
+  #capa-assets { z-index: 10; pointer-events: none; }
+  #capa-ui { z-index: 20; }
+  #personaje { position: absolute; z-index: 44; background: rgba(235, 87, 87, 0.35); border: 3px solid #eb5757; }
+  #subtitulos { position: absolute; z-index: 50; background: rgba(45, 156, 219, 0.35); border: 3px solid #2d9cdb; }
+  #scene-content-full { position: absolute; background: rgba(46, 204, 113, 0.25); border: 2px dashed #2ecc71; }
+  #scene-content-left { position: absolute; background: rgba(241, 196, 15, 0.25); border: 2px solid #f1c40f; }
+  .marker { position: absolute; width: 2px; height: 2px; background: red; transform: translate(-50%, -50%); }
+</style>
+</head>
+<body>
+<div id="root-container">
+  <div id="capa-fondo" class="absolute-fill"></div>
+  <div id="capa-assets" class="absolute-fill"></div>
+  <div id="capa-ui" class="absolute-fill">
+    <div id="lienzo" class="absolute-fill">
+      <div id="scene-content-full"></div>
+      <div id="scene-content-left"></div>
+      <div id="m-sup-izq" class="marker"></div>
+      <div id="m-sup-der" class="marker"></div>
+      <div id="m-inf-izq" class="marker"></div>
+      <div id="m-inf-der" class="marker"></div>
+    </div>
+  </div>
+  <div id="personaje"></div>
+  <div id="subtitulos"></div>
+</div>
+<div id="results-json" style="display:none;"></div>
+<script>
+  const scenarios = [{"id":"CFG1_TC1_estatica","cfgNombre":"Línea con Personaje","movNombre":"Estática (f=0)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"none","analitico":{"supIzq":[60,210],"infDer":[1020,1040],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC2_travel_in_f90","cfgNombre":"Línea con Personaje","movNombre":"Travel-In (f=90: max escala 1.12, tx=0, ty=0)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.1200)","analitico":{"supIzq":[2.4,143.04],"infDer":[1077.6,1072.64],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC3_zoom_in_f90","cfgNombre":"Línea con Personaje","movNombre":"Zoom-In (f=90: max zoom 1.15, ty=-20)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,103.3],"infDer":[1092,1057.8],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC4_orbital_f0","cfgNombre":"Línea con Personaje","movNombre":"Orbital (f=0: rot=-1.2°, inclina sector izq)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"scale(1.0200) rotate(-1.200deg)","analitico":{"supIzq":[60.71,208.57],"infDer":[1025.26,1055.61],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG1_TC5_paneo_f0","cfgNombre":"Línea con Personaje","movNombre":"Paneo (f=0: max desp horizontal tx=-30)","subModo":"linea","conPersonaje":true,"subTop":1123.5,"personajeTop":1262,"localTop":210,"localBottom":1040,"lienzoTransform":"none","camTransform":"translate(-30.00px, 0.00px)","analitico":{"supIzq":[30,210],"infDer":[990,1040],"subTop":1123.5,"personajeTop":1262}},{"id":"CFG2_TC1_estatica","cfgNombre":"Línea sin Personaje","movNombre":"Estática (f=0, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"none","analitico":{"supIzq":[60,300],"infDer":[1020,1130],"subTop":1283.5,"personajeTop":null}},{"id":"CFG2_TC2_travel_in_f90","cfgNombre":"Línea sin Personaje","movNombre":"Travel-In (f=90: max escala 1.12, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"scale(1.1200)","analitico":{"supIzq":[2.4,243.84],"infDer":[1077.6,1173.44],"subTop":1283.5,"personajeTop":null}},{"id":"CFG2_TC3_zoom_in_f90","cfgNombre":"Línea sin Personaje","movNombre":"Zoom-In (f=90: escala 1.15, ty=-20, dy=+90px)","subModo":"linea","conPersonaje":false,"subTop":1283.5,"personajeTop":null,"localTop":210,"localBottom":1040,"lienzoTransform":"translate(0px, 90px) scale(1)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,206.8],"infDer":[1092,1161.3],"subTop":1283.5,"personajeTop":null}},{"id":"CFG3_TC1_estatica","cfgNombre":"Bloque con Personaje","movNombre":"Estática (f=0: s=0.8605, dy=+230px)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"none","analitico":{"supIzq":[126.98,534.42],"infDer":[953.02,1214.19],"contentLeftBottom":1145.35,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC2_zoom_in_f90","cfgNombre":"Bloque con Personaje","movNombre":"Zoom-In (f=90: peor separación superior y=250 vs subtítulos)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[65.02,476.38],"infDer":[1014.98,1258.11],"contentLeftBottom":1178.95,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC3_travel_in_f90","cfgNombre":"Bloque con Personaje","movNombre":"Travel-In (f=90: escala 1.12, tx=0, ty=0)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.1200)","analitico":{"supIzq":[77.41,506.35],"infDer":[1002.59,1267.69],"contentLeftBottom":1190.59,"subBottom":465,"personajeTop":1262}},{"id":"CFG3_TC4_orbital_f0","cfgNombre":"Bloque con Personaje","movNombre":"Orbital (f=0: rot=-1.2°, inclina sector izq)","subModo":"bloque","conPersonaje":true,"subTop":210,"subBottom":465,"personajeTop":1262,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 230px) scale(0.860465)","camTransform":"scale(1.0200) rotate(-1.200deg)","analitico":{"supIzq":[113.82,538.62],"infDer":[969.25,1231.81],"contentLeftBottom":1161.64,"subBottom":465,"personajeTop":1262}},{"id":"CFG4_TC1_estatica","cfgNombre":"Bloque sin Personaje","movNombre":"Estática (f=0, dy=+360px)","subModo":"bloque","conPersonaje":false,"subTop":210,"subBottom":465,"personajeTop":null,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 360px) scale(1)","camTransform":"none","analitico":{"supIzq":[60,610],"infDer":[1020,1400],"subBottom":465,"personajeTop":null}},{"id":"CFG4_TC2_zoom_in_f90","cfgNombre":"Bloque sin Personaje","movNombre":"Zoom-In (f=90: escala 1.15, ty=-20, dy=+360px)","subModo":"bloque","conPersonaje":false,"subTop":210,"subBottom":465,"personajeTop":null,"localTop":250,"localBottom":1040,"lienzoTransform":"translate(0px, 360px) scale(1)","camTransform":"scale(1.1500) translate(0.00px, -20.00px)","analitico":{"supIzq":[-12,563.3],"infDer":[1092,1471.8],"subBottom":465,"personajeTop":null}}];
+  const results = [];
+
+  const capaUi = document.getElementById("capa-ui");
+  const lienzo = document.getElementById("lienzo");
+  const sub = document.getElementById("subtitulos");
+  const pers = document.getElementById("personaje");
+
+  const contentFull = document.getElementById("scene-content-full");
+  const contentLeft = document.getElementById("scene-content-left");
+
+  const mSupIzq = document.getElementById("m-sup-izq");
+  const mSupDer = document.getElementById("m-sup-der");
+  const mInfIzq = document.getElementById("m-inf-izq");
+  const mInfDer = document.getElementById("m-inf-der");
+
+  const rRoot = document.getElementById("root-container").getBoundingClientRect();
+
+  scenarios.forEach(params => {
+    capaUi.style.transformOrigin = "540px 768px";
+    capaUi.style.transform = params.camTransform || "none";
+
+    lienzo.style.transformOrigin = "540px 640px";
+    lienzo.style.transform = params.lienzoTransform || "none";
+
+    const localTop = params.localTop;
+    const localBottom = params.localBottom;
+
+    contentFull.style.left = "60px";
+    contentFull.style.top = localTop + "px";
+    contentFull.style.width = "960px";
+    contentFull.style.height = (localBottom - localTop) + "px";
+
+    if (params.subModo === "bloque") {
+      contentLeft.style.display = "block";
+      contentLeft.style.left = "60px";
+      contentLeft.style.top = localTop + "px";
+      contentLeft.style.width = "460px";
+      contentLeft.style.height = (960 - localTop) + "px";
+    } else {
+      contentLeft.style.display = "none";
+    }
+
+    mSupIzq.style.left = "60px";
+    mSupIzq.style.top = localTop + "px";
+
+    mSupDer.style.left = "1020px";
+    mSupDer.style.top = localTop + "px";
+
+    mInfIzq.style.left = "60px";
+    mInfIzq.style.top = localBottom + "px";
+
+    mInfDer.style.left = "1020px";
+    mInfDer.style.top = localBottom + "px";
+
+    if (params.subModo === "linea") {
+      sub.style.display = "block";
+      sub.style.left = "20px";
+      sub.style.right = "20px";
+      sub.style.width = "1040px";
+      sub.style.top = (params.subTop) + "px";
+      sub.style.height = "85px";
+    } else {
+      sub.style.display = "block";
+      sub.style.left = "130px";
+      sub.style.top = "210px";
+      sub.style.width = "870px";
+      sub.style.height = "255px";
+    }
+
+    if (params.conPersonaje) {
+      pers.style.display = "block";
+      pers.style.left = "80px";
+      pers.style.width = "440px";
+      pers.style.top = (params.personajeTop || 1262) + "px";
+      pers.style.height = (1920 - (params.personajeTop || 1262)) + "px";
+    } else {
+      pers.style.display = "none";
+    }
+
+    // Mediciones
+    const rContent = contentFull.getBoundingClientRect();
+    const rContentLeft = contentLeft.getBoundingClientRect();
+    const rSub = sub.getBoundingClientRect();
+    const rPers = params.conPersonaje ? pers.getBoundingClientRect() : null;
+
+    const rSupIzq = mSupIzq.getBoundingClientRect();
+    const rSupDer = mSupDer.getBoundingClientRect();
+    const rInfIzq = mInfIzq.getBoundingClientRect();
+    const rInfDer = mInfDer.getBoundingClientRect();
+
+    results.push({
+      id: params.id,
+      cfgNombre: params.cfgNombre,
+      movNombre: params.movNombre,
+      domData: {
+        content: {
+          x: rContent.left - rRoot.left,
+          y: rContent.top - rRoot.top,
+          width: rContent.width,
+          height: rContent.height,
+          bottom: rContent.bottom - rRoot.top
+        },
+        contentLeft: params.subModo === "bloque" ? {
+          x: rContentLeft.left - rRoot.left,
+          y: rContentLeft.top - rRoot.top,
+          bottom: rContentLeft.bottom - rRoot.top
+        } : null,
+        markers: {
+          supIzq: [rSupIzq.left - rRoot.left + 1, rSupIzq.top - rRoot.top + 1],
+          supDer: [rSupDer.left - rRoot.left + 1, rSupDer.top - rRoot.top + 1],
+          infIzq: [rInfIzq.left - rRoot.left + 1, rInfIzq.top - rRoot.top + 1],
+          infDer: [rInfDer.left - rRoot.left + 1, rInfDer.top - rRoot.top + 1]
+        }
+      },
+      analitico: params.analitico
+    });
+  });
+
+  const resEl = document.getElementById("results-json");
+  resEl.textContent = JSON.stringify(results);
+  resEl.style.display = "block";
+</script>
+</body>
+</html>

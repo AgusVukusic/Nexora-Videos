@@ -1,0 +1,660 @@
+[
+  {
+    "id": "CFG1_TC1_estatica",
+    "cfgNombre": "Línea con Personaje",
+    "movNombre": "Estática (f=0)",
+    "domData": {
+      "content": {
+        "x": 60,
+        "y": 210,
+        "width": 960,
+        "height": 830,
+        "bottom": 1040
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          60,
+          210
+        ],
+        "supDer": [
+          1020,
+          210
+        ],
+        "infIzq": [
+          60,
+          1040
+        ],
+        "infDer": [
+          1020,
+          1040
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        60,
+        210
+      ],
+      "infDer": [
+        1020,
+        1040
+      ],
+      "subTop": 1123.5,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG1_TC2_travel_in_f90",
+    "cfgNombre": "Línea con Personaje",
+    "movNombre": "Travel-In (f=90: max escala 1.12, tx=0, ty=0)",
+    "domData": {
+      "content": {
+        "x": 2.4000091552734375,
+        "y": 143.0399627685547,
+        "width": 1075.2000732421875,
+        "height": 929.6000366210938,
+        "bottom": 1072.6399993896484
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          2.2800140380859375,
+          142.9199676513672
+        ],
+        "supDer": [
+          1077.47998046875,
+          142.9199676513672
+        ],
+        "infIzq": [
+          2.2800140380859375,
+          1072.52001953125
+        ],
+        "infDer": [
+          1077.47998046875,
+          1072.52001953125
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        2.4,
+        143.04
+      ],
+      "infDer": [
+        1077.6,
+        1072.64
+      ],
+      "subTop": 1123.5,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG1_TC3_zoom_in_f90",
+    "cfgNombre": "Línea con Personaje",
+    "movNombre": "Zoom-In (f=90: max zoom 1.15, ty=-20)",
+    "domData": {
+      "content": {
+        "x": -12,
+        "y": 103.300048828125,
+        "width": 1104,
+        "height": 954.5,
+        "bottom": 1057.800048828125
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          -12.150001525878906,
+          103.15003967285156
+        ],
+        "supDer": [
+          1091.8499755859375,
+          103.15003967285156
+        ],
+        "infIzq": [
+          -12.150001525878906,
+          1057.6500244140625
+        ],
+        "infDer": [
+          1091.8499755859375,
+          1057.6500244140625
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        -12,
+        103.3
+      ],
+      "infDer": [
+        1092,
+        1057.8
+      ],
+      "subTop": 1123.5,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG1_TC4_orbital_f0",
+    "cfgNombre": "Línea con Personaje",
+    "movNombre": "Orbital (f=0: rot=-1.2°, inclina sector izq)",
+    "domData": {
+      "content": {
+        "x": 38.587799072265625,
+        "y": 188.71142578125,
+        "width": 996.715087890625,
+        "height": 866.921142578125,
+        "bottom": 1055.632568359375
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          38.546661376953125,
+          209.17710876464844
+        ],
+        "supDer": [
+          1017.5318603515625,
+          188.6702880859375
+        ],
+        "infIzq": [
+          56.276512145996094,
+          1055.5914306640625
+        ],
+        "infDer": [
+          1035.26171875,
+          1035.0845947265625
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        60.71,
+        208.57
+      ],
+      "infDer": [
+        1025.26,
+        1055.61
+      ],
+      "subTop": 1123.5,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG1_TC5_paneo_f0",
+    "cfgNombre": "Línea con Personaje",
+    "movNombre": "Paneo (f=0: max desp horizontal tx=-30)",
+    "domData": {
+      "content": {
+        "x": 30,
+        "y": 210,
+        "width": 960,
+        "height": 830,
+        "bottom": 1040
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          30,
+          210
+        ],
+        "supDer": [
+          990,
+          210
+        ],
+        "infIzq": [
+          30,
+          1040
+        ],
+        "infDer": [
+          990,
+          1040
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        30,
+        210
+      ],
+      "infDer": [
+        990,
+        1040
+      ],
+      "subTop": 1123.5,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG2_TC1_estatica",
+    "cfgNombre": "Línea sin Personaje",
+    "movNombre": "Estática (f=0, dy=+90px)",
+    "domData": {
+      "content": {
+        "x": 60,
+        "y": 300,
+        "width": 960,
+        "height": 830,
+        "bottom": 1130
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          60,
+          300
+        ],
+        "supDer": [
+          1020,
+          300
+        ],
+        "infIzq": [
+          60,
+          1130
+        ],
+        "infDer": [
+          1020,
+          1130
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        60,
+        300
+      ],
+      "infDer": [
+        1020,
+        1130
+      ],
+      "subTop": 1283.5,
+      "personajeTop": null
+    }
+  },
+  {
+    "id": "CFG2_TC2_travel_in_f90",
+    "cfgNombre": "Línea sin Personaje",
+    "movNombre": "Travel-In (f=90: max escala 1.12, dy=+90px)",
+    "domData": {
+      "content": {
+        "x": 2.4000091552734375,
+        "y": 243.8399658203125,
+        "width": 1075.2000732421875,
+        "height": 929.5999755859375,
+        "bottom": 1173.43994140625
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          2.2800140380859375,
+          243.719970703125
+        ],
+        "supDer": [
+          1077.47998046875,
+          243.719970703125
+        ],
+        "infIzq": [
+          2.2800140380859375,
+          1173.3199462890625
+        ],
+        "infDer": [
+          1077.47998046875,
+          1173.3199462890625
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        2.4,
+        243.84
+      ],
+      "infDer": [
+        1077.6,
+        1173.44
+      ],
+      "subTop": 1283.5,
+      "personajeTop": null
+    }
+  },
+  {
+    "id": "CFG2_TC3_zoom_in_f90",
+    "cfgNombre": "Línea sin Personaje",
+    "movNombre": "Zoom-In (f=90: escala 1.15, ty=-20, dy=+90px)",
+    "domData": {
+      "content": {
+        "x": -12,
+        "y": 206.800048828125,
+        "width": 1104,
+        "height": 954.5,
+        "bottom": 1161.300048828125
+      },
+      "contentLeft": null,
+      "markers": {
+        "supIzq": [
+          -12.150001525878906,
+          206.65005493164062
+        ],
+        "supDer": [
+          1091.8499755859375,
+          206.65005493164062
+        ],
+        "infIzq": [
+          -12.150001525878906,
+          1161.1500244140625
+        ],
+        "infDer": [
+          1091.8499755859375,
+          1161.1500244140625
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        -12,
+        206.8
+      ],
+      "infDer": [
+        1092,
+        1161.3
+      ],
+      "subTop": 1283.5,
+      "personajeTop": null
+    }
+  },
+  {
+    "id": "CFG3_TC1_estatica",
+    "cfgNombre": "Bloque con Personaje",
+    "movNombre": "Estática (f=0: s=0.8605, dy=+230px)",
+    "domData": {
+      "content": {
+        "x": 126.976806640625,
+        "y": 534.418701171875,
+        "width": 826.04638671875,
+        "height": 679.767333984375,
+        "bottom": 1214.18603515625
+      },
+      "contentLeft": {
+        "x": 126.976806640625,
+        "y": 534.418701171875,
+        "bottom": 1145.348876953125
+      },
+      "markers": {
+        "supIzq": [
+          127.11634063720703,
+          534.5582275390625
+        ],
+        "supDer": [
+          953.1627197265625,
+          534.5582275390625
+        ],
+        "infIzq": [
+          127.11634063720703,
+          1214.3255615234375
+        ],
+        "infDer": [
+          953.1627197265625,
+          1214.3255615234375
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        126.98,
+        534.42
+      ],
+      "infDer": [
+        953.02,
+        1214.19
+      ],
+      "contentLeftBottom": 1145.35,
+      "subBottom": 465,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG3_TC2_zoom_in_f90",
+    "cfgNombre": "Bloque con Personaje",
+    "movNombre": "Zoom-In (f=90: peor separación superior y=250 vs subtítulos)",
+    "domData": {
+      "content": {
+        "x": 65.02333068847656,
+        "y": 476.38153076171875,
+        "width": 949.953369140625,
+        "height": 781.7324829101562,
+        "bottom": 1258.114013671875
+      },
+      "contentLeft": {
+        "x": 65.02333068847656,
+        "y": 476.38153076171875,
+        "bottom": 1178.951171875
+      },
+      "markers": {
+        "supIzq": [
+          65.03378295898438,
+          476.3919677734375
+        ],
+        "supDer": [
+          1014.987060546875,
+          476.3919677734375
+        ],
+        "infIzq": [
+          65.03378295898438,
+          1258.1243896484375
+        ],
+        "infDer": [
+          1014.987060546875,
+          1258.1243896484375
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        65.02,
+        476.38
+      ],
+      "infDer": [
+        1014.98,
+        1258.11
+      ],
+      "contentLeftBottom": 1178.95,
+      "subBottom": 465,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG3_TC3_travel_in_f90",
+    "cfgNombre": "Bloque con Personaje",
+    "movNombre": "Travel-In (f=90: escala 1.12, tx=0, ty=0)",
+    "domData": {
+      "content": {
+        "x": 77.41403198242188,
+        "y": 506.388916015625,
+        "width": 925.1719970703125,
+        "height": 761.33935546875,
+        "bottom": 1267.728271484375
+      },
+      "contentLeft": {
+        "x": 77.41403198242188,
+        "y": 506.388916015625,
+        "bottom": 1190.6307373046875
+      },
+      "markers": {
+        "supIzq": [
+          77.4503173828125,
+          506.4251708984375
+        ],
+        "supDer": [
+          1002.6222534179688,
+          506.4251708984375
+        ],
+        "infIzq": [
+          77.4503173828125,
+          1267.7646484375
+        ],
+        "infDer": [
+          1002.6222534179688,
+          1267.7646484375
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        77.41,
+        506.35
+      ],
+      "infDer": [
+        1002.59,
+        1267.69
+      ],
+      "contentLeftBottom": 1190.59,
+      "subBottom": 465,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG3_TC4_orbital_f0",
+    "cfgNombre": "Bloque con Personaje",
+    "movNombre": "Orbital (f=0: rot=-1.2°, inclina sector izq)",
+    "domData": {
+      "content": {
+        "x": 113.81915283203125,
+        "y": 520.9766235351562,
+        "width": 856.9031982421875,
+        "height": 710.8560180664062,
+        "bottom": 1231.8326416015625
+      },
+      "contentLeft": {
+        "x": 113.81915283203125,
+        "y": 530.1669311523438,
+        "bottom": 1161.6341552734375
+      },
+      "markers": {
+        "supIzq": [
+          113.92328643798828,
+          538.7261352539062
+        ],
+        "supDer": [
+          956.3057861328125,
+          521.0807495117188
+        ],
+        "infIzq": [
+          128.44397735595703,
+          1231.936767578125
+        ],
+        "infDer": [
+          970.8264770507812,
+          1214.2913818359375
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        113.82,
+        538.62
+      ],
+      "infDer": [
+        969.25,
+        1231.81
+      ],
+      "contentLeftBottom": 1161.64,
+      "subBottom": 465,
+      "personajeTop": 1262
+    }
+  },
+  {
+    "id": "CFG4_TC1_estatica",
+    "cfgNombre": "Bloque sin Personaje",
+    "movNombre": "Estática (f=0, dy=+360px)",
+    "domData": {
+      "content": {
+        "x": 60,
+        "y": 610,
+        "width": 960,
+        "height": 790,
+        "bottom": 1400
+      },
+      "contentLeft": {
+        "x": 60,
+        "y": 610,
+        "bottom": 1320
+      },
+      "markers": {
+        "supIzq": [
+          60,
+          610
+        ],
+        "supDer": [
+          1020,
+          610
+        ],
+        "infIzq": [
+          60,
+          1400
+        ],
+        "infDer": [
+          1020,
+          1400
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        60,
+        610
+      ],
+      "infDer": [
+        1020,
+        1400
+      ],
+      "subBottom": 465,
+      "personajeTop": null
+    }
+  },
+  {
+    "id": "CFG4_TC2_zoom_in_f90",
+    "cfgNombre": "Bloque sin Personaje",
+    "movNombre": "Zoom-In (f=90: escala 1.15, ty=-20, dy=+360px)",
+    "domData": {
+      "content": {
+        "x": -12,
+        "y": 563.300048828125,
+        "width": 1104,
+        "height": 908.5,
+        "bottom": 1471.800048828125
+      },
+      "contentLeft": {
+        "x": -12,
+        "y": 563.300048828125,
+        "bottom": 1379.800048828125
+      },
+      "markers": {
+        "supIzq": [
+          -12.150001525878906,
+          563.1500244140625
+        ],
+        "supDer": [
+          1091.8499755859375,
+          563.1500244140625
+        ],
+        "infIzq": [
+          -12.150001525878906,
+          1471.6500244140625
+        ],
+        "infDer": [
+          1091.8499755859375,
+          1471.6500244140625
+        ]
+      }
+    },
+    "analitico": {
+      "supIzq": [
+        -12,
+        563.3
+      ],
+      "infDer": [
+        1092,
+        1471.8
+      ],
+      "subBottom": 465,
+      "personajeTop": null
+    }
+  }
+]
