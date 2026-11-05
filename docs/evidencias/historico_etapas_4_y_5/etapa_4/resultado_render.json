@@ -1,0 +1,177 @@
+{
+  "fecha": "2026-10-30T02:49:41.692Z",
+  "composicion": {
+    "id": "PruebaNexora",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationInFrames": 150
+  },
+  "navegador": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+  "tiempoRenderPase1Seg": "14.14",
+  "mp4": {
+    "archivo": ".agent/skills/nexora-reels/test-render/salida/prueba_nexora.mp4",
+    "tamanoBytes": 561189,
+    "sha256Pase1": "eddc2bce3ed3431023daba7d4d219ad3fff1a1c0c6800ca827d199559f25fae9",
+    "sha256Pase2": "063d2f081b7c4b76c9e2a025372f4c61b9d5914d4e7605e92d7c29e9077a5232",
+    "ffprobe": {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "High",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "mime_codec_string": "avc1.640028",
+      "width": 1080,
+      "height": 1920,
+      "coded_width": 1080,
+      "coded_height": 1920,
+      "has_b_frames": 2,
+      "sample_aspect_ratio": "1:1",
+      "display_aspect_ratio": "9:16",
+      "pix_fmt": "yuvj420p",
+      "level": 40,
+      "color_range": "pc",
+      "color_space": "bt470bg",
+      "chroma_location": "center",
+      "field_order": "progressive",
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "time_base": "1/90000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 450000,
+      "duration": "5.000000",
+      "bit_rate": "892998",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "150",
+      "extradata_size": 51,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "language": "und",
+        "handler_name": "VideoHandler"
+      },
+      "side_data_list": [
+        {
+          "side_data_type": "ICC Profile"
+        }
+      ]
+    }
+  },
+  "fotogramas": [
+    {
+      "frame": 0,
+      "tiempoSeg": "0.000",
+      "descripcion": "Escena 1 - Inicio (frame 0)",
+      "archivo": "salida/frames/frame_000.png",
+      "sha256Pase1": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "sha256Pase2": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "identico": true
+    },
+    {
+      "frame": 5,
+      "tiempoSeg": "0.167",
+      "descripcion": "Escena 1 - Entrada suave (frame 5)",
+      "archivo": "salida/frames/frame_005.png",
+      "sha256Pase1": "97ce2d24ef87806fe9a68f5fb1b8f286424ec5f8f7d0d0ff813f3a72e7218583",
+      "sha256Pase2": "97ce2d24ef87806fe9a68f5fb1b8f286424ec5f8f7d0d0ff813f3a72e7218583",
+      "identico": true
+    },
+    {
+      "frame": 15,
+      "tiempoSeg": "0.500",
+      "descripcion": "Escena 1 - Asentamiento y texto inicio (frame 15)",
+      "archivo": "salida/frames/frame_015.png",
+      "sha256Pase1": "25f779481c852f2ce0fba82c96a9ae73ffaebb4d8417eb8284f53c3cd0f7fbab",
+      "sha256Pase2": "25f779481c852f2ce0fba82c96a9ae73ffaebb4d8417eb8284f53c3cd0f7fbab",
+      "identico": true
+    },
+    {
+      "frame": 45,
+      "tiempoSeg": "1.500",
+      "descripcion": "Escena 1 - Texto completo con tildes (frame 45)",
+      "archivo": "salida/frames/frame_045.png",
+      "sha256Pase1": "377f13cbd6f6e224046aa37b94fd4a757f51472d86756ea378446e05b58c0dff",
+      "sha256Pase2": "377f13cbd6f6e224046aa37b94fd4a757f51472d86756ea378446e05b58c0dff",
+      "identico": true
+    },
+    {
+      "frame": 74,
+      "tiempoSeg": "2.467",
+      "descripcion": "Escena 1 - Final y salida suave (frame 74)",
+      "archivo": "salida/frames/frame_074.png",
+      "sha256Pase1": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "sha256Pase2": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "identico": true
+    },
+    {
+      "frame": 75,
+      "tiempoSeg": "2.500",
+      "descripcion": "Escena 2 - Inicio transición deslizar (frame 75)",
+      "archivo": "salida/frames/frame_075.png",
+      "sha256Pase1": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "sha256Pase2": "673e10f4a7e003d5735dab6162fe9ce8100424ce9ea0821fba62e8c07712edfe",
+      "identico": true
+    },
+    {
+      "frame": 80,
+      "tiempoSeg": "2.667",
+      "descripcion": "Escena 2 - Desplazamiento vertical activo (frame 80)",
+      "archivo": "salida/frames/frame_080.png",
+      "sha256Pase1": "78ea2a384b0e7d294933820a85b5633a649ccf1a7eb597c9dee7c88968197e89",
+      "sha256Pase2": "78ea2a384b0e7d294933820a85b5633a649ccf1a7eb597c9dee7c88968197e89",
+      "identico": true
+    },
+    {
+      "frame": 95,
+      "tiempoSeg": "3.167",
+      "descripcion": "Escena 2 - Asentamiento tarjeta spring (frame 95)",
+      "archivo": "salida/frames/frame_095.png",
+      "sha256Pase1": "75a76957e8f6bbad298934280963b7334ccef37e3ab5925113f6270773bb0f13",
+      "sha256Pase2": "75a76957e8f6bbad298934280963b7334ccef37e3ab5925113f6270773bb0f13",
+      "identico": true
+    },
+    {
+      "frame": 120,
+      "tiempoSeg": "4.000",
+      "descripcion": "Escena 2 - Respiración senoidal y texto (frame 120)",
+      "archivo": "salida/frames/frame_120.png",
+      "sha256Pase1": "cab73789933dd4e3ef00ad30066d66373ca5db0bfc37a8c7c8314460deeb4a9c",
+      "sha256Pase2": "cab73789933dd4e3ef00ad30066d66373ca5db0bfc37a8c7c8314460deeb4a9c",
+      "identico": true
+    },
+    {
+      "frame": 149,
+      "tiempoSeg": "4.967",
+      "descripcion": "Escena 2 - Fotograma final del reel (frame 149)",
+      "archivo": "salida/frames/frame_149.png",
+      "sha256Pase1": "87a6168b1158ea702ffad7cc71041a4f5a4aac5d4df6c26252e55f3b67388be2",
+      "sha256Pase2": "87a6168b1158ea702ffad7cc71041a4f5a4aac5d4df6c26252e55f3b67388be2",
+      "identico": true
+    }
+  ]
+}
