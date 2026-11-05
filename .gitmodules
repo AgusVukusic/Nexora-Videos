@@ -1,6 +1,0 @@
-[submodule ".agent/skills/napkin"]
-	path = .agent/skills/napkin
-	url = https://github.com/blader/napkin.git
-[submodule ".agents/skills/napkin"]
-	path = .agents/skills/napkin
-	url = https://github.com/blader/napkin.git
