@@ -98,7 +98,9 @@ export interface CapasCineProps {
 
 /**
  * Fondo con malla de gradientes radiales difusos (BgMesh).
- * En modo clásico preserva al 100% el comportamiento original (fondo opaco y manchas de THEME).
+ * Sin dirección de arte pinta un fondo opaco con la paleta del estilo activo (`plan.estilo`).
+ * Para el estilo "nexora" esos colores coinciden con THEME, así que su aspecto no cambia;
+ * los estilos claros ("nube", "menta", "limon"…) dejan de quedar tapados por el fondo oscuro de THEME.
  * En modo artístico respeta materialidad.fondo_modo ("transparente", "malla_armonizada" o "clasico").
  */
 export const BgMesh: React.FC<{ config?: BgMeshConfig }> = ({ config }) => {
@@ -107,9 +109,13 @@ export const BgMesh: React.FC<{ config?: BgMeshConfig }> = ({ config }) => {
 
   // Modo clásico estricto
   if (!modoArteActivo || MATERIALIDAD.fondo_modo === "clasico") {
-    const base = config?.colorBase ?? THEME.colores.fondo;
-    const c1 = config?.mancha1 ?? THEME.colores.fondoMalla1;
-    const c2 = config?.mancha2 ?? THEME.colores.fondoMalla2;
+    // Sin dirección de arte: paleta del estilo. Con arte en fondo_modo "clasico": THEME (comportamiento previo).
+    const paleta = modoArteActivo
+      ? { fondo: THEME.colores.fondo, manchas: [THEME.colores.fondoMalla1, THEME.colores.fondoMalla2] }
+      : ESTILO.colores;
+    const base = config?.colorBase ?? paleta.fondo;
+    const c1 = config?.mancha1 ?? paleta.manchas[0] ?? THEME.colores.fondoMalla1;
+    const c2 = config?.mancha2 ?? paleta.manchas[1] ?? THEME.colores.fondoMalla2;
     const opacidad = config?.opacidad ?? 0.8;
 
     const dx1 = animado ? 40 * Math.sin(frame / 90) : 0;
