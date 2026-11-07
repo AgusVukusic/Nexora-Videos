@@ -147,8 +147,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.6. `cifras` — Tarjetas de Métricas en Cascada
-- **Propósito:** Muestra de 1 a 3 tarjetas horizontales apiladas, cada una con un número de gran escala animado, etiqueta manual, prefijo/sufijo y barras ecualizadoras decorativas.
+### 2.6. `cifras` — Módulos Analíticos de Métricas
+- **Propósito:** Muestra de 1 a 3 módulos abiertos (sin tarjeta) apilados: índice monoespaciado (`01 / 03`) con filete que se traza, cifra monumental con conteo animado y etiqueta en versalitas con detalle opcional. Solo los porcentajes (`sufijo: "%"` y valores 0–100) muestran un arco vectorial con la proporción real.
 - **Momentos:** Dinámico: consume de `1` a `3` momentos según la cantidad de filas.
 - **Sonidos automáticos:** `golpe` (0.45) en filas con `destacar: true`; `tic` (0.3) en filas estándar.
 - **Propiedades:**
@@ -174,8 +174,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.7. `ficha` — Tarjeta de Especificaciones Estructurada
-- **Propósito:** Presenta una ficha técnica limpia de 1 a 4 filas con clave-valor, encabezado con icono y badge superior. Posee `alInicio: true` (se visualiza desde el primer frame).
+### 2.7. `ficha` — Ficha Técnica de Laboratorio
+- **Propósito:** Presenta una ficha técnica de 1 a 4 filas clave-valor dentro de un marco abierto con esquinas de visor y regla graduada en el borde izquierdo. Claves en monoespaciado, valores que entran con desenfoque cinético, cabecera con icono, título y etiqueta de estado en contorno. Posee `alInicio: true` (se visualiza desde el primer frame).
 - **Momentos:** Dinámico: consume de `1` a `4` momentos según la cantidad de filas.
 - **Sonidos automáticos:** `pop` (0.25) en cada fila revelada.
 - **Propiedades:**
@@ -201,8 +201,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.8. `lista` — Viñetas Secuenciales con Checkmarks
-- **Propósito:** Lista vertical de 2 a 5 elementos que entran en cascada lateral con cajas de verificación que se iluminan al activarse. Admite iconos por elemento y título superior.
+### 2.8. `lista` — Manifiesto Editorial Numerado
+- **Propósito:** Lista vertical de 2 a 5 puntos sin cajas: ordinales monumentales (`01`, `02`…), filetes separadores que se trazan y revelado en cortinilla. Cada punto recibe un subrayado cinético al enunciarse; solo el vigente queda en acento pleno y los anteriores se atenúan. El texto se ajusta para caber en una línea. Admite iconos por elemento y título superior.
 - **Momentos:** Dinámico: `items.length` (de 2 a 5 momentos). `alInicio: true` si incluye `titulo`.
 - **Sonidos automáticos:** `tic` (0.3) en cada ítem; `ding` (0.26) en el último ítem.
 - **Propiedades:**
@@ -224,8 +224,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.9. `pasos` — Proceso Secuencial Numerado
-- **Propósito:** Despliega de 2 a 4 pasos o etapas ordenadas cronológicamente, cada uno en una tarjeta destacada con número circular grande.
+### 2.9. `pasos` — Diagrama de Flujo con Nodos de Estado
+- **Propósito:** Despliega de 2 a 4 pasos ordenados como diagrama de flujo: columna de nodos (pendiente → vigente → completado) unidos por conectores vectoriales que se trazan al avanzar. Los nodos pendientes se ven desde el inicio; el texto de cada paso aparece al enunciarse, con el icono junto al rótulo `PASO 0N`.
 - **Momentos:** Dinámico: `pasos.length` (de 2 a 4 momentos).
 - **Sonidos automáticos:** `pop` (0.3) en cada paso.
 - **Propiedades:**
@@ -245,9 +245,9 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.10. `comparacion` — Enfrentamiento Lado a Lado
-- **Propósito:** Dos tarjetas enfrentadas (izquierda vs derecha) para contrastar conceptos, métodos o mitos vs realidades. Permite asignar un ganador que recibe un check verde mientras el perdedor recibe una X roja.
-- **Momentos:** `3` momentos: `[0]` tarjeta izquierda, `[1]` tarjeta derecha, `[2]` marcas de veredicto.
+### 2.10. `comparacion` — Pantalla Dividida con Veredicto
+- **Propósito:** Pantalla dividida por un corte vertical (`OPCIÓN A` / `OPCIÓN B`) para contrastar conceptos, métodos o mitos vs realidades. En el veredicto el reparto pasa de 50/50 a 60/40 a favor del ganador, que se ilumina y recibe la etiqueta `MEJOR OPCIÓN`; el perdedor se atenúa y su título queda tachado. Con `"ninguno"` se mantiene el 50/50 sin veredicto.
+- **Momentos:** `3` momentos: `[0]` lado izquierdo, `[1]` lado derecho y corte, `[2]` veredicto.
 - **Sonidos automáticos:** `pop` (0.3), `pop` (0.3), `exito` (0.26).
 - **Propiedades:**
   - `izquierda` *(objeto, obligatorio)*: `{ "titulo": string (máx. 16), "texto"?: string (máx. 50), "icono"?: string }`.
@@ -331,8 +331,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.14. `barras` — Gráfico Estadístico Vertical
-- **Propósito:** Muestra un gráfico comparativo de barras verticales (2 a 5 barras) con crecimiento elástico, valores numéricos formateados con unidad y etiqueta inferior.
+### 2.14. `barras` — Infografía de Barras con Escala
+- **Propósito:** Muestra un gráfico comparativo de 2 a 5 barras verticales sobre una retícula con guías horizontales de valores redondos (1, 2, 2,5 o 5 × 10ⁿ) y regla en el eje vertical. Las barras crecen sobre una base firme; solo la destacada usa el color de acento. Valores con unidad (sin alterar mayúsculas) y etiqueta inferior.
 - **Momentos:** Dinámico: `barras.length` (2 a 5 momentos). `alInicio: true` si tiene `titulo`.
 - **Sonidos automáticos:** `tic` (0.3) en cada barra levantada.
 - **Propiedades:**

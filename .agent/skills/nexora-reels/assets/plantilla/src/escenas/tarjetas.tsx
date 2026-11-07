@@ -2,44 +2,22 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import { measureText } from "@remotion/layout-utils";
-import { BORDE, C, ESTILO, SOMBRA, SUAVE } from "../motor/actual";
+import { BORDE, C, ESTILO, SOMBRA } from "../motor/actual";
 import { FPS } from "../motor/constantes";
 import { F, alfa } from "../motor/estilos";
 import { pesoTexto, useFuentes } from "../motor/fuentes";
-import { bump, lerp, numeroES, rnd, useFlota, usePop } from "../motor/anim";
-import { Destello, Icono, Llama, Marca, Onda, Pildora, Tachon, useGolpe } from "../piezas/basicas";
-import { generarEsquinasReticula } from "../motor/trazos";
+import { bump, lerp, numeroES, usePop } from "../motor/anim";
+import { Icono, Llama, Onda, useGolpe } from "../piezas/basicas";
+import { calcularDashOffset, generarArcoSvg, generarConectorOrtogonal, generarEsquinasReticula, generarMarcasRegla } from "../motor/trazos";
 import type { DefEscena, PropsEscena } from "../tipos";
 import { arr, bool, iconos, item, num, obj, reglas, txt } from "./util";
 
 const T = (peso: number): React.CSSProperties => ({ fontFamily: F.texto, fontWeight: pesoTexto(peso) });
 
-/** Tarjeta que sube con rebote suave en `desde`. */
-const TarjetaSube: React.FC<{ x: number; y: number; w: number; h?: number; desde: number; children: React.ReactNode; style?: React.CSSProperties; rot?: number }> = ({ x, y, w, h, desde, children, style, rot = 0 }) => {
-  const f = useCurrentFrame();
-  const p = spring({ frame: f - desde, fps: FPS, config: { damping: 15, stiffness: 150, mass: 0.7 } });
-  if (f < desde) return null;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y + (1 - p) * 120,
-        width: w,
-        height: h,
-        borderRadius: 34,
-        background: C.tarjeta,
-        color: C.tarjetaTexto,
-        boxShadow: SOMBRA,
-        border: BORDE,
-        opacity: Math.min(1, p * 1.8),
-        transform: `rotate(${rot}deg)`,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
+/** Tamaño de letra para que el texto quepa en `ancho` (entre `min` y `max`). */
+const tamQueCabe = (texto: string, fuente: string, peso: string, max: number, ancho: number, min = 40) => {
+  const w100 = measureText({ text: texto || " ", fontFamily: fuente, fontWeight: peso, fontSize: 100, validateFontIsLoaded: false }).width;
+  return Math.max(min, Math.min(max, (100 * ancho) / Math.max(1, w100)));
 };
 
 const Numero: React.FC<{ desde: number; hasta: number; v0: number; v1: number; tam: number; color?: string; golpe?: number; prefijo?: string; sufijo?: string; decimales?: number }> = ({
@@ -211,33 +189,83 @@ export const contador: DefEscena = {
 };
 
 // ================================================================== cifras
+// Módulos analíticos abiertos (sin tarjeta): filete que se traza y cifra monumental.
+// Solo los porcentajes (0–100 con sufijo "%") llevan arco: así el arco siempre representa el dato.
+// Geometría: el bloque completo queda dentro de y ∈ [250, 1040] (coordenadas de escena) con 3 filas.
+const CIFRAS = { x: 100, w: 880, centro: 640, cabecera: 52, pie: 50 };
+
 const Cifras: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
   const filas = arr<Record<string, unknown>>(p, "filas").slice(0, 3);
-  const alto = filas.length === 1 ? 300 : 220;
-  const y0 = 640 - (filas.length * (alto + 24)) / 2 + 12;
+  const n = filas.length;
+  const tam = n === 1 ? 190 : n === 2 ? 150 : 124;
+  const alto = Math.round(CIFRAS.cabecera + tam * 0.92 + CIFRAS.pie);
+  const hueco = n === 1 ? 0 : 40;
+  const y0 = CIFRAS.centro - (n * alto + (n - 1) * hueco) / 2;
+  const radio = Math.round(tam * 0.36);
+  const trazo = Math.max(6, Math.round(tam * 0.05));
+
   return (
     <AbsoluteFill>
       {filas.map((fila, k) => {
         const bk = b[k] ?? 0;
+        if (f < bk - 4) return null;
         const destacar = bool(fila, "destacar");
         const v = num(fila, "valor");
+        const v0 = num(fila, "desde", 0);
+        const sufijo = txt(fila, "sufijo");
+        const detalle = txt(fila, "detalle");
+        const y = y0 + k * (alto + hueco);
+        const entra = spring({ frame: f - (bk - 4), fps: FPS, config: { damping: 16, stiffness: 140, mass: 0.7 } });
+        const filete = lerp(f, bk - 4, bk + 10, 0, 1, Easing.out(Easing.cubic));
+        const conteo = lerp(f, bk, bk + 20, 0, 1, Easing.out(Easing.cubic));
+        const esPorcentaje = sufijo.trim() === "%" && v >= 0 && v <= 100 && v0 >= 0 && v0 <= 100;
+        const fraccion = (v0 + (v - v0) * conteo) / 100;
+        const color = destacar ? C.acento : C.texto;
+        const cx = CIFRAS.w - radio - trazo;
+        const cy = CIFRAS.cabecera + (alto - CIFRAS.cabecera) / 2;
+        const arco = generarArcoSvg(cx, cy, radio, 0, 359.99);
+        const largo = 2 * Math.PI * radio;
+        const dash = calcularDashOffset(fraccion, largo);
+        const indice = `${String(k + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}`;
+
         return (
-          <TarjetaSube key={k} x={120} y={y0 + k * (alto + 24)} w={840} h={alto} desde={bk - 4} style={{ display: "flex", alignItems: "center", padding: "0 44px", gap: 30 }}>
-            <Numero desde={bk} hasta={bk + 20} v0={num(fila, "desde", 0)} v1={v} tam={alto * 0.62} color={destacar ? C.acento : C.tarjetaTexto} golpe={destacar ? bk + 20 : -100} prefijo={txt(fila, "prefijo")} sufijo={txt(fila, "sufijo")} />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: F.mano, fontWeight: 700, fontSize: 64, color: C.acento, lineHeight: 1 }}>{txt(fila, "etiqueta")}</div>
-              {txt(fila, "detalle") && <div style={{ ...T(600), fontSize: 30, color: alfa(C.tarjetaTexto, 0.6), marginTop: 8 }}>{txt(fila, "detalle")}</div>}
-              {!txt(fila, "detalle") && (
-                <div style={{ display: "flex", alignItems: "flex-end", gap: 9, height: 46, marginTop: 10 }}>
-                  {Array.from({ length: 14 }).map((_, j) => {
-                    const h = 10 + Math.abs(Math.sin(f / 3 + j * 0.9 + k)) * 34 * (f > bk ? 1 : 0.2) * (0.5 + rnd(j + k * 20) * 0.5);
-                    return <div key={j} style={{ width: 14, height: h, borderRadius: 4, background: j % 3 === 0 ? C.acento : C.tarjetaTexto }} />;
-                  })}
-                </div>
-              )}
+          <div
+            key={k}
+            style={{
+              position: "absolute",
+              left: CIFRAS.x,
+              top: y + (1 - entra) * 40,
+              width: CIFRAS.w,
+              height: alto,
+              opacity: Math.min(1, entra * 1.6),
+            }}
+          >
+            {/* Cabecera: índice monoespaciado + filete milimétrico que se traza */}
+            <div style={{ display: "flex", alignItems: "center", gap: 18, height: 36 }}>
+              <span style={{ fontFamily: F.mono, fontSize: 22, letterSpacing: "2px", color: destacar ? C.acento : alfa(C.texto, 0.55), whiteSpace: "nowrap" }}>{indice}</span>
+              <div style={{ flex: 1, height: 2, background: alfa(C.linea, 0.6), position: "relative" }}>
+                <div style={{ position: "absolute", left: 0, top: 0, height: 2, width: `${filete * 100}%`, background: destacar ? C.acento : alfa(C.texto, 0.5) }} />
+              </div>
             </div>
-          </TarjetaSube>
+
+            {/* Cuerpo: cifra monumental con etiqueta y detalle */}
+            <div style={{ position: "absolute", left: 0, top: CIFRAS.cabecera, width: esPorcentaje ? cx - radio - 40 : CIFRAS.w, height: alto - CIFRAS.cabecera, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <Numero desde={bk} hasta={bk + 20} v0={v0} v1={v} tam={tam} color={color} golpe={destacar ? bk + 20 : -100} prefijo={txt(fila, "prefijo")} sufijo={sufijo} />
+              <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginTop: 14, whiteSpace: "nowrap" }}>
+                <span style={{ ...T(800), fontSize: 30, letterSpacing: "3px", textTransform: "uppercase", color }}>{txt(fila, "etiqueta")}</span>
+                {detalle && <span style={{ ...T(600), fontSize: 28, color: C.suave }}>{detalle}</span>}
+              </div>
+            </div>
+
+            {/* Arco vectorial: proporción real del porcentaje */}
+            {esPorcentaje && (
+            <svg viewBox={`0 0 ${CIFRAS.w} ${alto}`} style={{ position: "absolute", left: 0, top: 0, width: CIFRAS.w, height: alto, overflow: "visible", pointerEvents: "none" }}>
+              <circle cx={cx} cy={cy} r={radio} stroke={alfa(C.texto, 0.22)} strokeWidth={trazo} fill="none" />
+              <path d={arco} stroke={destacar ? C.acento : alfa(C.texto, 0.75)} strokeWidth={trazo} strokeLinecap="round" fill="none" strokeDasharray={dash.strokeDasharray} strokeDashoffset={dash.strokeDashoffset} />
+            </svg>
+            )}
+          </div>
         );
       })}
     </AbsoluteFill>
@@ -256,30 +284,79 @@ export const cifras: DefEscena = {
 };
 
 // ================================================================== ficha
+// Ficha técnica de laboratorio: marco abierto con esquinas de visor y regla graduada en el borde
+// izquierdo, claves en monoespaciado y valores que entran con desenfoque cinético.
+// Geometría: con 4 filas el marco ocupa y ∈ [~330, ~950] (coordenadas de escena).
+const FICHA = { x: 100, w: 880, centro: 640, cabecera: 150, fila: 104, pie: 36, regla: 56 };
+
 const Ficha: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
   const filas = arr<unknown[]>(p, "filas").slice(0, 4);
-  const entra = spring({ frame: f, fps: FPS, config: { damping: 15, stiffness: 140, mass: 0.7 } });
-  const fl = useFlota(0.3, 5, 17);
+  const n = filas.length;
+  const icono = txt(p, "icono");
+  const etiqueta = txt(p, "etiqueta");
+  const alto = FICHA.cabecera + n * FICHA.fila + FICHA.pie;
+  const y = FICHA.centro - alto / 2;
+  const entra = spring({ frame: f, fps: FPS, config: { damping: 16, stiffness: 130, mass: 0.7 } });
+  const marco = lerp(f, 0, 14, 0, 1, Easing.out(Easing.cubic));
+  const esquinas = generarEsquinasReticula(0, 0, FICHA.w, alto, 34);
+  const marcas = generarMarcasRegla(FICHA.cabecera - 10, alto - FICHA.pie + 10, 12, 60);
+  const xContenido = FICHA.regla + 14;
+
   return (
     <AbsoluteFill>
-      <div style={{ position: "absolute", left: 130, top: Math.max(260, 640 - (170 + filas.length * 100) / 2) + (1 - entra) * 160 + fl, width: 820, borderRadius: 40, background: C.tarjeta, color: C.tarjetaTexto, boxShadow: SOMBRA, border: BORDE, opacity: Math.min(1, entra * 1.6), padding: "40px 48px 26px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          {txt(p, "icono") ? <Icono nombre={txt(p, "icono")} tam={62} /> : <Destello size={62} giro={f * 0.6} />}
-          <div style={{ fontFamily: F.titulo, fontSize: 58, letterSpacing: -1 }}>{txt(p, "titulo")}</div>
-          {txt(p, "etiqueta") && <div style={{ marginLeft: "auto", background: alfa(C.acento, 0.15), color: C.acento, ...T(800), fontSize: 26, padding: "8px 18px", borderRadius: 30 }}>{txt(p, "etiqueta")}</div>}
+      <div style={{ position: "absolute", left: FICHA.x, top: y + (1 - entra) * 50, width: FICHA.w, height: alto, opacity: Math.min(1, entra * 1.6) }}>
+        {/* Esquinas de visor y regla graduada que se despliega de arriba abajo */}
+        <svg viewBox={`0 0 ${FICHA.w} ${alto}`} style={{ position: "absolute", left: 0, top: 0, width: FICHA.w, height: alto, overflow: "visible", pointerEvents: "none" }}>
+          {[esquinas.topIzq, esquinas.topDer, esquinas.botIzq, esquinas.botDer].map((d, i) => (
+            <path key={i} d={d} stroke={alfa(C.acento, 0.6)} strokeWidth={2.5} fill="none" />
+          ))}
+          {marcas.map((m, i) => {
+            const visible = (m.posicion - marcas[0].posicion) / Math.max(1, marcas[marcas.length - 1].posicion - marcas[0].posicion) <= marco;
+            return visible ? <line key={i} x1={18} x2={18 + (m.esMayor ? 24 : 11)} y1={m.posicion} y2={m.posicion} stroke={alfa(C.texto, m.esMayor ? 0.55 : 0.25)} strokeWidth={m.esMayor ? 2 : 1.5} /> : null;
+          })}
+        </svg>
+
+        {/* Cabecera: icono, título y etiqueta de estado en contorno */}
+        <div style={{ position: "absolute", left: xContenido, right: 40, top: 36, display: "flex", alignItems: "center", gap: 20 }}>
+          {icono ? <Icono nombre={icono} tam={56} color={C.acento} /> : <div style={{ width: 14, height: 14, borderRadius: 3, background: C.acento }} />}
+          <div style={{ fontFamily: F.titulo, fontSize: 62, lineHeight: 1, letterSpacing: -1, color: C.texto, whiteSpace: "nowrap" }}>{txt(p, "titulo")}</div>
+          {etiqueta && (
+            <div style={{ marginLeft: "auto", fontFamily: F.mono, fontWeight: 700, fontSize: 22, letterSpacing: "3px", textTransform: "uppercase", color: C.acento, border: `1.5px solid ${alfa(C.acento, 0.7)}`, padding: "8px 16px", borderRadius: 6, whiteSpace: "nowrap" }}>{etiqueta}</div>
+          )}
         </div>
-        <div style={{ height: 2, background: C.linea, margin: "28px 0 8px" }} />
+        <div style={{ position: "absolute", left: xContenido, right: 40, top: 118, display: "flex", alignItems: "center", gap: 16 }}>
+          <span style={{ fontFamily: F.mono, fontSize: 18, letterSpacing: "2px", color: alfa(C.texto, 0.45), whiteSpace: "nowrap" }}>{`FICHA · ${String(n).padStart(2, "0")} CAMPOS`}</span>
+          <div style={{ flex: 1, height: 1.5, background: alfa(C.linea, 0.8) }} />
+        </div>
+
+        {/* Filas: clave monoespaciada a la izquierda, valor a la derecha */}
         {filas.map((fila, k) => {
           const [etq, val, dest] = fila as [string, string | number, boolean?];
           const t = b[k] ?? 0;
-          const q = lerp(f, t, t + 8, 0, 1);
-          const g = 1 + 0.25 * bump(f, t + 2, 10);
+          const q = lerp(f, t, t + 9, 0, 1, Easing.out(Easing.cubic));
+          const g = 1 + 0.18 * bump(f, t + 3, 10);
           const grande = dest || typeof val === "number";
+          const top = FICHA.cabecera + k * FICHA.fila;
           return (
-            <div key={k} style={{ display: "flex", alignItems: "center", padding: "22px 0", borderBottom: k < filas.length - 1 ? `2px solid ${C.linea}` : undefined, opacity: q, transform: `translateX(${(1 - q) * 40}px)` }}>
-              <div style={{ ...T(600), fontSize: 34, color: alfa(C.tarjetaTexto, 0.75) }}>{etq}</div>
-              <div style={{ marginLeft: "auto", fontFamily: grande ? F.titulo : F.texto, fontWeight: grande ? undefined : pesoTexto(800), fontSize: grande ? 60 : 34, color: dest ? C.acento : C.tarjetaTexto, transform: `scale(${g})`, transformOrigin: "100% 50%", whiteSpace: "nowrap" }}>
+            <div key={k} style={{ position: "absolute", left: xContenido, right: 40, top, height: FICHA.fila, display: "flex", alignItems: "center" }}>
+              {k < n - 1 && <div style={{ position: "absolute", left: 0, bottom: 0, width: `${q * 100}%`, borderBottom: `1.5px dashed ${alfa(C.linea, 0.9)}` }} />}
+              {dest && <div style={{ position: "absolute", left: -xContenido + 18, top: FICHA.fila / 2 - 2, width: 30 * q, height: 4, background: C.acento }} />}
+              <div style={{ fontFamily: F.mono, fontSize: 24, letterSpacing: "2px", textTransform: "uppercase", color: dest ? C.acento : C.suave, opacity: Math.min(1, q * 1.5), whiteSpace: "nowrap" }}>{etq}</div>
+              <div
+                style={{
+                  marginLeft: "auto",
+                  fontFamily: grande ? F.titulo : F.texto,
+                  fontWeight: grande ? undefined : pesoTexto(800),
+                  fontSize: grande ? 60 : 36,
+                  color: dest ? C.acento : C.texto,
+                  opacity: q,
+                  filter: q < 1 ? `blur(${((1 - q) * 10).toFixed(2)}px)` : undefined,
+                  transform: `translateX(${((1 - q) * 30).toFixed(2)}px) scale(${g})`,
+                  transformOrigin: "100% 50%",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {typeof val === "number" ? numeroES(val) : val}
               </div>
             </div>
@@ -303,32 +380,63 @@ export const ficha: DefEscena = {
 };
 
 // ================================================================== lista
+// Manifiesto editorial abierto: sin cajas, con ordinales monumentales, filetes que se trazan
+// y un subrayado cinético que marca cada punto al enunciarse.
+// Geometría: con título y 5 puntos el bloque ocupa y ∈ [~300, ~980] (coordenadas de escena).
+const LISTA = { x: 100, w: 880, centro: 640, titulo: 120, num: 128, icono: 58 };
+
 const Lista: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
+  const ok = useFuentes();
   const items = arr(p, "items").slice(0, 5).map(item);
+  const n = items.length;
   const titulo = txt(p, "titulo");
-  const alto = 112;
-  const y0 = 640 - (items.length * alto + (titulo ? 110 : 0)) / 2;
-  const tp = usePop(0);
+  const alto = n >= 5 ? 112 : 124;
+  const cab = titulo ? LISTA.titulo : 0;
+  const y0 = LISTA.centro - (n * alto + cab) / 2;
+  const tp = lerp(f, 0, 12, 0, 1, Easing.out(Easing.cubic));
+  const conIconos = items.some((it) => !!it.icono);
+  // Punto vigente: el último ya enunciado. Los anteriores conservan su marca pero atenuada.
+  const vigente = items.reduce((acc, _, k) => (f >= (b[k] ?? 0) + 4 ? k : acc), -1);
+  if (!ok) return null;
+  const pesoTxt = String(pesoTexto(800));
+
   return (
     <AbsoluteFill>
-      {titulo && <div style={{ position: "absolute", top: y0 - 10, left: 0, right: 0, textAlign: "center", fontFamily: F.titulo, fontSize: 64 * 1, color: C.texto, transform: `scale(${tp})` }}>{titulo}</div>}
+      {titulo && (
+        <div style={{ position: "absolute", left: LISTA.x, width: LISTA.w, top: y0, height: LISTA.titulo, opacity: tp, transform: `translateY(${((1 - tp) * 20).toFixed(2)}px)` }}>
+          <div style={{ fontFamily: F.mono, fontSize: 20, letterSpacing: "3px", color: C.acento, marginBottom: 10, whiteSpace: "nowrap" }}>{`${String(n).padStart(2, "0")} PUNTOS`}</div>
+          <div style={{ fontFamily: F.titulo, fontSize: 60, lineHeight: 1, letterSpacing: -1, color: C.texto, whiteSpace: "nowrap" }}>{titulo}</div>
+        </div>
+      )}
       {items.map((it, k) => {
         const t = b[k] ?? 0;
-        const p2 = spring({ frame: f - t, fps: FPS, config: { damping: 14, stiffness: 170, mass: 0.6 } });
-        if (f < t - 2) return null;
-        const hecho = f >= t + 6;
+        if (f < t - 3) return null;
+        const y = y0 + cab + k * alto;
+        const revela = lerp(f, t - 3, t + 7, 0, 1, Easing.out(Easing.cubic));
+        const subraya = lerp(f, t + 4, t + 14, 0, 1, Easing.inOut(Easing.cubic));
+        const activo = f >= t + 4;
+        const atenuado = activo && k < vigente;
+        const xTexto = LISTA.num + (conIconos ? LISTA.icono : 0);
+        const tam = tamQueCabe(it.texto, F.texto, pesoTxt, n >= 5 ? 40 : 44, LISTA.w - xTexto - 10, 28);
+        const anchoTxt = measureText({ text: it.texto, fontFamily: F.texto, fontWeight: pesoTxt, fontSize: tam, validateFontIsLoaded: false }).width;
         return (
-          <div key={k} style={{ position: "absolute", left: 120, width: 840, top: y0 + (titulo ? 110 : 0) + k * alto, height: alto - 18, borderRadius: 28, background: C.tarjeta, boxShadow: SOMBRA, border: BORDE, display: "flex", alignItems: "center", gap: 24, padding: "0 30px", transform: `translateX(${(1 - p2) * 160}px)`, opacity: Math.min(1, p2 * 2) }}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: hecho ? C.acento : C.linea, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${1 + 0.25 * bump(f, t + 6, 8)})` }}>
-              {hecho && (
-                <svg viewBox="0 0 24 24" width={34} height={34}>
-                  <path d="M5 12.5 L10 17 L19 7" stroke={C.acentoTexto} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          <div key={k} style={{ position: "absolute", left: LISTA.x, width: LISTA.w, top: y, height: alto }}>
+            {/* Filete superior que se traza de izquierda a derecha */}
+            <div style={{ position: "absolute", left: 0, top: 0, height: 1.5, width: `${revela * 100}%`, background: alfa(C.texto, 0.18) }} />
+            {/* Contenido revelado con cortinilla horizontal */}
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", clipPath: `inset(0 ${((1 - revela) * 100).toFixed(2)}% 0 0)` }}>
+              <div style={{ width: LISTA.num, flexShrink: 0, fontFamily: F.titulo, fontSize: 64, lineHeight: 1, letterSpacing: -1, color: !activo ? alfa(C.texto, 0.25) : atenuado ? alfa(C.acento, 0.55) : C.acento, transform: `scale(${1 + 0.12 * bump(f, t + 4, 9)})`, transformOrigin: "0% 60%" }}>
+                {String(k + 1).padStart(2, "0")}
+              </div>
+              {conIconos && <div style={{ width: LISTA.icono, flexShrink: 0 }}>{it.icono && <Icono nombre={it.icono} tam={38} color={C.suave} />}</div>}
+              <div style={{ position: "relative", fontFamily: F.texto, fontWeight: pesoTxt, fontSize: tam, lineHeight: 1.1, color: C.texto, whiteSpace: "nowrap" }}>
+                {it.texto}
+                <svg width={anchoTxt} height={8} style={{ position: "absolute", left: 0, bottom: -14, overflow: "visible" }}>
+                  <line x1={0} y1={4} x2={anchoTxt} y2={4} stroke={atenuado ? alfa(C.acento, 0.3) : C.acento} strokeWidth={atenuado ? 3 : 5} strokeLinecap="round" {...calcularDashOffset(subraya, anchoTxt)} />
                 </svg>
-              )}
+              </div>
             </div>
-            {it.icono && <Icono nombre={it.icono} tam={44} color={C.tarjetaTexto} />}
-            <div style={{ ...T(800), fontSize: 40, color: C.tarjetaTexto, whiteSpace: "nowrap" }}>{it.texto}</div>
           </div>
         );
       })}
@@ -349,60 +457,123 @@ export const lista: DefEscena = {
 };
 
 // ================================================================== comparacion
-const Lado: React.FC<{ d: Record<string, unknown>; x: number; desde: number; gana: boolean; pierde: boolean; veredicto: number }> = ({ d, x, desde, gana, pierde, veredicto }) => {
+// Pantalla dividida por un corte vertical. En el veredicto el reparto pasa de 50/50 a 60/40 a favor
+// del ganador: su lado se ilumina y recibe la marca; el perdedor se atenúa y su título queda cortado.
+// Con ganador "ninguno" se mantiene el 50/50 y ambos lados quedan en igualdad.
+// Geometría: el área ocupa y ∈ [330, 890] (coordenadas de escena).
+const COMP = { x: 100, w: 880, y: 330, h: 560, columna: 300, margen: 36 };
+
+const LadoComparado: React.FC<{ d: Record<string, unknown>; rotulo: string; x: number; desde: number; gana: boolean; pierde: boolean; veredicto: number; tamTitulo: number }> = ({
+  d,
+  rotulo,
+  x,
+  desde,
+  gana,
+  pierde,
+  veredicto,
+  tamTitulo,
+}) => {
   const f = useCurrentFrame();
-  const p = spring({ frame: f - desde, fps: FPS, config: { damping: 14, stiffness: 150, mass: 0.7 } });
+  const entra = lerp(f, desde, desde + 12, 0, 1, Easing.out(Easing.cubic));
+  const v = lerp(f, veredicto, veredicto + 12, 0, 1, Easing.out(Easing.cubic));
+  const corte = lerp(f, veredicto, veredicto + 7, 0, 1, Easing.out(Easing.cubic));
   if (f < desde) return null;
-  const tras = f >= veredicto;
+  const icono = txt(d, "icono");
+  const titulo = txt(d, "titulo");
+  const anchoTitulo = measureText({ text: titulo, fontFamily: F.titulo, fontWeight: String(ESTILO.fuentes.titulo.peso), fontSize: tamTitulo, validateFontIsLoaded: false }).width;
+  const colorClave = gana && v > 0 ? C.acento : C.texto;
   return (
     <div
       style={{
         position: "absolute",
         left: x,
-        top: 300 + (1 - p) * 140,
-        width: 420,
-        height: 600,
-        borderRadius: 36,
-        background: C.tarjeta,
-        color: C.tarjetaTexto,
-        boxShadow: SOMBRA,
-        border: tras && gana ? `6px solid ${C.exito}` : BORDE,
-        opacity: Math.min(1, p * 1.8) * (tras && pierde ? 0.55 : 1),
-        transform: `scale(${tras && gana ? 1.04 : 1}) rotate(${tras && pierde ? -2 : 0}deg)`,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "60px 30px",
-        gap: 26,
-        filter: tras && pierde ? "grayscale(0.6)" : undefined,
+        top: COMP.y + 40,
+        width: COMP.columna,
+        opacity: entra * (pierde ? 1 - 0.55 * v : 1),
+        transform: `translateY(${((1 - entra) * 30).toFixed(2)}px) scale(${gana ? 1 + 0.05 * v : 1})`,
+        transformOrigin: "0% 0%",
       }}
     >
-      <div style={{ width: 150, height: 150, borderRadius: 40, background: alfa(C.acento, 0.12), display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Icono nombre={txt(d, "icono") || "sparkles"} tam={90} />
+      <div style={{ fontFamily: F.mono, fontSize: 20, letterSpacing: "3px", color: gana && v > 0 ? C.acento : C.suave, whiteSpace: "nowrap" }}>{rotulo}</div>
+      <div style={{ height: 96, display: "flex", alignItems: "center", marginTop: 18 }}>{icono && <Icono nombre={icono} tam={76} color={gana && v > 0 ? C.acento : alfa(C.texto, 0.8)} grosor={1.6} />}</div>
+      <div style={{ position: "relative", display: "inline-block", marginTop: 18, fontFamily: F.titulo, fontWeight: ESTILO.fuentes.titulo.peso, fontSize: tamTitulo, lineHeight: 1.05, letterSpacing: -1, color: colorClave, whiteSpace: "nowrap" }}>
+        {titulo}
+        {pierde && f >= veredicto && (
+          <svg width={anchoTitulo + 16} height={10} style={{ position: "absolute", left: -8, top: "55%", overflow: "visible" }}>
+            <line x1={0} y1={5} x2={(anchoTitulo + 16) * corte} y2={5} stroke={C.texto} strokeWidth={Math.max(4, tamTitulo * 0.07)} strokeLinecap="round" />
+          </svg>
+        )}
       </div>
-      <div style={{ fontFamily: F.titulo, fontSize: 52, textAlign: "center", lineHeight: 1.05 }}>{txt(d, "titulo")}</div>
-      {txt(d, "texto") && <div style={{ ...T(600), fontSize: 32, textAlign: "center", color: alfa(C.tarjetaTexto, 0.7), lineHeight: 1.25 }}>{txt(d, "texto")}</div>}
+      {txt(d, "texto") && <div style={{ ...T(600), fontSize: 30, lineHeight: 1.3, color: C.suave, marginTop: 18 }}>{txt(d, "texto")}</div>}
+      {gana && f >= veredicto && (
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginTop: 30, fontFamily: F.mono, fontWeight: 700, fontSize: 22, letterSpacing: "3px", color: C.acentoTexto, background: C.acento, padding: "8px 16px", borderRadius: 6, transform: `scale(${0.9 + 0.1 * v})`, transformOrigin: "0% 50%", opacity: v }}>
+          <svg viewBox="0 0 24 24" width={22} height={22}>
+            <path d="M5 12.5 L10 17 L19 7" stroke={C.acentoTexto} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          MEJOR OPCIÓN
+        </div>
+      )}
     </div>
   );
 };
 
 const Comparacion: React.FC<PropsEscena> = ({ p, b }) => {
+  const f = useCurrentFrame();
+  const ok = useFuentes();
   const [b0, b1, b2] = b;
   const g = txt(p, "ganador", "derecha");
-  const vs = usePop(b1 - 2);
+  const izq = obj(p, "izquierda");
+  const der = obj(p, "derecha");
+  const v = g === "ninguno" ? 0 : lerp(f, b2, b2 + 14, 0, 1, Easing.inOut(Easing.cubic));
+  // Reparto del ancho: 0,5 → 0,6 para el ganador.
+  const parteIzq = 0.5 + (g === "izquierda" ? 0.1 : g === "derecha" ? -0.1 : 0) * v;
+  const xCorte = COMP.x + COMP.w * parteIzq;
+  const corte = lerp(f, b1 - 6, b1 + 6, 0, 1, Easing.inOut(Easing.cubic));
+  if (!ok) return null;
+  const peso = String(ESTILO.fuentes.titulo.peso);
+  // Un único tamaño de título para ambos lados, calculado sobre la columna más estrecha.
+  const tamTitulo = Math.min(tamQueCabe(txt(izq, "titulo"), F.titulo, peso, 60, COMP.columna - 20, 30), tamQueCabe(txt(der, "titulo"), F.titulo, peso, 60, COMP.columna - 20, 30));
+
   return (
     <AbsoluteFill>
-      <Lado d={obj(p, "izquierda")} x={90} desde={b0} gana={g === "izquierda"} pierde={g === "derecha"} veredicto={b2} />
-      <Lado d={obj(p, "derecha")} x={570} desde={b1} gana={g === "derecha"} pierde={g === "izquierda"} veredicto={b2} />
-      {vs > 0 && (
-        <div style={{ position: "absolute", left: 540 - 50, top: 550, width: 100, height: 100, borderRadius: 50, background: C.oscuro, color: C.oscuroTexto, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.titulo, fontSize: 40, transform: `scale(${vs})`, boxShadow: SOMBRA }}>VS</div>
+      {/* Campo iluminado del ganador */}
+      {g !== "ninguno" && v > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            left: g === "izquierda" ? COMP.x : xCorte,
+            top: COMP.y,
+            width: g === "izquierda" ? xCorte - COMP.x : COMP.x + COMP.w - xCorte,
+            height: COMP.h,
+            background: `linear-gradient(180deg, ${alfa(C.acento, 0.1 * v)} 0%, ${alfa(C.acento, 0)} 100%)`,
+            borderTop: `2px solid ${alfa(C.acento, 0.8 * v)}`,
+          }}
+        />
       )}
-      {g !== "ninguno" && (
-        <>
-          <Marca desde={b2} x={g === "izquierda" ? 790 : 310} y={330} tipo="x" size={90} />
-          <Marca desde={b2 + 3} x={g === "izquierda" ? 310 : 790} y={330} tipo="check" size={90} />
-        </>
+
+      {/* Corte vertical que separa ambos lados */}
+      {f >= b1 - 6 && (
+        <svg viewBox={`0 0 1080 1920`} style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 1920, overflow: "visible", pointerEvents: "none" }}>
+          {/* Dos tramos con hueco central para el rótulo "VS"; el hueco se cierra en el veredicto */}
+          {(() => {
+            const medio = COMP.y + COMP.h / 2;
+            const hueco = 30 * (1 - v);
+            const tramo = COMP.h / 2 - hueco;
+            return (
+              <>
+                <line x1={xCorte} y1={COMP.y} x2={xCorte} y2={medio - hueco} stroke={alfa(C.texto, 0.35)} strokeWidth={2} {...calcularDashOffset(corte, tramo)} />
+                <line x1={xCorte} y1={COMP.y + COMP.h} x2={xCorte} y2={medio + hueco} stroke={alfa(C.texto, 0.35)} strokeWidth={2} {...calcularDashOffset(corte, tramo)} />
+              </>
+            );
+          })()}
+        </svg>
       )}
+      {f >= b1 && (
+        <div style={{ position: "absolute", left: xCorte - 30, top: COMP.y + COMP.h / 2 - 16, width: 60, textAlign: "center", fontFamily: F.mono, fontSize: 22, letterSpacing: "2px", color: C.suave, opacity: lerp(f, b1, b1 + 8, 0, 1) * (1 - v) }}>VS</div>
+      )}
+
+      <LadoComparado d={izq} rotulo="OPCIÓN A" x={COMP.x + COMP.margen / 2} desde={b0} gana={g === "izquierda"} pierde={g === "derecha"} veredicto={b2} tamTitulo={tamTitulo} />
+      <LadoComparado d={der} rotulo="OPCIÓN B" x={xCorte + COMP.margen} desde={b1} gana={g === "derecha"} pierde={g === "izquierda"} veredicto={b2} tamTitulo={tamTitulo} />
     </AbsoluteFill>
   );
 };
@@ -624,32 +795,78 @@ export const objecion: DefEscena = {
 };
 
 // ================================================================== pasos
+// Diagrama de flujo: columna de nodos de estado (pendiente → vigente → completado) unidos por
+// conectores vectoriales que se trazan al avanzar. Los nodos pendientes se ven desde el inicio
+// (anticipan la estructura) pero el texto de cada paso solo aparece al enunciarse.
+// Geometría: con 4 pasos el diagrama ocupa y ∈ [~350, ~930] (coordenadas de escena).
+const PASOS = { x: 100, w: 880, centro: 640, radio: 34, xTexto: 116 };
+
 const Pasos: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
+  const ok = useFuentes();
   const pasos = arr(p, "pasos").slice(0, 4).map(item);
   const n = pasos.length;
-  const alto = n <= 3 ? 210 : 170;
-  const y0 = 640 - (n * alto + (n - 1) * 46) / 2;
+  const paso = n <= 3 ? 200 : 168;
+  const y0 = PASOS.centro - ((n - 1) * paso) / 2;
+  const cx = PASOS.radio + 2;
+  const vigente = pasos.reduce((acc, _, k) => (f >= (b[k] ?? 0) ? k : acc), -1);
+  const aparece = lerp(f, 0, 10, 0, 1);
+  if (!ok) return null;
+  const pesoTxt = String(pesoTexto(800));
+
   return (
     <AbsoluteFill>
-      {pasos.map((paso, k) => {
+      {/* Conectores entre nodos: guía tenue + trazo de acento que avanza hacia el paso siguiente */}
+      <svg viewBox={`0 0 ${PASOS.w} 1920`} style={{ position: "absolute", left: PASOS.x, top: 0, width: PASOS.w, height: 1920, overflow: "visible", pointerEvents: "none" }}>
+        {pasos.slice(0, -1).map((_, k) => {
+          const ya = y0 + k * paso + PASOS.radio + 8;
+          const yb = y0 + (k + 1) * paso - PASOS.radio - 8;
+          const largo = Math.max(1, yb - ya);
+          const tSig = b[k + 1] ?? 0;
+          const avance = lerp(f, tSig - 8, tSig, 0, 1, Easing.inOut(Easing.cubic));
+          const d = generarConectorOrtogonal([cx, ya], [cx, yb], "vertical-primero");
+          return (
+            <g key={k} opacity={aparece}>
+              <path d={d} stroke={alfa(C.texto, 0.18)} strokeWidth={2} strokeDasharray="5 7" fill="none" />
+              <path d={d} stroke={C.acento} strokeWidth={4} strokeLinecap="round" fill="none" {...calcularDashOffset(avance, largo)} />
+            </g>
+          );
+        })}
+      </svg>
+
+      {pasos.map((ps, k) => {
         const t = b[k] ?? 0;
-        const q = spring({ frame: f - t, fps: FPS, config: { damping: 13, stiffness: 160, mass: 0.6 } });
-        if (f < t) return null;
-        const y = y0 + k * (alto + 46);
+        const cy = y0 + k * paso;
+        const estado = f < t ? "pendiente" : k === vigente ? "vigente" : "hecho";
+        const q = lerp(f, t, t + 10, 0, 1, Easing.out(Easing.cubic));
+        const pulso = bump(f, t, 12);
+        const anchoTxt = PASOS.w - PASOS.xTexto - 10;
+        const tam = tamQueCabe(ps.texto, F.texto, pesoTxt, n <= 3 ? 46 : 42, anchoTxt, 28);
+        const relleno = estado === "vigente" ? C.acento : "transparent";
+        const borde = estado === "pendiente" ? alfa(C.texto, 0.25) : C.acento;
+        const colorNum = estado === "vigente" ? C.acentoTexto : estado === "hecho" ? C.acento : alfa(C.texto, 0.35);
         return (
-          <React.Fragment key={k}>
-            <div style={{ position: "absolute", left: 150, top: y, width: 780, height: alto, borderRadius: 34, background: C.tarjeta, color: C.tarjetaTexto, boxShadow: SOMBRA, border: BORDE, display: "flex", alignItems: "center", gap: 30, padding: "0 36px", transform: `scale(${0.7 + 0.3 * q})`, opacity: Math.min(1, q * 2) }}>
-              <div style={{ width: alto * 0.6, height: alto * 0.6, borderRadius: alto * 0.3, background: C.acento, color: C.acentoTexto, fontFamily: F.titulo, fontSize: alto * 0.34, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{k + 1}</div>
-              <div style={{ ...T(800), fontSize: 42, lineHeight: 1.1, flex: 1 }}>{paso.texto}</div>
-              {paso.icono && <Icono nombre={paso.icono} tam={64} />}
+          <div key={k} style={{ position: "absolute", left: PASOS.x, width: PASOS.w, top: cy - PASOS.radio, height: PASOS.radio * 2 }}>
+            {/* Nodo de estado con halo al activarse */}
+            <div style={{ position: "absolute", left: cx - PASOS.radio, top: 0, width: PASOS.radio * 2, height: PASOS.radio * 2, opacity: aparece }}>
+              {pulso > 0 && <div style={{ position: "absolute", inset: -14 * pulso, borderRadius: "50%", border: `2px solid ${alfa(C.acento, 0.5 * (1 - pulso))}` }} />}
+              <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: relleno, border: `2.5px solid ${borde}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.mono, fontWeight: 700, fontSize: 24, color: colorNum, transform: `scale(${1 + 0.1 * pulso})` }}>
+                {String(k + 1).padStart(2, "0")}
+              </div>
             </div>
-            {k < n - 1 && f >= t + 6 && (
-              <svg viewBox="0 0 40 46" width={40} height={46} style={{ position: "absolute", left: 520, top: y + alto, opacity: lerp(f, t + 6, t + 10, 0, 1) }}>
-                <path d="M20 4 V36 M8 26 L20 40 L32 26" stroke={C.acento} strokeWidth={6} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            {/* Texto del paso: aparece al enunciarse */}
+            {f >= t && (
+              <div style={{ position: "absolute", left: PASOS.xTexto, right: 0, top: PASOS.radio - 46, height: 92, display: "flex", alignItems: "center", opacity: q, transform: `translateX(${((1 - q) * 24).toFixed(2)}px)` }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: F.mono, fontSize: 18, letterSpacing: "3px", color: estado === "vigente" ? C.acento : C.suave, marginBottom: 6, whiteSpace: "nowrap" }}>
+                    {`PASO ${String(k + 1).padStart(2, "0")}`}
+                    {ps.icono && <Icono nombre={ps.icono} tam={22} color={estado === "vigente" ? C.acento : C.suave} />}
+                  </div>
+                  <div style={{ fontFamily: F.texto, fontWeight: pesoTxt, fontSize: tam, lineHeight: 1.1, color: estado === "vigente" ? C.texto : alfa(C.texto, 0.75), whiteSpace: "nowrap" }}>{ps.texto}</div>
+                </div>
+              </div>
             )}
-          </React.Fragment>
+          </div>
         );
       })}
     </AbsoluteFill>
@@ -728,36 +945,86 @@ export const pregunta: DefEscena = {
 };
 
 // ================================================================== barras
+// Infografía con escala: retícula de guías horizontales con valores redondos, regla en el eje
+// vertical y barras que crecen sobre una base firme. La barra destacada es la única en acento.
+// Geometría: título en y ≈ 260, base en y = 930 y etiquetas hasta y ≈ 990 (coordenadas de escena).
+const BARRAS = { x: 100, w: 880, eje: 92, base: 930, altoMax: 440, yTitulo: 256 };
+
+/** Paso "redondo" (1, 2, 2,5 o 5 × 10^k) para dividir la escala en unas 4 guías. */
+const pasoEscala = (max: number): number => {
+  const bruto = Math.max(1e-9, max / 4);
+  const pot = Math.pow(10, Math.floor(Math.log10(bruto)));
+  const r = bruto / pot;
+  return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 2.5 ? 2.5 : r <= 5 ? 5 : 10) * pot;
+};
+
 const Barras: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
   const barras = arr<Record<string, unknown>>(p, "barras").slice(0, 5);
   const max = Math.max(1, ...barras.map((x) => num(x, "valor")));
   const destacar = num(p, "destacar", -1);
   const unidad = txt(p, "unidad");
+  const titulo = txt(p, "titulo");
   const n = barras.length;
-  const ancho = Math.min(150, 720 / n - 30);
-  const base = 980;
-  const altoMax = 520;
+  const paso = pasoEscala(max);
+  const tope = Math.ceil(max / paso) * paso;
+  const guias = Array.from({ length: Math.round(tope / paso) + 1 }, (_, i) => i * paso);
+  const yDe = (v: number) => BARRAS.base - BARRAS.altoMax * (v / tope);
+  const x0 = BARRAS.x + BARRAS.eje;
+  const anchoArea = BARRAS.w - BARRAS.eje;
+  const celda = anchoArea / n;
+  const ancho = Math.min(124, celda - 44);
+  const reticula = lerp(f, 0, 16, 0, 1, Easing.out(Easing.cubic));
+  const decimales = paso < 1 ? 1 : 0;
+  const marcas = generarMarcasRegla(yDe(tope), BARRAS.base, BARRAS.altoMax / (guias.length - 1) / 5, BARRAS.altoMax / (guias.length - 1));
+
   return (
     <AbsoluteFill>
-      {txt(p, "titulo") && <div style={{ position: "absolute", top: 250, left: 0, right: 0, textAlign: "center", fontFamily: F.titulo, fontSize: 56, color: C.texto }}>{txt(p, "titulo")}</div>}
-      <div style={{ position: "absolute", left: 120, right: 120, top: base, height: 5, borderRadius: 3, background: alfa(C.texto, 0.25) }} />
+      {titulo && (
+        <div style={{ position: "absolute", left: BARRAS.x, width: BARRAS.w, top: BARRAS.yTitulo, opacity: reticula }}>
+          <div style={{ fontFamily: F.mono, fontSize: 20, letterSpacing: "3px", color: C.acento, marginBottom: 10, whiteSpace: "nowrap" }}>{unidad ? `UNIDAD · ${unidad}` : "COMPARATIVA"}</div>
+          <div style={{ fontFamily: F.titulo, fontSize: 56, lineHeight: 1, letterSpacing: -1, color: C.texto, whiteSpace: "nowrap" }}>{titulo}</div>
+        </div>
+      )}
+
+      {/* Retícula: guías con valor de escala + regla en el eje vertical */}
+      <svg viewBox="0 0 1080 1920" style={{ position: "absolute", left: 0, top: 0, width: 1080, height: 1920, overflow: "visible", pointerEvents: "none" }}>
+        {guias.map((g, i) => {
+          const y = yDe(g);
+          const largo = BARRAS.x + BARRAS.w - x0;
+          return (
+            <line key={i} x1={x0} y1={y} x2={x0 + largo} y2={y} stroke={alfa(C.texto, i === 0 ? 0.5 : 0.12)} strokeWidth={i === 0 ? 3 : 1.5} {...(i === 0 ? calcularDashOffset(reticula, largo) : { strokeDasharray: "6 8" })} opacity={i === 0 ? 1 : reticula} />
+          );
+        })}
+        {marcas.map((m, i) => (
+          <line key={`m${i}`} x1={x0 - (m.esMayor ? 16 : 8)} x2={x0} y1={m.posicion} y2={m.posicion} stroke={alfa(C.texto, m.esMayor ? 0.5 : 0.22)} strokeWidth={m.esMayor ? 2 : 1.2} opacity={reticula} />
+        ))}
+        <line x1={x0} y1={yDe(tope)} x2={x0} y2={BARRAS.base} stroke={alfa(C.texto, 0.3)} strokeWidth={1.5} opacity={reticula} />
+      </svg>
+      {guias.map((g, i) => (
+        <div key={i} style={{ position: "absolute", left: BARRAS.x - 10, width: BARRAS.eje - 14, top: yDe(g) - 12, textAlign: "right", fontFamily: F.mono, fontSize: 19, color: C.suave, opacity: reticula, whiteSpace: "nowrap" }}>
+          {numeroES(g, decimales)}
+        </div>
+      ))}
+
       {barras.map((x, k) => {
         const t = b[k] ?? 0;
         const v = num(x, "valor");
-        const h = altoMax * (v / max) * lerp(f, t, t + 14, 0, 1, Easing.out(Easing.cubic));
-        const cx = 540 + (k - (n - 1) / 2) * (ancho + 40);
-        const color = k === destacar ? C.acento : SUAVE ? alfa(C.texto, 0.85) : C.tarjeta;
+        const crece = lerp(f, t, t + 14, 0, 1, Easing.out(Easing.cubic));
+        const h = BARRAS.altoMax * (v / tope) * crece;
+        const cx = x0 + celda * (k + 0.5);
+        const esDest = k === destacar;
+        const etiqueta = lerp(f, t + 6, t + 12, 0, 1);
         return (
           <React.Fragment key={k}>
-            <div style={{ position: "absolute", left: cx - ancho / 2, top: base - h, width: ancho, height: h, borderRadius: "16px 16px 6px 6px", background: color, border: SUAVE ? undefined : `4px solid ${C.borde}`, boxShadow: SUAVE ? SOMBRA : undefined }} />
+            <div style={{ position: "absolute", left: cx - ancho / 2, top: BARRAS.base - h, width: ancho, height: h, background: esDest ? C.acento : alfa(C.texto, 0.16), borderTop: h > 0 ? `3px solid ${esDest ? C.acento : alfa(C.texto, 0.7)}` : undefined, boxSizing: "border-box", boxShadow: esDest ? `0 0 28px ${alfa(C.acento, 0.35)}` : undefined }} />
             {f >= t + 6 && (
-              <div style={{ position: "absolute", left: cx - 120, width: 240, top: base - h - 74, textAlign: "center", fontFamily: F.titulo, fontSize: 48, color: k === destacar ? C.acento : C.texto, opacity: lerp(f, t + 6, t + 10, 0, 1) }}>
-                {numeroES(v)}
-                {unidad}
+              <div style={{ position: "absolute", left: cx - 100, width: 200, top: BARRAS.base - h - 62, textAlign: "center", fontFamily: F.titulo, fontSize: 44, lineHeight: 1, color: esDest ? C.acento : C.texto, opacity: etiqueta, transform: `translateY(${((1 - etiqueta) * 10).toFixed(2)}px)`, whiteSpace: "nowrap" }}>
+                {numeroES(v, Number.isInteger(v) ? 0 : 1)}
+                {unidad && <span style={{ fontSize: 26, marginLeft: 4, color: esDest ? C.acento : C.suave }}>{unidad}</span>}
               </div>
             )}
-            <div style={{ position: "absolute", left: cx - 120, width: 240, top: base + 18, textAlign: "center", ...T(800), fontSize: 30, color: C.texto }}>{txt(x, "etiqueta")}</div>
+            <div style={{ position: "absolute", left: cx - celda / 2, width: celda, top: BARRAS.base + 18, textAlign: "center", ...T(800), fontSize: n >= 5 ? 22 : 26, color: esDest ? C.acento : C.texto, opacity: f >= t ? 1 : 0.4, whiteSpace: "nowrap" }}>{txt(x, "etiqueta")}</div>
           </React.Fragment>
         );
       })}
@@ -779,12 +1046,6 @@ export const barras: DefEscena = {
 
 // ================================================================== tachado ("No es X: es Y")
 const CARTA = { x: 100, y: 310, w: 880, h: 560 };
-
-/** Tamaño de letra para que el texto quepa en `ancho` (como mucho `max`). */
-const tamQueCabe = (texto: string, fuente: string, peso: string, max: number, ancho: number) => {
-  const w100 = measureText({ text: texto || " ", fontFamily: fuente, fontWeight: peso, fontSize: 100, validateFontIsLoaded: false }).width;
-  return Math.max(40, Math.min(max, (100 * ancho) / Math.max(1, w100)));
-};
 
 const Tachado: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
