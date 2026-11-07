@@ -182,9 +182,9 @@ La propiedad `en` de cada escena define cuándo aparece cada elemento visual. Ad
 | Escena | Momentos | Propósito Principal | Campos Clave Obligatorios / Opcionales | Sonidos Automáticos |
 | :--- | :---: | :--- | :--- | :--- |
 | **`titular`** | 1 | Gancho con revelado tipográfico | `texto` (máx. 90, líneas $\le 28$), `etiqueta`, `imagenes`, `icono` | `whoosh` / `pop` |
-| **`chat`** | 5 | Diálogo de mensajería UI | `mensaje`, `titulo`, `saludo`, `respuesta`, `pildora`, `movil` | `tecla`, `pop`, `ding` |
-| **`editor`** | 4 | IDE de código con 4 pistas | `archivo`, `hecho`, `palabras` (máx. 4), `sonidos` (máx. 3) | `whoosh`, `exito`, `pop` |
-| **`movil`** | 3 | Smartphone en perspectiva | `titulo` (máx. 24), `subtitulo`, `pegatina`, `contador`, `icono` | `whoosh`, `pop` |
+| **`chat`** | 5 | Consola de prompt y respuesta | `mensaje`, `titulo`, `saludo`, `respuesta`, `pildora`, `movil` | `tecla`, `pop`, `ding` |
+| **`editor`** | 4 | Mesa de edición con 4 pistas | `archivo`, `hecho`, `palabras` (máx. 4), `sonidos` (máx. 3) | `whoosh`, `exito`, `pop` |
+| **`movil`** | 3 | Dispositivo y datos en pantalla dividida | `titulo` (máx. 24), `subtitulo`, `pegatina`, `contador`, `icono` | `whoosh`, `pop` |
 | **`contador`** | 2 | Cifra numérica impactante | `valor` (número), `etiqueta` (máx. 40), `desde`, `icono`, `llama` | `puff` / `golpe` |
 | **`cifras`** | 1–3 | 1 a 3 módulos de métricas abiertos | `filas` (1–3 ítems: `valor`, `etiqueta`, `detalle`, `destacar`) | `golpe` / `tic` |
 | **`ficha`** | 1–4 | Ficha técnica clave-valor con regla | `titulo` (máx. 18), `etiqueta`, `filas` (1–4 tuplas), `icono` | `pop` |
@@ -192,10 +192,10 @@ La propiedad `en` de cada escena define cuándo aparece cada elemento visual. Ad
 | **`pasos`** | 2–4 | Diagrama de flujo con nodos | `pasos` (2–4 textos o `{texto, icono}`) | `pop` |
 | **`comparacion`** | 3 | Pantalla dividida con veredicto | `izquierda`, `derecha`, `ganador` (`"izquierda"`/`"derecha"`) | `pop`, `pop`, `exito` |
 | **`tachado`** | 2 | Desmentido "No es X: es Y" | `antes` (máx. 22), `despues` (máx. 18), `modo` (`"texto"`/`"codigo"`) | `negacion`, `swoosh` |
-| **`objecion`** | 2 | Globo de duda y réplica | `texto` (máx. 60), `respuesta` (máx. 30), `numero` (máx. 12) | `pop`, `ding` |
-| **`pregunta`** | 3 | Test de opción múltiple | `pregunta` (máx. 60), `opciones` (2–4), `correcta` (0–3) | `pop`, `exito` |
+| **`objecion`** | 2 | Cita editorial y réplica | `texto` (máx. 60), `respuesta` (máx. 30), `numero` (máx. 12) | `pop`, `ding` |
+| **`pregunta`** | 3 | Test con cuenta regresiva | `pregunta` (máx. 60), `opciones` (2–4), `correcta` (0–3) | `pop`, `exito` |
 | **`barras`** | 2–5 | Infografía de barras con escala | `barras` (2–5 ítems: `etiqueta`, `valor`), `titulo`, `unidad` | `tic` |
-| **`imagen`** | 2 | Foto estelar con efectos | `imagen`, `texto`, `etiqueta`, `formato`, `efectos` (`cine`, etc.) | `proyector`/`burbuja`/`pop` |
+| **`imagen`** | 2 | Encuadre fotográfico con visor | `imagen`, `texto`, `etiqueta`, `formato`, `efectos` (`cine`, etc.) | `proyector`/`burbuja`/`pop` |
 | **`galeria`** | 2 | 2 a 6 imágenes | `imagenes` (2–6), `modo` (`abanico`, `orbita`, `rejilla`), `etiqueta` | `whoosh` / `ding` |
 | **`cta`** | 3 | Llamada a la acción y confeti | `palabra` (máx. 12), `verbo`, `texto`, `iconos` (máx. 5 Lucide) | `tecla`, `exito` |
 

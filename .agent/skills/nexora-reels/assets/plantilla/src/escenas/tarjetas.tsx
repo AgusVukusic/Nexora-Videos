@@ -885,45 +885,102 @@ export const pasos: DefEscena = {
 };
 
 // ================================================================== pregunta (test)
+// Consola de test: pregunta editorial, opciones en filas abiertas con tecla monoespaciada y un
+// arco de cuenta regresiva que se vacía entre la última opción y el revelado (el tiempo para pensar).
+// En el revelado la correcta toma el acento y las demás se atenúan con un corte.
+// Geometría: cabecera desde y = 250, pregunta en y ∈ [320, ~550]; con 4 opciones las filas terminan
+// en y = 1006 (coordenadas de escena).
+const PREG = { x: 100, w: 880, yPregunta: 320, yOpciones: 590, fila: 104, tecla: 56, radio: 30 };
+
 const Pregunta: React.FC<PropsEscena> = ({ p, b }) => {
   const f = useCurrentFrame();
+  const ok = useFuentes();
   const [b0, b1, b2] = b;
   const opciones = arr<string>(p, "opciones").slice(0, 4);
+  const n = opciones.length;
   const correcta = num(p, "correcta", 0);
-  const pq = usePop(b0);
+  const entra = lerp(f, b0, b0 + 12, 0, 1, Easing.out(Easing.cubic));
+  const finOpciones = b1 + (n - 1) * 4 + 8;
+  const restante = 1 - lerp(f, finOpciones, b2, 0, 1, Easing.linear);
+  const revela = f >= b2;
+  const segundos = Math.max(0, Math.ceil((b2 - f) / FPS));
+  if (!ok) return null;
+  const pesoTxt = String(pesoTexto(800));
+  const largoArco = 2 * Math.PI * PREG.radio;
+
   return (
     <AbsoluteFill>
-      <div style={{ position: "absolute", left: 110, right: 110, top: 270, textAlign: "center", fontFamily: F.titulo, fontSize: 62, lineHeight: 1.08, color: C.texto, transform: `scale(${pq})` }}>{txt(p, "pregunta")}</div>
+      {/* Cabecera: rótulo + cuenta regresiva */}
+      <div style={{ position: "absolute", left: PREG.x, width: PREG.w, top: PREG.yPregunta - 70, height: 2 * PREG.radio + 8, display: "flex", alignItems: "center", opacity: entra }}>
+        <span style={{ fontFamily: F.mono, fontSize: 20, letterSpacing: "3px", color: C.acento, whiteSpace: "nowrap" }}>{`PREGUNTA · ${n} OPCIONES`}</span>
+        <div style={{ flex: 1, height: 1.5, margin: "0 20px", background: alfa(C.linea, 0.8) }} />
+        <div style={{ position: "relative", width: PREG.radio * 2 + 8, height: PREG.radio * 2 + 8 }}>
+          <svg width={PREG.radio * 2 + 8} height={PREG.radio * 2 + 8} style={{ overflow: "visible" }}>
+            <circle cx={PREG.radio + 4} cy={PREG.radio + 4} r={PREG.radio} stroke={alfa(C.texto, 0.18)} strokeWidth={4} fill="none" />
+            {f >= b1 && !revela && (
+              <path d={generarArcoSvg(PREG.radio + 4, PREG.radio + 4, PREG.radio, 0, 359.99)} stroke={C.acento} strokeWidth={4} strokeLinecap="round" fill="none" {...calcularDashOffset(restante, largoArco)} />
+            )}
+          </svg>
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.mono, fontWeight: 700, fontSize: 22, color: revela ? C.acento : C.suave }}>
+            {revela ? "✓" : f >= b1 ? String(segundos) : "·"}
+          </div>
+        </div>
+      </div>
+
+      {/* Pregunta */}
+      <div style={{ position: "absolute", left: PREG.x, width: PREG.w, top: PREG.yPregunta, fontFamily: F.titulo, fontSize: 56, lineHeight: 1.1, letterSpacing: -1, color: C.texto, opacity: entra, transform: `translateY(${((1 - entra) * 20).toFixed(2)}px)` }}>
+        {txt(p, "pregunta")}
+      </div>
+
+      {/* Opciones */}
       {opciones.map((o, k) => {
         const t = b1 + k * 4;
-        const q = spring({ frame: f - t, fps: FPS, config: { damping: 14, stiffness: 170, mass: 0.6 } });
         if (f < t) return null;
-        const revela = f >= b2;
+        const q = lerp(f, t, t + 9, 0, 1, Easing.out(Easing.cubic));
         const bien = k === correcta;
+        const v = lerp(f, b2, b2 + 10, 0, 1, Easing.out(Easing.cubic));
+        const xTexto = PREG.tecla + 28;
+        const tam = tamQueCabe(String(o), F.texto, pesoTxt, 40, PREG.w - xTexto - 70, 28);
+        const anchoTxt = measureText({ text: String(o), fontFamily: F.texto, fontWeight: pesoTxt, fontSize: tam, validateFontIsLoaded: false }).width;
+        const resaltada = revela && bien;
+        const descartada = revela && !bien;
         return (
-          <div
-            key={k}
-            style={{
-              position: "absolute",
-              left: 150,
-              width: 780,
-              top: 520 + k * 128,
-              height: 104,
-              borderRadius: 30,
-              background: revela && bien ? C.exito : C.tarjeta,
-              color: revela && bien ? "#fff" : C.tarjetaTexto,
-              boxShadow: SOMBRA,
-              border: BORDE,
-              display: "flex",
-              alignItems: "center",
-              gap: 22,
-              padding: "0 30px",
-              opacity: Math.min(1, q * 2) * (revela && !bien ? 0.45 : 1),
-              transform: `translateX(${(1 - q) * 120}px) scale(${revela && bien ? 1 + 0.06 * bump(f, b2, 10) : 1})`,
-            }}
-          >
-            <div style={{ fontFamily: F.titulo, fontSize: 40, width: 50, color: revela && bien ? "#fff" : C.acento }}>{"ABCD"[k]}</div>
-            <div style={{ ...T(800), fontSize: 38 }}>{o}</div>
+          <div key={k} style={{ position: "absolute", left: PREG.x, width: PREG.w, top: PREG.yOpciones + k * PREG.fila, height: PREG.fila, display: "flex", alignItems: "center", opacity: q * (descartada ? 1 - 0.6 * v : 1), transform: `translateX(${((1 - q) * 30).toFixed(2)}px)` }}>
+            <div style={{ position: "absolute", left: 0, top: 0, height: 1.5, width: `${q * 100}%`, background: alfa(C.texto, 0.14) }} />
+            {resaltada && <div style={{ position: "absolute", left: -18, top: 22, bottom: 22, width: 5, background: C.acento, transform: `scaleY(${v})` }} />}
+            <div
+              style={{
+                width: PREG.tecla,
+                height: PREG.tecla,
+                flexShrink: 0,
+                borderRadius: 8,
+                border: `2px solid ${resaltada ? C.acento : alfa(C.texto, 0.35)}`,
+                background: resaltada ? C.acento : "transparent",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: F.mono,
+                fontWeight: 700,
+                fontSize: 26,
+                color: resaltada ? C.acentoTexto : C.texto,
+                transform: `scale(${resaltada ? 1 + 0.12 * bump(f, b2, 10) : 1})`,
+              }}
+            >
+              {"ABCD"[k]}
+            </div>
+            <div style={{ position: "relative", marginLeft: 28, fontFamily: F.texto, fontWeight: pesoTxt, fontSize: tam, lineHeight: 1.1, color: resaltada ? C.acento : C.texto, whiteSpace: "nowrap" }}>
+              {o}
+              {descartada && (
+                <svg width={anchoTxt + 12} height={6} style={{ position: "absolute", left: -6, top: "52%", overflow: "visible" }}>
+                  <line x1={0} y1={3} x2={(anchoTxt + 12) * v} y2={3} stroke={alfa(C.texto, 0.7)} strokeWidth={3} strokeLinecap="round" />
+                </svg>
+              )}
+            </div>
+            {resaltada && (
+              <svg viewBox="0 0 24 24" width={40} height={40} style={{ marginLeft: "auto", opacity: v }}>
+                <path d="M5 12.5 L10 17 L19 7" stroke={C.acento} strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" {...calcularDashOffset(v, 22)} />
+              </svg>
+            )}
           </div>
         );
       })}

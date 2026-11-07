@@ -44,9 +44,9 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.2. `chat` — Conversación y Mensajería UI
-- **Propósito:** Representa un diálogo o consulta en una interfaz de mensajería con burbuja de mensaje, respuesta, anotación superior, tarjeta de móvil y píldora de contexto.
-- **Momentos:** `5` momentos: `[0]` mensaje, `[1]` respuesta, `[2]` anotación, `[3]` tarjeta móvil, `[4]` píldora.
+### 2.2. `chat` — Consola Técnica de Prompt y Respuesta
+- **Propósito:** Consola abierta con cabecera de sesión (`SESIÓN · {titulo}`), línea de prompt donde se teclea el `mensaje` (la `anotacion` aparece como rótulo monoespaciado), conector hacia la respuesta con código que se escribe y se desplaza solo en un panel oscuro, fila de resultado alineada con los datos de `movil` y la `pildora` como línea de estado. Sin `mensaje`, muestra el `saludo` centrado. Si la frase anterior también es `chat`, la consola ya está en pantalla.
+- **Momentos:** `5` momentos: `[0]` empieza a teclear, `[1]` envío, `[2]` respuesta y código, `[3]` fila de resultado (`movil`), `[4]` línea de estado (`pildora`).
 - **Sonidos automáticos:** `tecla` (0.3) y `pop` (0.32) en mensaje; `pop` (0.35) en tarjeta móvil; `ding` (0.26) en píldora.
 - **Propiedades:**
   - `mensaje` *(string, opcional)*: Texto del mensaje entrante (máx. 38 letras).
@@ -74,9 +74,9 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.3. `editor` — IDE y Línea de Tiempo de Código
-- **Propósito:** Vista cinematográfica de editor de código con 4 pistas horizontales (subtítulos, escenas, voz, sonidos), cabezal móvil, ventana de previsualización con zoom-out elástico, chips de palabras y efectos sonoros flotantes.
-- **Momentos:** `4` momentos: `[0]` zoom out, `[1]` píldora de logro ("hecho con código"), `[2]` chips de palabras, `[3]` chips de sonidos.
+### 2.3. `editor` — Mesa de Edición con Línea de Tiempo
+- **Propósito:** Zoom hacia atrás que revela el propio reel dentro de una mesa de edición técnica: reglas graduadas, cabecera de archivo, vista previa 9:16 y 4 pistas (subtítulos, escenas, voz, sonidos) con cabezal de reproducción. Las `palabras` y los `sonidos` encajan como clips dentro de su pista; `hecho` aparece como sello sobre la vista previa. Si la frase anterior también es `editor`, no repite el zoom.
+- **Momentos:** `4` momentos: `[0]` zoom hacia atrás, `[1]` sello `hecho`, `[2]` clips de palabras, `[3]` clips de sonidos.
 - **Sonidos automáticos:** `whoosh` (0.3), `exito` (0.26), `pop` (0.35).
 - **Propiedades:**
   - `archivo` *(string, opcional)*: Nombre en la pestaña del IDE (máx. 24 letras). Por defecto `"este_reel.tsx"`.
@@ -97,8 +97,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.4. `movil` — Teléfono Móvil Isométrico
-- **Propósito:** Maqueta de smartphone en perspectiva inclinada ($380\text{ px}$ de ancho) con pantalla animada, contador dinámico opcional y pegatina de impacto superpuesta.
+### 2.4. `movil` — Dispositivo y Datos en Pantalla Dividida
+- **Propósito:** Composición asimétrica: dispositivo recto a la izquierda (pantalla con icono, título, subtítulo y vista previa del reel) y, a la derecha, el `contador` monumental unido por un conector y la `pegatina` como etiqueta de estado. Sin contador ni pegatina, el dispositivo queda centrado.
 - **Momentos:** `3` momentos: `[0]` entrada del teléfono, `[1]` revelado de contenido y contador, `[2]` pegatina.
 - **Sonidos automáticos:** `whoosh` (0.28); `pop` (0.38) en la pegatina.
 - **Propiedades:**
@@ -267,7 +267,7 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 ---
 
 ### 2.11. `tachado` — Desmentido Visual "No es X: es Y"
-- **Propósito:** Rompe una creencia previa. Muestra el texto erróneo, traza un tachón rojo enérgico con temblor de impacto y revela la afirmación correcta en gran tamaño con color de acento o formato de código (`</>`). `alInicio: true`.
+- **Propósito:** Rompe una creencia previa. Muestra la `CONCEPCIÓN ANTERIOR` en un contenedor con esquinas técnicas, la descarta con un corte geométrico recto y una sacudida breve, y revela el `NUEVO ESTÁNDAR` en tipografía ultra-bold con color de acento o formato de código (`</>`). `alInicio: true`.
 - **Momentos:** `2` momentos: `[0]` tachón sobre `antes`, `[1]` revelado de `despues`.
 - **Sonidos automáticos:** `negacion` (0.22), `swoosh` (0.3).
 - **Propiedades:**
@@ -289,9 +289,9 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.12. `objecion` — Globo de Pensamiento y Réplica
-- **Propósito:** Plantea una duda o creencia común (*"¿Pensarás que…?"*) en un globo de diálogo con signos de interrogación dinámicos, respondiéndola con una píldora inferior.
-- **Momentos:** `2` momentos: `[0]` globo de diálogo, `[1]` píldora de respuesta. `alInicio: true` si incluye `numero`.
+### 2.12. `objecion` — Cita Editorial y Réplica
+- **Propósito:** Plantea una duda o creencia común (*"¿Pensarás que…?"*) como cita editorial con comillas en marca de agua y rótulo (`OBJECIÓN {numero}` o `PREGUNTA FRECUENTE`), unida por un conector a una réplica categórica en tarjeta oscura con acento.
+- **Momentos:** `2` momentos: `[0]` cita, `[1]` réplica. `alInicio: true` si incluye `numero`.
 - **Sonidos automáticos:** `pop` (0.32); `ding` (0.26) en la respuesta.
 - **Propiedades:**
   - `texto` *(string, obligatorio)*: Pregunta u objeción (máx. 60 letras).
@@ -310,8 +310,8 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.13. `pregunta` — Test Interactivo de Opción Múltiple
-- **Propósito:** Gamifica el reel con una pregunta central y 2 a 4 opciones (A, B, C, D). Revela la opción correcta en verde mientras atenúa las demás.
+### 2.13. `pregunta` — Consola de Test con Cuenta Regresiva
+- **Propósito:** Gamifica el reel con una pregunta editorial y 2 a 4 opciones en filas abiertas con teclas monoespaciadas (A, B, C, D). Un arco de cuenta regresiva marca el tiempo entre la última opción y el revelado; la correcta toma el color de acento con ✓ y las demás se atenúan y se tachan.
 - **Momentos:** `3` momentos: `[0]` pregunta, `[1]` opciones, `[2]` revelado de la correcta.
 - **Sonidos automáticos:** `pop` (0.3) en opciones; `exito` (0.28) en respuesta correcta.
 - **Propiedades:**
@@ -360,9 +360,9 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ---
 
-### 2.15. `imagen` — Fotografía Destacada con Efectos Ópticos
-- **Propósito:** Imagen protagonista con marco elegante, badge superior, pie de foto y efectos ópticos visuales procedimentales opcionales.
-- **Momentos:** `2` momentos: `[0]` entrada de la foto, `[1]` píldora de texto inferior.
+### 2.15. `imagen` — Encuadre Fotográfico con Visor
+- **Propósito:** Imagen protagonista revelada con máscara de arriba abajo, con HUD de visor de cámara (`● REC` con código de tiempo, formato `3:2`/`1:1`/`3:4`, esquinas de encuadre y `etiqueta` abajo a la izquierda), pie de foto editorial y efectos ópticos procedimentales opcionales.
+- **Momentos:** `2` momentos: `[0]` entrada de la foto y efectos, `[1]` pie de foto (`texto`).
 - **Sonidos automáticos:** Depende de los efectos: `proyector` (0.32) con `cine`; `burbuja` (0.28) con `burbujas`/`agua`; `campana` (0.22) con `estrellas`/`haz`; o `pop` (0.3) con texto estándar.
 - **Propiedades:**
   - `imagen` *(string, obligatorio)*: Ruta en `public/` (formatos `.png`, `.jpg`, `.jpeg`, `.webp`).
@@ -387,10 +387,11 @@ Las escenas se dibujan dentro de un rectángulo seguro de **960 × 860 px**:
 
 ### 2.16. `galeria` — Colección de Imágenes en Múltiples Modos
 - **Propósito:** Muestra un conjunto de 2 a 6 imágenes organizadas según tres modos visuales:
-  - `abanico`: Entran apiladas y se abren en abanico radial.
-  - `orbita`: Rotan en un anillo elíptico tridimensional alrededor de un icono central.
-  - `rejilla`: Cuadrícula compacta de 2 o 3 columnas con opción de resaltar una imagen.
-- **Momentos:** `2` momentos: `[0]` entrada base, `[1]` apertura radial o resaltado.
+  - `abanico`: Tira de contacto fotográfica con perforaciones y códigos de cuadro que se desplaza en horizontal.
+  - `orbita`: Anillo fijo de imágenes alrededor de un icono central, con conectores que se trazan en el momento clave.
+  - `rejilla`: Muro modular asimétrico (la primera imagen ocupa 2×2 celdas) con opción de resaltar una imagen.
+  - Todas usan filetes finos en lugar de marcos blancos; `etiqueta` es pie editorial (rótulo monoespaciado en `orbita`).
+- **Momentos:** `2` momentos: `[0]` entrada, `[1]` desplazamiento, conectores o resaltado, y etiqueta.
 - **Sonidos automáticos:** `whoosh` (0.3) en abanico/rejilla; `ding` (0.3) en órbita.
 - **Propiedades:**
   - `imagenes` *(lista string, obligatorio, 2 a 6 imágenes)*: Rutas en `public/`.
